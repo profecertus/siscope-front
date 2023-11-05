@@ -123,8 +123,8 @@ export class EmbarcacionComponent {
     });
   }
 
-  deleteRow(e: any, index: number) {
-    e.plantaDto.estadoReg = false;
+  deleteRow(e: Embarcacion, index: number) {
+    e.estadoReg = false;
     Swal.fire({
       title: '¿Seguro de eliminar la Planta?',
       showCancelButton: true,
@@ -132,9 +132,8 @@ export class EmbarcacionComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        /*this.embarcacionService.obtenerEmbarcaciones(e).forEach(value => {
-          //console.log(e.plantaDto)
-          e.plantaDto.idPlanta = value;
+        this.embarcacionService.guardarEmbarcacion(e).forEach(value => {
+          //console.log(value);
         }).then(value => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Planta Eliminada!','success');
@@ -142,7 +141,7 @@ export class EmbarcacionComponent {
           Swal.fire('Error',"Hubo Problemas al Eliminar la planta, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
-        });*/
+        });
       }
     })
   }
@@ -184,15 +183,18 @@ export class EmbarcacionComponent {
     let mensaje:string="Se actualizo correctamente la Planta";
     Swal.showLoading( );
     //En caso sea modificación.
-    if (!(e.plantaDto.idPlanta > 0)){
-      e.plantaDto.idPlanta = null;
+    // @ts-ignore
+    if (!(e.idEmbarcacion > 0)){
+      // @ts-ignore
+      e.idEmbarcacion = null;
       mensaje = "Se grabo correctamente la Planta";
     }
-/*
-    this.plantaService.guardarPlanta(e).forEach(value => {
-      e.plantaDto.idPlanta = value;
+    this.embarcacionService.guardarEmbarcacion(e).forEach(value => {
+      //console.log(value);
+      e = value;
     }).then(value => {
-      if(e.plantaDto.idPlanta>0)
+      // @ts-ignore
+      if(e.idEmbarcacion > 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
         this.basicDataSource.push(e);
@@ -200,12 +202,12 @@ export class EmbarcacionComponent {
       //Ahora debo de actualizar la relación proveedor con servicio.
       Swal.fire('Exito',mensaje,'success');
     }).catch( error =>{
+      console.log(error);
       Swal.fire('Error',"Hubo Problemas al grabar la Planta.",'error');
     }).finally(()=>{
       this.editForm!.modalInstance.hide();
     });
 
- */
   }
 
   onCanceled() {
