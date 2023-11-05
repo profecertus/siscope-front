@@ -1,6 +1,6 @@
 export class Trabajador{
-  idTipodoc: IdTipoDoc = new IdTipoDoc();
-  numeroDocumento: string = '';
+  id:TrabajadorIdDto = new TrabajadorIdDto();
+  idTipodoc: TipoDocumentoDto = new TipoDocumentoDto();
   nombres: string = '';
   apellidoPat: string = '';
   apellidoMat: string = '';
@@ -10,9 +10,18 @@ export class Trabajador{
   estado: boolean = true;
   estadoReg: boolean = true;
   [key:string]: any;
+  setIdTipoDoc(){
+    this.id.idTipodoc = this.idTipodoc.id;
+  }
 }
 
-export class IdTipoDoc{
+export class TrabajadorIdDto{
+  idTipodoc: number = 0;
+  numeroDocumento:string = '';
+  [key:string]:any;
+}
+
+export class TipoDocumentoDto{
   id:number = 0;
   nombre: string = '';
   abreviatura: string = '';
@@ -23,7 +32,7 @@ export class IdTipoDoc{
 
 export class IdFormaPago{
   idFormaPago: number = 0;
-  nombre: string = '';
+  nombreFormaPago: string = '';
   estado: boolean = true;
   estadoReg: boolean = true;
   [key:string]: any;

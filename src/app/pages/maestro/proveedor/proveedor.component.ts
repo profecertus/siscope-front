@@ -244,7 +244,7 @@ export class ProveedorComponent {
     this.formConfig.items[4].options = this.tipoServicicioSource;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '600px',
+      width: '700px',
       maxHeight: '600px',
       title: 'Proveedores - Edición',
       showAnimate: false,
@@ -268,7 +268,7 @@ export class ProveedorComponent {
     this.formData = row;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '600px',
+      width: '700px',
       maxHeight: '600px',
       title: 'Proveedores - Nuevo',
       showAnimate: false,

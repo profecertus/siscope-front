@@ -17,12 +17,7 @@ export class AdminFormComponent implements OnInit {
   _formData: any = {};
 
   @Input() set formData(val: any) {
-    console.log("INGRESO")
-    console.log(val);
     this._formData = JSON.parse(JSON.stringify(val));
-    console.log(
-      this._formData
-    )
   }
 
   @Output() submitted = new EventEmitter();

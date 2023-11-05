@@ -42,11 +42,11 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="numeroDocumento" header="Número Documento" [width]="'200px'">
+              <d-column field="id" header="Número Documento" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem }}
+                      {{ cellItem.numeroDocumento }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -82,7 +82,7 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.nombre }}
+                      {{ cellItem.nombreFormaPago }}
                     </span>
                   </ng-template>
                 </d-cell>

@@ -2,10 +2,17 @@ import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/c
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { DialogService, FormLayout } from '@devui';
 import { Subscription } from 'rxjs';
-import { RespuestaPlanta } from '../../../model/planta.modelo';
 import Swal from 'sweetalert2';
 import { Trabajador } from '../../../model/trabajador.model';
 import { TrabajadorService } from '../../../service/trabajador.service';
+import { TipoDocumento } from '../../../model/proveedor.model';
+import { TipodocumentoService } from '../../../service/tipodocumento.service';
+import { MonedaService } from '../../../service/moneda.service';
+import { BancoService } from '../../../service/banco.service';
+import { FormaPagoService } from '../../../service/formaPago.service';
+import { Moneda } from '../../../model/moneda.model';
+import { Banco } from '../../../model/banco.model';
+import { FormaPago } from '../../../model/formaPago.model';
 
 @Component({
   selector: 'app-trabajador',
@@ -15,7 +22,12 @@ import { TrabajadorService } from '../../../service/trabajador.service';
 export class TrabajadorComponent {
   basicDataSource: Trabajador[] = [];
   basicDataSourceBkp: Trabajador[] = [];
+  tipoDocSource: TipoDocumento[] = [];
+  bancoSource: Banco[] = [];
+  monedaSource: Moneda[] = [];
+  formaPagoSource: FormaPago[] = [];
   DatoABuscar: string = "";
+  accion:number = 0; //0 = Editar 1=Nuevo
 
 
   formConfig: FormConfig = {
@@ -24,9 +36,9 @@ export class TrabajadorComponent {
       {
         label: 'Tipo Doc.',
         cabecera: 'idTipodoc',
-        prop: 'nombre',
+        prop: 'idTipodoc',
         type: 'select',
-        deep: 2,
+        deep: 1,
         options: [], //Se cargan luego
         placeholder: 'Tipo Documento',
         filterKey: 'nombre',
@@ -36,10 +48,11 @@ export class TrabajadorComponent {
       },
       {
         label: 'Núm. Doc.',
+        cabecera: 'id',
         prop: 'numeroDocumento',
         type: 'input',
         required: true,
-        deep: 1,
+        deep: 2,
         tips: 'Numero documento',
         placeholder: 'Número de Documento',
         rule:{validators: [{ required: true }]},
@@ -73,23 +86,21 @@ export class TrabajadorComponent {
       },
       {
         label: 'Frm Pago',
-        cabecera: 'idFormaPago',
-        prop: 'nombre',
+        prop: 'idFormaPago',
         type: 'select',
-        deep: 2,
+        deep: 1,
         options: [], //Se cargan luego
         placeholder: 'Forma Pago',
-        filterKey: 'nombre',
+        filterKey: 'nombreFormaPago',
         multipleselect: [],
         required: true,
         rule:{validators: [{ required: true }]},
       },
       {
         label: 'Moneda',
-        cabecera: 'idMoneda',
-        prop: 'nombre',
+        prop: 'idMoneda',
         type: 'select',
-        deep: 2,
+        deep: 1,
         options: [], //Se cargan luego
         placeholder: 'Moneda',
         filterKey: 'nombre',
@@ -99,10 +110,9 @@ export class TrabajadorComponent {
       },
       {
         label: 'Banco',
-        cabecera: 'idBanco',
-        prop: 'nombreBanco',
+        prop: 'idBanco',
         type: 'select',
-        deep: 2,
+        deep: 1,
         options: [], //Se cargan luego
         placeholder: 'Banco',
         filterKey: 'nombreBanco',
@@ -133,11 +143,16 @@ export class TrabajadorComponent {
   EditorTemplate: TemplateRef<any> | undefined;
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private trabajadorService: TrabajadorService
+              private trabajadorService: TrabajadorService, private tipodocumentoService: TipodocumentoService,
+              private monedaService: MonedaService, private bancoService: BancoService, private formaPagoService: FormaPagoService
   ) {}
 
   ngOnInit() {
     this.getList();
+    this.getListTipoDocumento();
+    this.getListMoneda();
+    this.getListBanco();
+    this.getListFormaPago();
   }
 
   getList() {
@@ -150,17 +165,43 @@ export class TrabajadorComponent {
     });
   }
 
+  getListTipoDocumento() {
+    this.busy = this.tipodocumentoService.obtenerTipoDocumentos().subscribe((res:TipoDocumento[]) => {
+      this.tipoDocSource =res;
+    });
+  }
+
+  getListMoneda(){
+    this.busy = this.monedaService.obtenerMonedas().subscribe((res:Moneda[]) =>{
+      this.monedaSource =res;
+    });
+  }
+
+  getListBanco(){
+    this.busy = this.bancoService.obtenerBancos().subscribe((res:Banco[]) =>{
+      this.bancoSource =res;
+    });
+  }
+
+  getListFormaPago(){
+    this.busy = this.formaPagoService.obtenerFormaPago().subscribe((res:FormaPago[]) =>{
+      this.formaPagoSource =res;
+    });
+  }
 
   editRow(row: any, index: number) {
+    this.accion = 0;
     this.editRowIndex = index;
     this.formData = row;
-    //this.formConfig.items[2].options = this.destinos;
-    //this.formConfig.items[3].options = this.clientes;
+    this.formConfig.items[0].options = this.tipoDocSource;
+    this.formConfig.items[5].options = this.formaPagoSource;
+    this.formConfig.items[6].options = this.monedaSource;
+    this.formConfig.items[7].options = this.bancoSource;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
       maxHeight: '600px',
-      title: 'Plantas - Edición',
+      title: 'Trabajadores - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -173,16 +214,19 @@ export class TrabajadorComponent {
     this.getList();
   }
   newRow():void {
+    this.accion = 1;
     let row = new Trabajador();
     this.editRowIndex = -1;
     this.formData = row;
-    //this.formConfig.items[2].options = this.destinos;
-    //this.formConfig.items[3].options = this.clientes;
+    this.formConfig.items[0].options = this.tipoDocSource;
+    this.formConfig.items[5].options = this.formaPagoSource;
+    this.formConfig.items[6].options = this.monedaSource;
+    this.formConfig.items[7].options = this.bancoSource;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
       maxHeight: '600px',
-      title: 'Plantas - Nuevo',
+      title: 'Trabajadores - Nuevo',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -191,7 +235,7 @@ export class TrabajadorComponent {
     });
   }
 
-  deleteRow(e: any, index: number) {
+  deleteRow(e: Trabajador, index: number) {
     e.estadoReg = false;
     Swal.fire({
       title: '¿Seguro de eliminar al Tabajador?',
@@ -200,9 +244,9 @@ export class TrabajadorComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
+        console.log(e);
         this.trabajadorService.guardarTrabajador(e).forEach(value => {
-          //console.log(e.plantaDto)
-          e.plantaDto.idPlanta = value;
+          //e.plantaDto.idPlanta = value;
         }).then(value => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Trabajador Eliminado!','success');
@@ -228,8 +272,6 @@ export class TrabajadorComponent {
       }
       return false;
     });
-
-
   }
 
   onPageChange(e: number) {
@@ -248,19 +290,17 @@ export class TrabajadorComponent {
     this.getList();
   }
 
-  onSubmitted(e: any) {
+  onSubmitted(e: Trabajador) {
     let mensaje:string="Se actualizo correctamente al Trabajador";
     Swal.showLoading( );
-    //En caso sea modificación.
-    if (!(e.plantaDto.idPlanta > 0)){
-      e.plantaDto.idPlanta = null;
+    if (this.accion == 1){
       mensaje = "Se grabo correctamente al Trabajador";
     }
-
+    e.id.idTipodoc = e.idTipodoc.id;
     this.trabajadorService.guardarTrabajador(e).forEach(value => {
-      e.plantaDto.idPlanta = value;
+      //Sin accion
     }).then(value => {
-      if(e.plantaDto.idPlanta>0)
+      if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
         this.basicDataSource.push(e);
