@@ -1,0 +1,23 @@
+<% if(i18n) { %>import esPE from "../assets/i18n/es-PE";
+import enUS from "../assets/i18n/en-US";
+
+export const LANGUAGES = [
+  {
+    code: 'es-PE',
+    lang: '简体中文',
+    prefix: 'CN',
+  },
+  {
+    code: 'en-us',
+    lang: 'English',
+    prefix: 'US',
+  },
+];
+
+export const I18N_LANGUAGES = ["es-PE", "en-us"];
+export const DEFAULT_LANG = "<%= defaultLanguage %>";
+
+export const I18N = {
+  "es-PE": esPE,
+  "en-us": enUS,
+};<% } %>

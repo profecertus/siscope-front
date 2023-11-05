@@ -1,0 +1,72 @@
+<form dForm [layout]="formConfig.layout" [labelSize]="formConfig.labelSize" (dSubmit)="submitPlanForm($event)">
+  <d-form-item *ngFor="let item of formConfig.items">
+    <d-form-label [required]="item.required" [hasHelp]="item.required" [helpTips]='item.tips'>{{ item.label }}：</d-form-label>
+    <d-form-control [extraInfo]="item.extraInfo">
+      <div class="row" *ngIf="item.type === 'multiselect'">
+        <div class="col-md-5">
+          <d-select
+            [name]="item.prop"
+            [options]="item.options"
+            [placeholder]="item.placeholder"
+            [filterKey]="item.filterKey"
+            [isSearch]="true"
+            [readonly]="true"
+            [multiple]="true"
+            (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"
+            [ngModel]="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]:_formData[item.prop]): _formData[item.cabecera][item.cuerpo][item.prop]"
+            [dValidateRules]="item.required ? item.rule : {}"
+            [extraConfig]="{ labelization: { enable: true, overflow: 'multiple-line' } }"
+          ></d-select>
+        </div>
+      </div>
+
+      <input
+        dTextInput
+        [name]="item.prop"
+        (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"
+        [ngModel]="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]:_formData[item.prop]): _formData[item.cabecera][item.cuerpo][item.prop]"
+        [placeholder]='item.placeholder'
+        *ngIf="item.type === 'input'"
+        [dValidateRules]="item.required ? item.rule : {}"
+      />
+      <d-select
+        *ngIf="item.type === 'select'"
+        [appendToBody]="true"
+        [isSearch]="true"
+        [options]='item.options'
+        [name]="item.prop"
+        [filterKey]="item.filterKey"
+        [placeholder]='item.placeholder'
+        (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"
+        [ngModel]="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]:_formData[item.prop]): _formData[item.cabecera][item.cuerpo][item.prop]"
+        [dValidateRules]="item.required ? item.rule : {}"
+        [extraConfig]="{selectedItemWithTemplate:{enable: true}}"
+      ></d-select>
+      <div class="devui-input-group devui-dropdown-origin" *ngIf="item.type === 'datePicker'">
+        <input
+          class="devui-input devui-form-control"
+          placeholder="y/MM/dd"
+          (click)="datePicker1.toggle()"
+          [name]="item.prop"
+          (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"
+          [ngModel]="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]:_formData[item.prop]): _formData[item.cabecera][item.cuerpo][item.prop]"
+          autocomplete="off"
+          dDatepicker
+          appendToBody
+          #datePicker1="datepicker"
+          [dValidateRules]="item.required ? item.rule : []"
+        />
+        <div class="devui-input-group-addon close-icon-wrapper" (click)="datePicker1.clearAll()">
+          <i class="icon icon-close"></i>
+        </div>
+        <div class="devui-input-group-addon" (click)="datePicker1.toggle()">
+          <i class="icon icon-calendar"></i>
+        </div>
+      </div>
+    </d-form-control>
+  </d-form-item>
+  <d-form-operation class="da-form-operation">
+    <d-button style="margin-right: 5px" dFormSubmit [dFormSubmitData]="'submit-button'">Aceptar</d-button>
+    <d-button bsStyle="common" (click)="cancel()">Cancelar</d-button>
+  </d-form-operation>
+</form>

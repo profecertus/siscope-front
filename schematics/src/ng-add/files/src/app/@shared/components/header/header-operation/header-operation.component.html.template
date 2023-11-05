@@ -1,0 +1,84 @@
+<div class="da-operations">
+  <d-search
+    class="da-header-search"
+    [iconPosition]="'left'"
+    [noBorder]="true"
+    (searchFn)="onSearch($event)"
+  ></d-search>
+  <a href="https://devui.design/admin-page/docs" target="_blank">
+    <i class="icon icon-helping"></i>
+  </a>
+  <d-badge [count]="5">
+    <i class="icon icon-notice"></i>
+  </d-badge>
+  <div class="da-operations-user" dDropDown [trigger]="'hover'" appendToBody dDropDownToggle>
+    <d-avatar
+      [name]="user.userName"
+      [width]="22"
+      [height]="22"
+    ></d-avatar>
+    <span class="da-user-name">{{ user?.userName }}</span>
+    <ul dDropDownMenu class="devui-dropdown-menu devui-scrollbar" role="menu" style="min-width: 120px">
+      <ng-container *ngIf="haveLoggedIn; else login">
+        <li role="menuitem">
+          <a
+            class="devui-dropdown-item"
+            [routerLink]="['/pages', 'user', 'center']"
+            ><i class="icon icon-mine"></i><% if(i18n) { %>{{ "header.userCenter" | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>个人中心<% } else { %>User Center<% } } %></a
+          >
+        </li>
+        <li role="menuitem">
+          <a
+            class="devui-dropdown-item"
+            [routerLink]="['/pages', 'user', 'settings']"
+            ><i class="icon icon-setting"></i><% if(i18n) { %>{{ "header.userSettings" | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>个人设置<% } else { %>Settings<% } } %></a
+          >
+        </li>
+        <li role="menuitem" (click)="handleUserOps('logout')">
+          <a class="devui-dropdown-item logout"
+            ><i class="icon icon-exit"></i><% if(i18n) { %>{{ "header.logout" | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>登出<% } else { %>Logout<% } } %></a
+          >
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <% if(i18n) { %>
+  <div
+    class="da-language-wrapper"
+    dDropDown
+    [trigger]="'hover'"
+    appendToBody
+    dDropDownToggle
+  >
+    <!-- TODO: svg替换为图标 -->
+    <svg viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="languageIconTitle" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" color="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title id="languageIconTitle">Language</title> <circle cx="12" cy="12" r="10"></circle> <path stroke-linecap="round" d="M12,22 C14.6666667,19.5757576 16,16.2424242 16,12 C16,7.75757576 14.6666667,4.42424242 12,2 C9.33333333,4.42424242 8,7.75757576 8,12 C8,16.2424242 9.33333333,19.5757576 12,22 Z"></path> <path stroke-linecap="round" d="M2.5 9L21.5 9M2.5 15L21.5 15"></path> </g></svg>
+    <ul
+      dDropDownMenu
+      class="devui-dropdown-menu devui-scrollbar"
+      role="menu"
+      style="min-width: 120px"
+    >
+      <li
+        *ngFor="let item of languages"
+        role="menuitem"
+        [ngClass]="{ 'da-active-lang': language === item.code }"
+        (click)="onLanguageClick(item.code)"
+      >
+        <a class="devui-dropdown-item">
+          <span class="da-language-prefix">{{ item.prefix }}</span>
+          {{ item.lang }}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <% } %>
+</div>
+
+<ng-template #login>
+  <li role="menuitem">
+    <a class="devui-dropdown-item"><i class="icon icon-assign"></i><% if(i18n) { %>{{ "header.login" | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>登录<% } else { %>Login<% } } %></a>
+  </li>
+  <li role="menuitem">
+    <a class="devui-dropdown-item"><i class="icon icon-add-member"></i><% if(i18n) { %>{{ "header.register" | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>注册<% } else { %>Register<% } } %></a>
+  </li>
+</ng-template>

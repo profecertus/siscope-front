@@ -1,0 +1,57 @@
+<div class="da-operations">
+  <div class="da-operations-notice" dDropDown [trigger]="'click'" dDropDownToggle appendToBody [closeScope]="'blank'">
+    <d-badge [count]="noticeCount">
+      <i class="icon icon-notice"></i>
+    </d-badge>
+    <div class="da-notice-modal" dDropDownMenu role="menu">
+      <da-header-notice (countEvent)="handleNoticeCount($event)"></da-header-notice>
+    </div>
+  </div>
+
+  <div class="da-operations-user" dDropDown [trigger]="'hover'" appendToBody dDropDownToggle>
+    <d-avatar [name]="user.userName" [width]="22" [height]="22"></d-avatar>
+    <span class="da-user-name">{{ user.userName }}</span>
+    <ul dDropDownMenu class="devui-dropdown-menu devui-scrollbar" role="menu" style="min-width: 120px">
+      <ng-container *ngIf="haveLoggedIn; else login">
+        <li role="menuitem">
+          <a class="devui-dropdown-item" [routerLink]="['/pages', 'user', 'center']"
+            ><i class="icon icon-mine"></i>{{ 'header.userCenter' | translate }}</a
+          >
+        </li>
+        <li role="menuitem">
+          <a class="devui-dropdown-item" [routerLink]="['/pages', 'user', 'settings']"
+            ><i class="icon icon-setting"></i>{{ 'header.userSettings' | translate }}</a
+          >
+        </li>
+        <li role="menuitem" (click)="handleUserOps('logout')">
+          <a class="devui-dropdown-item logout"><i class="icon icon-exit"></i>{{ 'header.logout' | translate }}</a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="da-language-wrapper" dDropDown [trigger]="'hover'" appendToBody dDropDownToggle>
+    <span class="da-progress-icon-position icon-letter-a"></span>
+    <ul dDropDownMenu class="devui-dropdown-menu devui-scrollbar" role="menu" style="min-width: 120px">
+      <li
+        *ngFor="let item of languages"
+        role="menuitem"
+        [ngClass]="{ 'da-active-lang': language === item.code }"
+        (click)="onLanguageClick(item.code)"
+      >
+        <a class="devui-dropdown-item">
+          <span class="da-language-prefix">{{ item.prefix }}</span>
+          {{ item.lang }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #login>
+  <li role="menuitem">
+    <a class="devui-dropdown-item"><i class="icon icon-assign"></i>{{ 'header.login' | translate }}</a>
+  </li>
+  <li role="menuitem">
+    <a class="devui-dropdown-item"><i class="icon icon-add-member"></i>{{ 'header.register' | translate }}</a>
+  </li>
+</ng-template>

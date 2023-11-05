@@ -1,0 +1,91 @@
+<div class="da-register" style="background-image: url('assets/img/background/img_log.png'); background-repeat: no-repeat; background-position: center;">
+  <d-toast [value]="toastMessage"></d-toast>
+  <div class="da-register-form">
+    <div class="da-register-logo-wrapper">
+      <div class="da-register-logo">
+        <span class="da-logo-devui">
+          <img src="assets/devui-logo.svg" alt="DevUI-Logo" />
+        </span>
+        <span class="da-text">DevUI</span>
+      </div>
+      <span class="da-coperation">
+        <% if (i18n) { %>{{ 'registerPage.coperation' | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>DevUI Design 出品<% } else { %>DevUI Design Presented<% } } %>
+      </span>
+    </div>
+    <div class="da-register-wrapper">
+      <form dForm [layout]="verticalLayout" (dSubmit)="register($event)" [labelSize]="'sm'" ngForm>
+        <d-form-item>
+          <d-form-label [required]="true">
+            <% if (i18n) { %>{{ 'registerPage.email' | translate }}:<% } else { if(defaultLanguage === 'es-PE') { %>邮箱:<% } else { %>Email:<% } } %>
+          </d-form-label>
+          <d-form-control>
+            <div>
+              <input dTextInput autocomplete="off" name="userEmail" placeholder="Email" [(ngModel)]="formData.email"  [dValidateRules]="formRules['emailRules']" />
+            </div>
+          </d-form-control>
+        </d-form-item>
+        <d-form-item>
+          <d-form-label [required]="true">
+            <% if (i18n) { %>{{ 'registerPage.password' | translate }}:<% } else { if(defaultLanguage === 'es-PE') { %>密码:<% } else { %>Password:<% } } %>
+          </d-form-label>
+          <d-form-control [suffixTemplate]="suffixTemplate">
+            <input
+              dTextInput
+              dValidateSyncKey="password"
+              [type]="showPassword ? 'text' : 'password'"
+              name="password"
+              placeholder="Password"
+              [(ngModel)]="formData.password"
+              [dValidateRules]="formRules['passwordRules']"
+            />
+          </d-form-control>
+        </d-form-item>
+        <d-form-item>
+          <d-form-label [required]="true">
+            <% if (i18n) { %>{{ 'registerPage.confirmPassword' | translate }}:<% } else { if(defaultLanguage === 'es-PE') { %>确认密码:<% } else { %>Confirm Password:<% } } %>
+          </d-form-label>
+          <d-form-control [suffixTemplate]="suffixTemplate2">
+            <input
+              dTextInput
+              dValidateSyncKey="password"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              [(ngModel)]="formData.confirmPassword"
+              [dValidateRules]="formRules['confirmPasswordRules']"
+            />
+          </d-form-control>
+        </d-form-item>
+        <button class="da-submit-button" dFormSubmit>
+          <% if (i18n) { %>{{ 'registerPage.submit' | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>注册<% } else { %>Register<% } } %>
+        </button>
+        <a class="da-other" routerLink="/login">
+          <% if (i18n) { %>{{ 'registerPage.other' | translate }}<% } else { if(defaultLanguage === 'es-PE') { %>使用已有账号登录<% } else { %>Already have an account?<% } } %>
+        </a>
+      </form>
+    </div>
+  </div><% if(i18n) { %>
+  <div class="da-language-wrapper" dDropDown [trigger]="'hover'" dDropDownToggle appendToBody>
+    <svg viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="languageIconTitle" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" color="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title id="languageIconTitle">Language</title> <circle cx="12" cy="12" r="10"></circle> <path stroke-linecap="round" d="M12,22 C14.6666667,19.5757576 16,16.2424242 16,12 C16,7.75757576 14.6666667,4.42424242 12,2 C9.33333333,4.42424242 8,7.75757576 8,12 C8,16.2424242 9.33333333,19.5757576 12,22 Z"></path> <path stroke-linecap="round" d="M2.5 9L21.5 9M2.5 15L21.5 15"></path> </g></svg>
+    <ul dDropDownMenu class="devui-dropdown-menu devui-scrollbar" role="menu" style="width: 120px">
+      <li
+        *ngFor="let item of languages"
+        role="menuitem"
+        [ngClass]="{ 'da-active-lang': language === item.code }"
+        (click)="onLanguageClick(item.code)"
+      >
+        <a class="devui-dropdown-item">
+          <span class="da-language-prefix">{{ item.prefix }}</span>
+          {{ item.lang }}
+        </a>
+      </li>
+    </ul>
+  </div><% } %>
+  <da-footer></da-footer>
+</div>
+<ng-template #suffixTemplate>
+  <i [class]="showPassword ? 'icon icon-preview' : 'icon icon-preview-forbidden'" (click)="showPassword = !showPassword"></i>
+</ng-template>
+<ng-template #suffixTemplate2>
+  <i [class]="showConfirmPassword ? 'icon icon-preview' : 'icon icon-preview-forbidden'" (click)="showConfirmPassword = !showConfirmPassword"></i>
+</ng-template>
