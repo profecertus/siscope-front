@@ -120,9 +120,9 @@ export class CamaraComponent {
     this.formConfig.items[3].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '600px',
+      width: '700px',
       maxHeight: '600px',
-      title: 'Plantas - Edición',
+      title: 'Camaras - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -142,9 +142,9 @@ export class CamaraComponent {
     this.formConfig.items[3].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '600px',
+      width: '700px',
       maxHeight: '600px',
-      title: 'Plantas - Nuevo',
+      title: 'Camaras - Nuevo',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,

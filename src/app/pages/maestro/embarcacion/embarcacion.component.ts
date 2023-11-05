@@ -142,9 +142,9 @@ export class EmbarcacionComponent {
     this.formConfig.items[3].options = this.clientes;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '600px',
+      width: '700px',
       maxHeight: '600px',
-      title: 'Plantas - Edición',
+      title: 'Embarcaciones - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -164,9 +164,9 @@ export class EmbarcacionComponent {
     this.formConfig.items[3].options = this.clientes;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '600px',
+      width: '700px',
       maxHeight: '600px',
-      title: 'Plantas - Nuevo',
+      title: 'Embarcaciones - Nuevo',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
