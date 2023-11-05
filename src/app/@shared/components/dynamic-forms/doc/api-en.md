@@ -35,9 +35,9 @@ For details, see the example of the dynamic form page of the form block`src/app/
 
 ## 事件
 
-|  参数   |                                                                                    类型                                                                                     | 说明                                                | 跳转 Demo                                               |
-| :-----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------- | ------------------------------------------------------- |
-| formSubmit | `EventEmitter<{valid: boolean, directive: `[`DFormGroupRuleDirective`](https://devui.design/components/es-pe/form/api#DFormGroupRuleDirective) `\| AbstractControlDirective}, errors: {[key: string]: ValidationErrors}>` | Optional. This event is responded to when the submit button binding element is used to trigger submission. |
+|  参数   |                                                                                                            类型                                                                                                            | 说明                                                | 跳转 Demo                                               |
+| :-----: |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:| :-------------------------------------------------- | ------------------------------------------------------- |
+| formSubmit | `EventEmitter<{valid: boolean, directive: `[`DFormGroupRuleDirective`](https://devui.design/components/es-PE/form/api#DFormGroupRuleDirective) `\| AbstractControlDirective}, errors: {[key: string]: ValidationErrors}>` | Optional. This event is responded to when the submit button binding element is used to trigger submission. |
 
 ### DFormData参数说明
 

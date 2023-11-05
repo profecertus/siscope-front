@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * For details about the description of each configuration item, please see  APIs of d-checkbox and dValidateRules parameters of d-form.
- * https://devui.design/components/es-pe/checkbox/api  && https://devui.design/components/es-pe/form/api#DValidateRules
+ * https://devui.design/components/es-PE/checkbox/api  && https://devui.design/components/es-pe/form/api#DValidateRules
  */
 
 import { Observable } from 'rxjs';

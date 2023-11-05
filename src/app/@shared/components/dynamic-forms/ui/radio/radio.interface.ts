@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * For details about the description of each configuration item, please see  APIs of d-radio and dValidateRules parameters of d-form.
- * https://devui.design/components/es-pe/radio/api  && https://devui.design/components/es-pe/form/api#DValidateRules
+ * https://devui.design/components/es-PE/radio/api  && https://devui.design/components/es-pe/form/api#DValidateRules
  */
 
 import { Observable } from 'rxjs';

@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * For details about the description of each configuration item, please see  APIs of d-select  and dValidateRules parameters of d-form.
- * https://devui.design/components/es-pe/select/api  && https://devui.design/components/es-pe/form/api#DValidateRules
+ * https://devui.design/components/es-PE/select/api  && https://devui.design/components/es-pe/form/api#DValidateRules
  */
 
 import { ConnectedPosition } from '@angular/cdk/overlay';

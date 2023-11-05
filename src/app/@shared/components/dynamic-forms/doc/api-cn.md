@@ -35,9 +35,9 @@ import { DynamicFormsModule } from 'src/app/@shared/components/dynamic-forms/dyn
 
 ## 事件
 
-|  参数   |                                                                                    类型                                                                                     | 说明                                                | 跳转 Demo                                               |
-| :-----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------- | ------------------------------------------------------- |
-| formSubmit | `EventEmitter<{valid: boolean, directive: `[`DFormGroupRuleDirective`](https://devui.design/components/es-pe/form/api#DFormGroupRuleDirective) `\| AbstractControlDirective}, errors: {[key: string]: ValidationErrors}>` | 可选，点击submit按钮触发提交时，响应事件 |
+|  参数   |                                                                                                            类型                                                                                                            | 说明                                                | 跳转 Demo                                               |
+| :-----: |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:| :-------------------------------------------------- | ------------------------------------------------------- |
+| formSubmit | `EventEmitter<{valid: boolean, directive: `[`DFormGroupRuleDirective`](https://devui.design/components/es-PE/form/api#DFormGroupRuleDirective) `\| AbstractControlDirective}, errors: {[key: string]: ValidationErrors}>` | 可选，点击submit按钮触发提交时，响应事件 |
 
 ### DFormData参数说明
 

@@ -1,4 +1,4 @@
-import esPE from '../assets/i18n/es-pe';
+import esPE from '../assets/i18n/es-PE';
 import enUS from '../assets/i18n/en-US';
 
 export const LANGUAGES = [
