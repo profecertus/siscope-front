@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlService: 'http://localhost:8080',
+  urlService: 'http://www.arquitecturabi.pe:8080',
   sufijoProveedor: '/proveedor/v1',
   sufijoTipoDocumento: '/documento/v1',
   sufijoTipoServicio: '/tipoServicio/v1',
