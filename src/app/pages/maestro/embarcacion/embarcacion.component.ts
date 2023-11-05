@@ -4,10 +4,9 @@ import { FormConfig } from '../../../@shared/components/admin-form';
 import { Subscription } from 'rxjs';
 import { RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
-import { PlantaService } from '../../../service/planta.service';
 import { RespuestaPlanta } from '../../../model/planta.modelo';
-import { Destino } from '../../../model/destino.model';
-import { Cliente } from '../../../model/cliente.model';
+import { EmbarcacionService } from '../../../service/embarcacion.service';
+import { Embarcacion } from '../../../model/embarcacion.model';
 
 @Component({
   selector: 'app-embarcacion',
@@ -18,8 +17,6 @@ import { Cliente } from '../../../model/cliente.model';
 export class EmbarcacionComponent {
   basicDataSource: RespuestaProveedor[] = [];
   basicDataSourceBkp: RespuestaProveedor[] = [];
-  destinos: Destino[] =[];
-  clientes: Cliente[] = [];
   DatoABuscar: string = "";
 
 
@@ -27,48 +24,26 @@ export class EmbarcacionComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Nombre',
+        label: 'Nombre Emb.',
         prop: 'nombre',
         type: 'input',
-        required: true,
-        deep: 2,
-        cabecera: 'plantaDto',
-        tips: 'Nombre',
-        placeholder: 'Nombre de la Planta',
-        rule:{validators: [{ required: true }]},
-      },
-      {
-        label: 'Dirección',
-        prop: 'direccion',
-        type: 'input',
-        deep: 2,
-        cabecera: 'plantaDto',
-        placeholder: 'Dirección',
-      },
-      {
-        label: 'Destino',
-        prop: 'relPlantaDestinoDto',
-        type: 'multiselect',
         deep: 1,
-        options: [], //Se cargan luego
-        placeholder: 'Tipo de Destino',
-        filterKey: 'nombre',
-        multipleselect: [],
-        required: true,
-        rule:{validators: [{ required: true }]},
+        tips: 'Nombre',
+        placeholder: 'Nombre de la Embarcacion',
       },
       {
-        label: 'Cliente',
-        cabecera: 'plantaDto',
-        prop: 'ruc',
-        type: 'select',
-        deep: 2,
-        options: [], //Se cargan luego
-        placeholder: 'Cliente',
-        filterKey: 'cliente',
-        multipleselect: [],
-        required: true,
-        rule:{validators: [{ required: true }]},
+        label: 'Num. Matricula',
+        prop: 'numMatricula',
+        type: 'input',
+        deep: 1,
+        placeholder: 'Número de Matricula',
+      },
+      {
+        label: 'Tonelaje',
+        prop: 'tonelaje',
+        type: 'input',
+        deep: 1,
+        placeholder: 'Tonelaje',
       },
     ],
     labelSize: '',
@@ -93,18 +68,16 @@ export class EmbarcacionComponent {
   EditorTemplate: TemplateRef<any> | undefined;
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private plantaService: PlantaService
+              private embarcacionService: EmbarcacionService
   ) {}
 
   ngOnInit() {
     this.getList();
-    this.getListDestino();
-    this.getListCliente();
   }
 
 
   getList() {
-    return this.busy = this.plantaService.obtenerPlantas((this.pager.pageIndex - 1), this.pager.pageSize).
+    return this.busy = this.embarcacionService.obtenerEmbarcaciones((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
       let res : RespuestaPlanta[]  = elemento.content;
       //console.log(res);
@@ -114,32 +87,9 @@ export class EmbarcacionComponent {
     });
   }
 
-  getListDestino(){
-    return this.busy = this.plantaService.obtenerDestinos().pipe().subscribe((elemento)=>{
-      this.destinos = elemento;
-    });
-  }
-
-  getListCliente(){
-    return this.busy = this.plantaService.obtenerClientes().pipe().subscribe((elemento) =>{
-      this.clientes = elemento;
-    })
-  }
-
-  getDestino(elem:any[]):string{
-    let respuesta = "";
-    let dato:any;
-    for(dato in elem){
-      respuesta = `${respuesta + elem[dato].nombre} / `;
-    }
-    return respuesta.slice(0,-3);
-  }
-
   editRow(row: any, index: number) {
     this.editRowIndex = index;
     this.formData = row;
-    this.formConfig.items[2].options = this.destinos;
-    this.formConfig.items[3].options = this.clientes;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -157,11 +107,9 @@ export class EmbarcacionComponent {
     this.getList();
   }
   newRow():void {
-    let row = new RespuestaPlanta();
+    let row = new Embarcacion();
     this.editRowIndex = -1;
     this.formData = row;
-    this.formConfig.items[2].options = this.destinos;
-    this.formConfig.items[3].options = this.clientes;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -184,7 +132,7 @@ export class EmbarcacionComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.plantaService.guardarPlanta(e).forEach(value => {
+        /*this.embarcacionService.obtenerEmbarcaciones(e).forEach(value => {
           //console.log(e.plantaDto)
           e.plantaDto.idPlanta = value;
         }).then(value => {
@@ -194,7 +142,7 @@ export class EmbarcacionComponent {
           Swal.fire('Error',"Hubo Problemas al Eliminar la planta, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
-        });
+        });*/
       }
     })
   }
@@ -240,7 +188,7 @@ export class EmbarcacionComponent {
       e.plantaDto.idPlanta = null;
       mensaje = "Se grabo correctamente la Planta";
     }
-
+/*
     this.plantaService.guardarPlanta(e).forEach(value => {
       e.plantaDto.idPlanta = value;
     }).then(value => {
@@ -256,6 +204,8 @@ export class EmbarcacionComponent {
     }).finally(()=>{
       this.editForm!.modalInstance.hide();
     });
+
+ */
   }
 
   onCanceled() {

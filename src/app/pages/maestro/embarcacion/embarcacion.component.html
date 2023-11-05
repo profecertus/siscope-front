@@ -35,36 +35,36 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="plantaDto" header="Id" [width]="'100px'">
+              <d-column field="idEmbarcacion" header="Id Embarcacion" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    {{ cellItem.idPlanta }}
+                    {{ cellItem }}
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="plantaDto" header="Nombre" [width]="'200px'">
+              <d-column field="nombre" header="Nombre" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.nombre }}
+                      {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="relPlantaDestinoDto" header="Número Matricula" [width]="'200px'">
+              <d-column field="numMatricula" header="Número Matricula" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ getDestino(cellItem) }}
+                      {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="plantaDto" header="Tonelaje" [width]="'200px'">
+              <d-column field="tonelaje" header="Tonelaje" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.ruc.nombre }}
+                      {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
