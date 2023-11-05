@@ -14,7 +14,7 @@ export default {
       'trabajador': 'Trabajador',
       'camara': 'Camara',
       'planta': 'Planta',
-      'operativo': 'Conceptos Operativos',
+      //'operativo': 'Conceptos Operativos',
       'administrativo': 'Conceptos Administrativos',
     },
     'tarifa':{

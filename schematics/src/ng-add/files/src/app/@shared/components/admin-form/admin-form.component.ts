@@ -24,6 +24,8 @@ export class AdminFormComponent implements OnInit {
 
   @Output() canceled = new EventEmitter();
 
+  @Output() adicional = new EventEmitter();
+
   constructor() {}
 
   ngOnInit() {}
@@ -36,5 +38,9 @@ export class AdminFormComponent implements OnInit {
 
   cancel() {
     this.canceled.emit();
+  }
+
+  adicion(){
+    this.adicional.emit();
   }
 }

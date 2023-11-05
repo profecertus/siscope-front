@@ -34,10 +34,6 @@ export default function (values: any) {
           title: values['maestro']['trabajador'],
           link: '/pages/maestro/trabajador',
         },
-        {
-          title: values['maestro']['operativo'],
-          link: '/pages/maestro/operativo',
-        },
       ],
       link: '/pages/maestro',
       menuIcon: 'icon icon-modify',

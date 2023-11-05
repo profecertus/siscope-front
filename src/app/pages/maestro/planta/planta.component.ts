@@ -23,6 +23,7 @@ export class PlantaComponent {
   DatoABuscar: string = "";
 
 
+
   formConfig: FormConfig = {
     layout: FormLayout.Horizontal,
     items: [
@@ -61,7 +62,7 @@ export class PlantaComponent {
         label: 'Cliente',
         cabecera: 'plantaDto',
         prop: 'ruc',
-        type: 'select',
+        type: 'selectButton',
         deep: 2,
         options: [], //Se cargan luego
         placeholder: 'Cliente',
@@ -77,6 +78,7 @@ export class PlantaComponent {
   formData = {};
 
   editForm: any = null;
+  formAddClient: any = null;
 
   editRowIndex = -1;
 
@@ -91,6 +93,10 @@ export class PlantaComponent {
 
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
+
+  @ViewChild('AgregarCliente', { static: true })
+  AgregarClienteTemplate: TemplateRef<any> | undefined;
+  layoutDirection: FormLayout = FormLayout.Horizontal;
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
               private plantaService: PlantaService
@@ -262,5 +268,25 @@ export class PlantaComponent {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
   }
+
+  onAdicional(){
+    this.formAddClient = this.dialogService.open({
+      id: 'edit-dialog',
+      width: '600px',
+      maxHeight: '600px',
+      title: 'Nuevo Cliente',
+      showAnimate: false,
+      contentTemplate: this.AgregarClienteTemplate,
+      backdropCloseable: true,
+      onClose: () => {},
+      buttons: [],
+    });
+  }
+
+  onCloseCliente(){
+    this.formAddClient!.modalInstance.hide();
+  }
+
+
 }
 

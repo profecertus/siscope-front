@@ -29,6 +29,7 @@
         *ngIf="item.type === 'input'"
         [dValidateRules]="item.required ? item.rule : {}"
       />
+
       <d-select
         *ngIf="item.type === 'select'"
         [appendToBody]="true"
@@ -42,6 +43,31 @@
         [dValidateRules]="item.required ? item.rule : {}"
         [extraConfig]="{selectedItemWithTemplate:{enable: true}}"
       ></d-select>
+
+      <div class="btn-group" *ngIf="item.type === 'selectButton'">
+        <d-row [dAlign]="'stretch'" class="base-container">
+          <d-col [dSpan]="19">
+            <d-select
+              *ngIf="item.type === 'selectButton'"
+              [appendToBody]="true"
+              [isSearch]="true"
+              [options]='item.options'
+              [name]="item.prop"
+              [filterKey]="item.filterKey"
+              [placeholder]='item.placeholder'
+              (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"
+              [ngModel]="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]:_formData[item.prop]): _formData[item.cabecera][item.cuerpo][item.prop]"
+              [dValidateRules]="item.required ? item.rule : {}"
+              [extraConfig]="{selectedItemWithTemplate:{enable: true}}"
+            ></d-select>
+          </d-col>
+          <d-col [dSpan]="1"/>
+          <d-col [dSpan]="1">
+            <d-button bsStyle="common" (click)="adicion()" *ngIf="item.type === 'selectButton'"><strong>...</strong></d-button>
+          </d-col>
+        </d-row>
+      </div>
+
       <div class="devui-input-group devui-dropdown-origin" *ngIf="item.type === 'datePicker'">
         <input
           class="devui-input devui-form-control"
@@ -56,6 +82,7 @@
           #datePicker1="datepicker"
           [dValidateRules]="item.required ? item.rule : []"
         />
+
         <div class="devui-input-group-addon close-icon-wrapper" (click)="datePicker1.clearAll()">
           <i class="icon icon-close"></i>
         </div>
@@ -66,7 +93,13 @@
     </d-form-control>
   </d-form-item>
   <d-form-operation class="da-form-operation">
-    <d-button style="margin-right: 5px" dFormSubmit [dFormSubmitData]="'submit-button'">Aceptar</d-button>
-    <d-button bsStyle="common" (click)="cancel()">Cancelar</d-button>
+    <d-row>
+      <d-col [dSpan]="8">
+        <d-button style="margin-right: 5px" dFormSubmit [dFormSubmitData]="'submit-button'">Aceptar</d-button>
+      </d-col>
+      <d-col [dSpan]="4"/>
+      <d-button bsStyle="common" (click)="cancel()">Cancelar</d-button>
+      <d-col [dSpan]="2"/>
+    </d-row>
   </d-form-operation>
 </form>
