@@ -2,11 +2,12 @@ import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/c
 import { DialogService, FormLayout } from '@devui';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { Subscription } from 'rxjs';
-import { RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
+import { ProveedorModel, RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
 import { RespuestaPlanta } from '../../../model/planta.modelo';
 import { EmbarcacionService } from '../../../service/embarcacion.service';
 import { Embarcacion } from '../../../model/embarcacion.model';
+import { ProveedorService } from '../../../service/proveedor.service';
 
 @Component({
   selector: 'app-embarcacion',
@@ -17,6 +18,7 @@ import { Embarcacion } from '../../../model/embarcacion.model';
 export class EmbarcacionComponent {
   basicDataSource: RespuestaProveedor[] = [];
   basicDataSourceBkp: RespuestaProveedor[] = [];
+  proveedores: ProveedorModel[] = [];
   DatoABuscar: string = "";
 
 
@@ -30,6 +32,18 @@ export class EmbarcacionComponent {
         deep: 1,
         tips: 'Nombre',
         placeholder: 'Nombre de la Embarcacion',
+      },
+      {
+        label: 'Proveedor',
+        prop: 'idProveedor',
+        type: 'select',
+        deep: 1,
+        options: [], //Se cargan luego
+        placeholder: 'Proveedor',
+        filterKey: 'razonSocial',
+        multipleselect: [],
+        required: true,
+        rule:{validators: [{ required: true }]},
       },
       {
         label: 'Num. Matricula',
@@ -68,18 +82,19 @@ export class EmbarcacionComponent {
   EditorTemplate: TemplateRef<any> | undefined;
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private embarcacionService: EmbarcacionService
+              private embarcacionService: EmbarcacionService, private proveedorService: ProveedorService
   ) {}
 
   ngOnInit() {
     this.getList();
+    this.getListProveedor();
   }
 
 
   getList() {
     return this.busy = this.embarcacionService.obtenerEmbarcaciones((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
-      let res : RespuestaPlanta[]  = elemento.content;
+      let res : Embarcacion[]  = elemento.content;
       //console.log(res);
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
@@ -87,9 +102,21 @@ export class EmbarcacionComponent {
     });
   }
 
+  getListProveedor(){
+    //Obtengo los proveedores y filtro por FLETE (06)
+    return this.busy = this.proveedorService.obtenerProveedoresCamara().
+    pipe().subscribe((elemento) => {
+      let respuesta = elemento.filter(item =>
+        item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 1).length > 0
+      );
+      this.proveedores = respuesta;
+    });
+  }
+
   editRow(row: any, index: number) {
     this.editRowIndex = index;
     this.formData = row;
+    this.formConfig.items[1].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -110,6 +137,7 @@ export class EmbarcacionComponent {
     let row = new Embarcacion();
     this.editRowIndex = -1;
     this.formData = row;
+    this.formConfig.items[1].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',

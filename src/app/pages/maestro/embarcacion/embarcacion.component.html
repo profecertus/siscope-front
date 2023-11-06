@@ -42,6 +42,15 @@
                   </ng-template>
                 </d-cell>
               </d-column>
+              <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem.razonSocial }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
               <d-column field="nombre" header="Nombre" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
