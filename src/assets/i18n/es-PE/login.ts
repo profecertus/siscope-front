@@ -1,6 +1,6 @@
 export default {
   loginPage: {
-    coperation: 'Powered By DevUI@v 0.0.2',
+    coperation: 'Powered By DevUI@v 0.0.3',
     loginWays: {
       account: 'Inicio Usuario',
       email: 'Inicio Email',
