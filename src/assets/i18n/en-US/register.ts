@@ -1,6 +1,6 @@
 export default {
   registerPage: {
-    coperation: 'Powered By DevUI@v 0.0.1',
+    coperation: 'Powered By DevUI@v 0.0.2',
     title: 'Register',
     submit: 'Register',
     email: 'Email',
