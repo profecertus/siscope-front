@@ -26,11 +26,13 @@ export class EmbarcacionComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Nombre Emb.',
+        label: 'Nombre',
         prop: 'nombre',
         type: 'input',
         deep: 1,
         tips: 'Nombre',
+        required: true,
+        rule:{validators: [{ required: true }]},
         placeholder: 'Nombre de la Embarcacion',
       },
       {
@@ -42,6 +44,7 @@ export class EmbarcacionComponent {
         placeholder: 'Proveedor',
         filterKey: 'razonSocial',
         multipleselect: [],
+        tips:'Solo Proveedores de Pesca',
         required: true,
         rule:{validators: [{ required: true }]},
       },
