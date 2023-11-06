@@ -18,7 +18,8 @@ export class ProveedorService {
     return this.http.get(`${this.apiUrl}${this.proveedor}/getAllPage/${numpage}/${numsize}`);
   }
 
-  obtenerProveedoresCamara(): Observable<any> {
+  obtenerProveedoresCamara(): Observable<ProveedorModel[]> {
+    // @ts-ignore
     return this.http.get(`${this.apiUrl}${this.proveedor}/getAll`);
   }
 

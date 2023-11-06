@@ -4,6 +4,7 @@ export class TipoServicio {
   idUm?: UnidadMedida = new UnidadMedida();
   estado?: boolean = true;
   estadoReg?: boolean = true;
+  [key:string]:any
 }
 
 export class UnidadMedida {
@@ -12,4 +13,5 @@ export class UnidadMedida {
   abreviatura?: string = "";
   estado?: boolean = true;
   estadoReg?: boolean = true;
+  [key:string]:any
 }

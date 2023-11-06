@@ -106,9 +106,13 @@ export class CamaraComponent {
   }
 
   getListProveedor(){
+    //Obtengo los proveedores y filtro por FLETE (06)
     return this.busy = this.proveedorService.obtenerProveedoresCamara().
     pipe().subscribe((elemento) => {
-      this.proveedores = elemento;
+      let respuesta = elemento.filter(item =>
+        item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 6).length > 0
+      );
+      this.proveedores = respuesta;
     });
   }
 

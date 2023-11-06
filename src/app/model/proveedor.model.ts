@@ -7,16 +7,17 @@ export class RespuestaProveedor{
 }
 
 export class ProveedorModel {
-  id?: number = 0;
-  razonSocial?: string = "";
-  nombreComercial?: string = "";
-  idTipodoc?: TipoDocumento = new TipoDocumento();
-  numeroDocumento?: string = "";
-  direccion?: string = "";
-  telefono?: string ="";
-  correo?: string = "";
-  estado?: boolean = true;
-  estadoReg?: boolean = true;
+  id: number = 0;
+  razonSocial: string = "";
+  nombreComercial: string = "";
+  idTipodoc: TipoDocumento = new TipoDocumento();
+  numeroDocumento: string = "";
+  direccion: string = "";
+  telefono: string ="";
+  correo: string = "";
+  estado: boolean = true;
+  estadoReg: boolean = true;
+  relProvTiposervDto: TipoServicio[] = [];
   [key: string]: any; // Agregar la firma de índice
 }
 
