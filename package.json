@@ -11,7 +11,7 @@
     "ng": "ng",
     "start": "ng serve --open --port 8001",
     "build": "ng build",
-    "build:website": "ng build --configuration production --base-href /admin/ --deploy-url /admin/ --output-path dist/admin",
+    "build:website": "ng build --configuration production --base-href /siscope/ --output-path dist/siscope",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

@@ -122,7 +122,7 @@
 </div>
 
 <ng-template #EditorTemplate>
-  <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()" (adicional)='onAdicional()'>
+  <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()" (adicional)='onAdicional($event)'>
   </da-admin-form>
 </ng-template>
 
@@ -133,7 +133,7 @@
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'El RUC del Cliente.'">RUC</d-form-label>
         <d-form-control>
           <div>
-            <input dTextInput autocomplete="off" name="RUCCliente" />
+            <input dTextInput autocomplete="off" name="RUCCliente" [(ngModel)]='rucCliente' maxlength='11'/>
           </div>
         </d-form-control>
       </d-form-item>
@@ -141,14 +141,14 @@
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Nombre del Cliente.'">Nombre</d-form-label>
         <d-form-control>
           <div>
-            <input dTextInput autocomplete="off" name="nombreCliente" />
+            <input dTextInput autocomplete="off" name="nombreCliente" [(ngModel)]='nombreCliente' maxlength='70' />
           </div>
         </d-form-control>
       </d-form-item>
       <d-form-operation>
         <d-row>
           <d-col [dSpan]="8">
-            <d-button bsStyle="primary" class="mr-element-spacing" circled="true" style="margin-right: 4px">Grabar</d-button>
+            <d-button bsStyle="primary" class="mr-element-spacing" circled="true" style="margin-right: 4px" (click)='saveCliente()' >Grabar</d-button>
           </d-col>
           <d-col [dSpan]="4"/>
           <d-col [dSpan]="8"><d-button bsStyle="common" circled="true" (click)='onCloseCliente()'  >Cancelar</d-button></d-col>

@@ -33,6 +33,12 @@ export class PlantaService {
     return this.http.get(`${this.apiUrl}${this.cliente}/getAllCliente`);
   }
 
+  guardarCliente(cliente:Cliente) : Observable<Cliente>{
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // @ts-ignore
+    return this.http.post(`${this.apiUrl}${this.cliente}/saveCliente`, cliente, {headers});
+  }
+
   guardarPlanta(datos: RespuestaPlanta):Observable<any>{
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Realizar la solicitud PUT enviando el objeto JSON

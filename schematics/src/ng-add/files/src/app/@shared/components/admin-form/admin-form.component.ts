@@ -40,7 +40,7 @@ export class AdminFormComponent implements OnInit {
     this.canceled.emit();
   }
 
-  adicion(){
-    this.adicional.emit();
+  adicion( formdata:any ){
+    this.adicional.emit(this._formData);
   }
 }

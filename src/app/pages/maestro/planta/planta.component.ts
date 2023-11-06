@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/c
 import { DialogService, FormLayout } from '@devui';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { Subscription } from 'rxjs';
-import { RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
+import { RespuestaProveedor } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
 import { PlantaService } from '../../../service/planta.service';
 import { RespuestaPlanta } from '../../../model/planta.modelo';
@@ -97,6 +97,8 @@ export class PlantaComponent {
   @ViewChild('AgregarCliente', { static: true })
   AgregarClienteTemplate: TemplateRef<any> | undefined;
   layoutDirection: FormLayout = FormLayout.Horizontal;
+  rucCliente: string = '';
+  nombreCliente: string = '';
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
               private plantaService: PlantaService
@@ -113,7 +115,6 @@ export class PlantaComponent {
     return this.busy = this.plantaService.obtenerPlantas((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
       let res : RespuestaPlanta[]  = elemento.content;
-      //console.log(res);
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
@@ -191,7 +192,6 @@ export class PlantaComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.plantaService.guardarPlanta(e).forEach(value => {
-          //console.log(e.plantaDto)
           e.plantaDto.idPlanta = value.valorDevuelto;
         }).then(value => {
           this.basicDataSource.splice(index, 1);
@@ -246,7 +246,6 @@ export class PlantaComponent {
       e.plantaDto.idPlanta = null;
       mensaje = "Se grabo correctamente la Planta";
     }
-
     this.plantaService.guardarPlanta(e).forEach(value => {
       e.plantaDto.idPlanta = value.valorDevuelto;
     }).then(value => {
@@ -268,8 +267,9 @@ export class PlantaComponent {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
   }
-
-  onAdicional(){
+  eventoCliente:any;
+  onAdicional(evento:any){
+    this.eventoCliente = evento;
     this.formAddClient = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
@@ -288,5 +288,30 @@ export class PlantaComponent {
   }
 
 
+  saveCliente() {
+    let miCliente = new Cliente();
+    miCliente.nombre = this.nombreCliente;
+    miCliente.ruc = this.rucCliente;
+    miCliente.cliente = this.nombreCliente + " - " + this.rucCliente;
+    Swal.fire({
+      title: '¿Seguro de grabar el Cliente?',
+      showCancelButton: true,
+      confirmButtonText: 'Grabar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      this.plantaService.guardarCliente(miCliente).forEach(valor => {
+        this.clientes.push(valor);
+        this.formConfig.items[3].options = this.clientes;
+        this.eventoCliente.plantaDto.ruc = miCliente;
+        this.nombreCliente = '';
+        this.rucCliente = '';
+        Swal.fire('Exito','Cliente grabado!','success');
+      }).
+      then(()=>{}).catch(error => {
+        console.log(error);
+        Swal.fire('Error','Sucedio un error al momento de grabar - Verifique que el cliente no exista o que el RUC no esta asignado','error');
+      }).finally(()=>{this.onCloseCliente();});
+    });
+  }
 }
 

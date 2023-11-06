@@ -63,7 +63,7 @@
           </d-col>
           <d-col [dSpan]="1"/>
           <d-col [dSpan]="1">
-            <d-button bsStyle="common" (click)="adicion()" *ngIf="item.type === 'selectButton'"><strong>...</strong></d-button>
+            <d-button bsStyle="common" (click)="adicion( _formData )" *ngIf="item.type === 'selectButton'"><strong>...</strong></d-button>
           </d-col>
         </d-row>
       </div>

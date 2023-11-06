@@ -9,6 +9,7 @@ import { CoreModule } from './@core/core.module';
 import { SharedModule } from './@shared/shared.module';
 import { Observable, of } from 'rxjs';
 import { I18N } from '../config/language-config';
+import { APP_BASE_HREF } from '@angular/common';
 
 
 class I18NLoader implements TranslateLoader {
@@ -33,7 +34,7 @@ class I18NLoader implements TranslateLoader {
       },
     }),
   ],
-  providers: [],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/siscope/' }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -4,10 +4,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build:website
 
 # Etapa de ejecución
 FROM nginx:alpine
-COPY --from=builder /app/dist/devui-admin /usr/share/nginx/html
+COPY --from=builder /app/dist/siscope /usr/share/nginx/html
 EXPOSE 80
-#CMD ["nginx", "-g", "daemon off;"]
+
