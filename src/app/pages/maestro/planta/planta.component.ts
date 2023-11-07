@@ -2,12 +2,13 @@ import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/c
 import { DialogService, FormLayout } from '@devui';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { Subscription } from 'rxjs';
-import { RespuestaProveedor } from '../../../model/proveedor.model';
+import { ProveedorModel, RespuestaProveedor } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
 import { PlantaService } from '../../../service/planta.service';
 import { RespuestaPlanta } from '../../../model/planta.modelo';
 import { Destino } from '../../../model/destino.model';
 import { Cliente } from '../../../model/cliente.model';
+import { ProveedorService } from '../../../service/proveedor.service';
 
 @Component({
   selector: 'app-planta',
@@ -18,6 +19,8 @@ import { Cliente } from '../../../model/cliente.model';
 export class PlantaComponent {
   basicDataSource: RespuestaProveedor[] = [];
   basicDataSourceBkp: RespuestaProveedor[] = [];
+  descargaPlanta:ProveedorModel[] = [];
+  comisionPlanta:ProveedorModel[] = [];
   destinos: Destino[] =[];
   clientes: Cliente[] = [];
   DatoABuscar: string = "";
@@ -76,7 +79,7 @@ export class PlantaComponent {
   };
 
   formData = {};
-
+  eventoCliente:any;
   editForm: any = null;
   formAddClient: any = null;
 
@@ -96,18 +99,25 @@ export class PlantaComponent {
 
   @ViewChild('AgregarCliente', { static: true })
   AgregarClienteTemplate: TemplateRef<any> | undefined;
+
+  @ViewChild('RelPlantaProveedor', { static: true })
+  RelPlantaProveedor: TemplateRef<any> | undefined;
+
+
   layoutDirection: FormLayout = FormLayout.Horizontal;
   rucCliente: string = '';
   nombreCliente: string = '';
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private plantaService: PlantaService
+              private plantaService: PlantaService, private proveedorService: ProveedorService
               ) {}
 
   ngOnInit() {
     this.getList();
     this.getListDestino();
     this.getListCliente();
+    this.getListProveedorDescPlanta();
+    this.getListProveedorComPlanta();
   }
 
 
@@ -118,6 +128,28 @@ export class PlantaComponent {
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
+    });
+  }
+
+  getListProveedorDescPlanta(){
+      //Obtengo los proveedores y filtro por FLETE (06)
+      return this.busy = this.proveedorService.obtenerProveedoresCamara().
+      pipe().subscribe((elemento) => {
+        let respuesta = elemento.filter(item =>
+          item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 8).length > 0
+        );
+        this.descargaPlanta = respuesta;
+      });
+    }
+
+  getListProveedorComPlanta(){
+    //Obtengo los proveedores y filtro por FLETE (06)
+    return this.busy = this.proveedorService.obtenerProveedoresCamara().
+    pipe().subscribe((elemento) => {
+      let respuesta = elemento.filter(item =>
+        item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 12).length > 0
+      );
+      this.comisionPlanta = respuesta;
     });
   }
 
@@ -267,7 +299,22 @@ export class PlantaComponent {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
   }
-  eventoCliente:any;
+
+  onRelacional(e: any, index: number){
+    this.formAddClient = this.dialogService.open({
+      id: 'edit-dialog',
+      width: '600px',
+      maxHeight: '600px',
+      title: 'Proveedores en Planta',
+      showAnimate: false,
+      contentTemplate: this.RelPlantaProveedor,
+      backdropCloseable: true,
+      onClose: () => {},
+      buttons: [],
+    });
+  }
+
+
   onAdicional(evento:any){
     this.eventoCliente = evento;
     this.formAddClient = this.dialogService.open({
