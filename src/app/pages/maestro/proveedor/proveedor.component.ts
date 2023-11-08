@@ -260,8 +260,6 @@ export class ProveedorComponent {
   }
   newRow():void {
     let row = new RespuestaProveedor();
-    row.proveedor = new ProveedorModel();
-    row.relProvTiposerv = new RelProvTipoServ();
     this.editRowIndex = -1;
     this.formConfig.items[2].options = this.tipoDocSource;
     this.formConfig.items[4].options = this.tipoServicicioSource;

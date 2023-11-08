@@ -1,8 +1,8 @@
 import { TipoServicio } from './tipoServicio.model';
 
 export class RespuestaProveedor{
-  proveedor?: ProveedorModel;
-  relProvTiposerv?: RelProvTipoServ;
+  proveedor: ProveedorModel = new ProveedorModel();
+  relProvTiposerv: RelProvTipoServ = new RelProvTipoServ();
   [key: string]: any; // Agregar la firma de índice
 }
 
@@ -22,24 +22,24 @@ export class ProveedorModel {
 }
 
 export class TipoDocumento {
-  id?: number = 0;
-  nombre?: string = "";
-  abreviatura?: string = "";
-  estado?: boolean = true;
-  estadoReg?: boolean = true;
+  id: number = 0;
+  nombre: string = "";
+  abreviatura: string = "";
+  estado: boolean = true;
+  estadoReg: boolean = true;
   [key: string]: any; // Agregar la firma de índice
 }
 
 export class RelProvTipoServ{
-  id?: idRel = new idRel();
-  estado?: boolean = true;
-  estadoReg?: boolean = true;
-  idTipoServicio?: TipoServicio = new TipoServicio();
+  id: idRel = new idRel();
+  estado: boolean = true;
+  estadoReg: boolean = true;
+  idTipoServicio: TipoServicio = new TipoServicio();
   [key: string]: any; // Agregar la firma de índice
 }
 
 export class idRel{
-  idProveedor?: number = 0;
-  idTipoServicio?: number = 0;
+  idProveedor: number = 0;
+  idTipoServicio: number = 0;
   [key: string]: any; // Agregar la firma de índice
 }

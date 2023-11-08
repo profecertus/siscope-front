@@ -9,6 +9,8 @@ import { RespuestaPlanta } from '../../../model/planta.modelo';
 import { Destino } from '../../../model/destino.model';
 import { Cliente } from '../../../model/cliente.model';
 import { ProveedorService } from '../../../service/proveedor.service';
+import { TipoServicio } from '../../../model/tipoServicio.model';
+import { RelplantaproveedorService } from '../../../service/relplantaproveedor.service';
 
 @Component({
   selector: 'app-planta',
@@ -17,13 +19,16 @@ import { ProveedorService } from '../../../service/proveedor.service';
 })
 
 export class PlantaComponent {
-  basicDataSource: RespuestaProveedor[] = [];
-  basicDataSourceBkp: RespuestaProveedor[] = [];
+  basicDataSource: RespuestaPlanta[] = [];
+  basicDataSourceBkp: RespuestaPlanta[] = [];
   descargaPlanta:ProveedorModel[] = [];
   comisionPlanta:ProveedorModel[] = [];
   destinos: Destino[] =[];
   clientes: Cliente[] = [];
   DatoABuscar: string = "";
+  idPlantaSel:number = 0;
+  seleccionadoDescPlanta : any;
+  seleccionadoComPlanta:any;
 
 
 
@@ -109,7 +114,8 @@ export class PlantaComponent {
   nombreCliente: string = '';
 
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private plantaService: PlantaService, private proveedorService: ProveedorService
+              private plantaService: PlantaService, private proveedorService: ProveedorService,
+              private relplantaproveedorService: RelplantaproveedorService
               ) {}
 
   ngOnInit() {
@@ -134,9 +140,9 @@ export class PlantaComponent {
   getListProveedorDescPlanta(){
       //Obtengo los proveedores y filtro por FLETE (06)
       return this.busy = this.proveedorService.obtenerProveedoresCamara().
-      pipe().subscribe((elemento) => {
+      pipe().subscribe((elemento : ProveedorModel[]) => {
         let respuesta = elemento.filter(item =>
-          item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 8).length > 0
+          item.relProvTiposervDto.filter((valor:TipoServicio) => valor.idTipoServicio.id == 8).length > 0
         );
         this.descargaPlanta = respuesta;
       });
@@ -147,7 +153,7 @@ export class PlantaComponent {
     return this.busy = this.proveedorService.obtenerProveedoresCamara().
     pipe().subscribe((elemento) => {
       let respuesta = elemento.filter(item =>
-        item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 12).length > 0
+        item.relProvTiposervDto.filter((valor:TipoServicio) => valor.idTipoServicio.id == 12).length > 0
       );
       this.comisionPlanta = respuesta;
     });
@@ -300,7 +306,26 @@ export class PlantaComponent {
     this.editRowIndex = -1;
   }
 
-  onRelacional(e: any, index: number){
+  onCancelado() {
+    this.formAddClient!.modalInstance.hide();
+
+  }
+
+
+  onRelacional(e: RespuestaPlanta, index: number){
+    this.seleccionadoComPlanta=null;
+    this.seleccionadoDescPlanta=null;
+    // @ts-ignore
+    this.idPlantaSel = e.plantaDto.idPlanta;
+    for(let i = 0; i< e.relPlantaProveedorDtoList.length; i++ ){
+      if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 8){
+        this.seleccionadoDescPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+      }
+      if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 12){
+        this.seleccionadoComPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+      }
+    }
+
     this.formAddClient = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
@@ -360,5 +385,30 @@ export class PlantaComponent {
       }).finally(()=>{this.onCloseCliente();});
     });
   }
+
+  grabarRel() {
+    Swal.fire({
+      title: '¿Seguro de grabar los Proveedores?',
+      showCancelButton: true,
+      confirmButtonText: 'Grabar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+          this.relplantaproveedorService.
+            actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoComPlanta.id.toString(), "12")
+            .forEach(value => {
+              this.relplantaproveedorService.
+                actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoDescPlanta.id.toString(), "8")
+                .forEach(value1 => {this.onCancelado();});
+            } );
+          }
+      }).
+      then(()=>{}).catch(error => {
+        console.log(error);
+        Swal.fire('Error','Sucedio un error al momento de grabar.','error');
+      this.onCancelado();
+      });
+  }
+
 }
 

@@ -15,8 +15,8 @@ import { Camara } from '../../../model/camara.model';
   styleUrls: ['./camara.component.scss']
 })
 export class CamaraComponent {
-  basicDataSource: RespuestaProveedor[] = [];
-  basicDataSourceBkp: RespuestaProveedor[] = [];
+  basicDataSource: Camara[] = [];
+  basicDataSourceBkp: Camara[] = [];
   proveedores:ProveedorModel[] =[];
   DatoABuscar: string = "";
   accion:number = 0;
@@ -97,7 +97,7 @@ export class CamaraComponent {
   getList() {
     return this.busy = this.camaraService.obtenerCamaras((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
-      let res : RespuestaPlanta[]  = elemento.content;
+      let res : Camara[]  = elemento.content;
       //console.log(res);
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;

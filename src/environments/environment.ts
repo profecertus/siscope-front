@@ -17,6 +17,7 @@ export const environment = {
   sufijoBanco: '/banco/v1',
   sufijoFormaPago: '/formaPago/v1',
   sufijoEmbarcacion: '/embarcacion/v1',
+  sufijoRelPlantaProv: '/relplantaproveedor/v1',
 };
 
 /*

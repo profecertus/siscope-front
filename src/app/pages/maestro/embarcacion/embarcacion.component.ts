@@ -16,8 +16,8 @@ import { ProveedorService } from '../../../service/proveedor.service';
 })
 
 export class EmbarcacionComponent {
-  basicDataSource: RespuestaProveedor[] = [];
-  basicDataSourceBkp: RespuestaProveedor[] = [];
+  basicDataSource: Embarcacion[] = [];
+  basicDataSourceBkp: Embarcacion[] = [];
   proveedores: ProveedorModel[] = [];
   DatoABuscar: string = "";
 
