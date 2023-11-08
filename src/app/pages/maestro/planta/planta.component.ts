@@ -308,11 +308,12 @@ export class PlantaComponent {
 
   onCancelado() {
     this.formAddClient!.modalInstance.hide();
-
+    this.editRowIndex = -1;
   }
 
 
   onRelacional(e: RespuestaPlanta, index: number){
+    this.editRowIndex = index;
     this.seleccionadoComPlanta=null;
     this.seleccionadoDescPlanta=null;
     // @ts-ignore
@@ -399,7 +400,13 @@ export class PlantaComponent {
             .forEach(value => {
               this.relplantaproveedorService.
                 actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoDescPlanta.id.toString(), "8")
-                .forEach(value1 => {this.onCancelado();});
+                .forEach(value1 => {
+                  this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
+                    this.basicDataSource.splice(this.editRowIndex, 1, valor);
+                    this.onCancelado();
+                  });
+
+                });
             } );
           }
       }).

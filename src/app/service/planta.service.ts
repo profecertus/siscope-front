@@ -23,6 +23,10 @@ export class PlantaService {
     return this.http.get(`${this.apiUrl}${this.planta}/getAllPage/${numpage}/${numsize}`);
   }
 
+  obtenerPlanta(idPlanta:number):Observable<any>{
+    return  this.http.get(`${this.apiUrl}${this.planta}/getPlanta/${idPlanta}`);
+  }
+
   obtenerDestinos() : Observable<Destino[]>{
     // @ts-ignore
     return this.http.get(`${this.apiUrl}${this.destino}/getAllDestino`);
