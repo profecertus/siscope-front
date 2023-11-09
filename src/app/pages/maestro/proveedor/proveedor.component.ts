@@ -5,10 +5,11 @@ import { Subscription } from 'rxjs';
 import { ProveedorService } from '../../../service/proveedor.service';
 import { TipodocumentoService } from '../../../service/tipodocumento.service';
 import { TiposervicioService } from '../../../service/tiposervicio.service';
-import { ProveedorModel, RelProvTipoServ, RespuestaProveedor, TipoDocumento, idRel } from '../../../model/proveedor.model';
+import { RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
 import { TipoServicio } from '../../../model/tipoServicio.model';
 import  Swal  from 'sweetalert2';
-import { TableWidthConfig } from 'ng-devui';
+
+
 
 
 @Component({
@@ -23,6 +24,7 @@ export class ProveedorComponent {
   tipoServicicioSource: TipoServicio[] = [];
   DatoABuscar: string = "";
   accion:number = 0;
+
 
   formConfigTrab: FormConfig = {
     layout: FormLayout.Horizontal,
@@ -164,6 +166,13 @@ export class ProveedorComponent {
         cabecera: 'proveedor',
         placeholder: 'Ingrese el correo electrónico',
       },
+      {
+        label: 'Estado',
+        cabecera:'proveedor',
+        prop: 'estado',
+        type: 'switch',
+        deep: 2,
+      },
     ],
     labelSize: '',
   };
@@ -297,10 +306,11 @@ export class ProveedorComponent {
       if (result.isConfirmed) {
         this.proveedorService.guardarProveedor(e).forEach(value => {
           e.proveedor.id = value.valorDevuelto;
-        }).then(value => {
+        }).then(() => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Proveedor Eliminado!','success');
         }).catch( error =>{
+          console.log(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar el proveedor, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -349,12 +359,31 @@ export class ProveedorComponent {
     //En caso sea modificación.
     if (this.accion == 1){
       e.proveedor.id = null;
-      mensaje = "Se grabo correctamente el proveedor";
+      mensaje = "Se grabó correctamente el proveedor";
     }
+
+    if (e.proveedor.idTipodoc.abreviatura == 'RUC'){
+      let ruc : number = parseInt( e.proveedor.numeroDocumento );
+      if( ruc > 9999999999 ){
+
+        //Valido el numero de RUC
+        for (var suma = -(ruc%10<2), i = 0; i<11; i++, ruc = ruc/10|0)
+          suma += (ruc % 10) * (i % 7 + (i/7|0) + 1);
+        if(suma % 11 !== 0){
+          Swal.fire('Error',"El número de RUC ingresado NO es válido!",'error');
+          return;
+        }
+      }else{
+        Swal.fire('Error',"El número de RUC ingresado NO tiene los 11 digitos",'error');
+        return;
+      }
+    }
+
+
 
     this.proveedorService.guardarProveedor(e).forEach(value => {
       e.proveedor.id = value.valorDevuelto;
-    }).then(value => {
+    }).then(() => {
       if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
@@ -363,11 +392,11 @@ export class ProveedorComponent {
       //Ahora debo de actualizar la relación proveedor con servicio.
       Swal.fire('Exito',mensaje,'success');
     }).catch( error =>{
+      console.log(error);
       Swal.fire('Error',"Hubo Problemas al grabar el proveedor, verifique que el tipo y numero de documento no Exista",'error');
     }).finally(()=>{
       this.editForm!.modalInstance.hide();
     });
-
   }
 
   onCanceled() {

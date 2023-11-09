@@ -87,6 +87,15 @@
                   </ng-template>
                 </d-cell>
               </d-column>
+              <d-column field="proveedor" header="Estado" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'200px'">
+                      <d-tag [tag]="cellItem.estado.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.estado.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
               <d-column field="proveedor" header="Telefono" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">

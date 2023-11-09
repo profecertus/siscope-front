@@ -8,9 +8,9 @@
       <d-breadcrumb-item>Camaras</d-breadcrumb-item>
     </d-breadcrumb>
     <div class="da-content-banner-title">
-      Listado de Camaras
+      Listado de Cámaras
     </div>
-    <div>Lista de las <strong>camaras</strong> incluidos en el sistema</div>
+    <div>Lista de las <strong>cámaras</strong> incluidos en el sistema</div>
   </div>
   <div class="da-content-wrapper">
     <da-layout-row [daGutter]="[24, 24]">
@@ -65,6 +65,15 @@
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem.razonSocial }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="estado" header="Estado" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
                 </d-cell>

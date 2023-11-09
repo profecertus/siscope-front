@@ -62,21 +62,23 @@ export class TrabajadorComponent {
         label: 'Nombres',
         prop: 'nombres',
         type: 'input',
-        required: false,
+        required: true,
         maxi:70,
         deep: 1,
         tips: 'Nombres',
         placeholder: 'Nombres',
+        rule:{validators: [{ required: true }]},
       },
       {
         label: 'Ape. Pat',
         prop: 'apellidoPat',
         type: 'input',
-        required: false,
         deep: 1,
         maxi:70,
         tips: 'Apellido Paterno',
         placeholder: 'Apellido Paterno',
+        required:true,
+        rule:{validators: [{ required: true }]},
       },
       {
         label: 'Ape. Mat',
@@ -123,6 +125,19 @@ export class TrabajadorComponent {
         multipleselect: [],
         required: true,
         rule:{validators: [{ required: true }]},
+      },
+      {
+        label: 'Cta Bancaria',
+        prop: 'ctabancaria',
+        type: 'number',
+        deep: 1,
+        placeholder: 'Cuenta Bancaria',
+      },
+      {
+        label: 'Estado',
+        prop: 'estado',
+        type: 'switch',
+        deep: 1,
       },
     ],
     labelSize: '',
@@ -249,12 +264,13 @@ export class TrabajadorComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         console.log(e);
-        this.trabajadorService.guardarTrabajador(e).forEach(value => {
+        this.trabajadorService.guardarTrabajador(e).forEach(() => {
           //e.plantaDto.idPlanta = value;
-        }).then(value => {
+        }).then(() => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Trabajador Eliminado!','success');
         }).catch( error =>{
+          console.log(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar el Trabajador, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -298,12 +314,12 @@ export class TrabajadorComponent {
     let mensaje:string="Se actualizo correctamente al Trabajador";
     Swal.showLoading( );
     if (this.accion == 1){
-      mensaje = "Se grabo correctamente al Trabajador";
+      mensaje = "Se grabó correctamente al Trabajador";
     }
     e.id.idTipodoc = e.idTipodoc.id;
-    this.trabajadorService.guardarTrabajador(e).forEach(value => {
+    this.trabajadorService.guardarTrabajador(e).forEach(() => {
       //Sin accion
-    }).then(value => {
+    }).then(() => {
       if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
@@ -311,10 +327,10 @@ export class TrabajadorComponent {
       this.basicDataSourceBkp = this.basicDataSource;
       //Ahora debo de actualizar la relación proveedor con servicio.
       Swal.fire('Exito',mensaje,'success');
-    }).catch( error =>{
-      Swal.fire('Error',"Hubo Problemas al grabar al Trabajador.",'error');
-    }).finally(()=>{
       this.editForm!.modalInstance.hide();
+    }).catch( error =>{
+      console.log(error);
+      Swal.fire('Error',"Hubo Problemas al grabar al Trabajador.",'error');
     });
   }
 

@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
-import { ProveedorModel, RespuestaProveedor } from '../../../model/proveedor.model';
+import { ProveedorModel } from '../../../model/proveedor.model';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { DialogService, FormLayout } from '@devui';
 import { Subscription } from 'rxjs';
-import { RespuestaPlanta } from '../../../model/planta.modelo';
 import Swal from 'sweetalert2';
 import { CamaraService } from '../../../service/camara.service';
 import { ProveedorService } from '../../../service/proveedor.service';
@@ -65,6 +64,12 @@ export class CamaraComponent {
         required: true,
         rule:{validators: [{ required: true }]},
       },
+      {
+        label: 'Estado',
+        prop: 'estado',
+        type: 'switch',
+        deep: 1,
+      },
     ],
     labelSize: '',
   };
@@ -112,10 +117,9 @@ export class CamaraComponent {
     //Obtengo los proveedores y filtro por FLETE (06)
     return this.busy = this.proveedorService.obtenerProveedoresCamara().
     pipe().subscribe((elemento) => {
-      let respuesta = elemento.filter(item =>
-        item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 6).length > 0
+      this.proveedores = elemento.filter(item =>
+          item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 6).length > 0
       );
-      this.proveedores = respuesta;
     });
   }
 
@@ -164,7 +168,7 @@ export class CamaraComponent {
     e.estadoReg = false;
     this.accion = -1;
     Swal.fire({
-      title: '¿Seguro de eliminar la Camara?',
+      title: '¿Seguro de eliminar la Cámara?',
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
@@ -173,11 +177,12 @@ export class CamaraComponent {
         this.camaraService.guardarCamara(e).forEach(value => {
           console.log(e)
           e.placa = value;
-        }).then(value => {
+        }).then(() => {
           this.basicDataSource.splice(index, 1);
-          Swal.fire('Exito','Camara Eliminada!','success');
+          Swal.fire('Exito','Cámara Eliminada!','success');
         }).catch( error =>{
-          Swal.fire('Error',"Hubo Problemas al Eliminar la Camara, intentelo más tarde",'error');
+          console.log(error);
+          Swal.fire('Error',"Hubo Problemas al Eliminar la Cámara, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
         });
@@ -219,12 +224,12 @@ export class CamaraComponent {
   }
 
   onSubmitted(e: Camara) {
-    let mensaje:string="Se actualizo correctamente la Camara";
+    let mensaje:string="Se actualizo correctamente la Cámara";
     Swal.showLoading( );
     if (this.accion == 1){
-      mensaje = "Se grabo correctamente la Camara";
+      mensaje = "Se grabó correctamente la Cámara";
     }
-    this.camaraService.guardarCamara(e).forEach(value => {let valor = value;}).then(value  => {
+    this.camaraService.guardarCamara(e).forEach(() => {}).then(()  => {
       if(this.accion == 1)
         this.basicDataSource.push(e);
       else
@@ -233,8 +238,7 @@ export class CamaraComponent {
       Swal.fire('Exito',mensaje,'success');
     }).catch( (error: any) =>{
       console.log(error);
-      Swal.fire('Error',"Hubo Problemas al grabar la Camara." + error,'error');
-    }).finally(()=>{
+      Swal.fire('Error',"Hubo Problemas al grabar la Cámara." + error,'error');
       this.editForm!.modalInstance.hide();
     });
   }

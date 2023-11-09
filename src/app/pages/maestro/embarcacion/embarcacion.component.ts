@@ -2,9 +2,8 @@ import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/c
 import { DialogService, FormLayout } from '@devui';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { Subscription } from 'rxjs';
-import { ProveedorModel, RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
+import { ProveedorModel } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
-import { RespuestaPlanta } from '../../../model/planta.modelo';
 import { EmbarcacionService } from '../../../service/embarcacion.service';
 import { Embarcacion } from '../../../model/embarcacion.model';
 import { ProveedorService } from '../../../service/proveedor.service';
@@ -79,6 +78,7 @@ export class EmbarcacionComponent {
   editForm: any = null;
 
   editRowIndex = -1;
+  accion = 0;
 
 
   pager = {
@@ -117,14 +117,14 @@ export class EmbarcacionComponent {
     //Obtengo los proveedores y filtro por FLETE (06)
     return this.busy = this.proveedorService.obtenerProveedoresCamara().
     pipe().subscribe((elemento) => {
-      let respuesta = elemento.filter(item =>
+      this.proveedores = elemento.filter(item =>
         item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 1).length > 0
       );
-      this.proveedores = respuesta;
     });
   }
 
   editRow(row: any, index: number) {
+    this.accion = 0;
     this.editRowIndex = index;
     this.formData = row;
     console.log(row);
@@ -146,6 +146,7 @@ export class EmbarcacionComponent {
     this.getList();
   }
   newRow():void {
+    this.accion = 1;
     let row = new Embarcacion();
     this.editRowIndex = -1;
     this.formData = row;
@@ -172,12 +173,13 @@ export class EmbarcacionComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.embarcacionService.guardarEmbarcacion(e).forEach(value => {
+        this.embarcacionService.guardarEmbarcacion(e).forEach(() => {
           //console.log(value);
-        }).then(value => {
+        }).then(() => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Planta Eliminada!','success');
         }).catch( error =>{
+          console.log(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar la planta, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -220,32 +222,30 @@ export class EmbarcacionComponent {
   }
 
   onSubmitted(e: any) {
-    let mensaje:string="Se actualizo correctamente la Planta";
+    let mensaje:string="Se actualizo correctamente la Embarcación";
     Swal.showLoading( );
     //En caso sea modificación.
     // @ts-ignore
-    if (!(e.idEmbarcacion > 0)){
+    if (this.accion == 1){
       // @ts-ignore
       e.idEmbarcacion = null;
-      mensaje = "Se grabo correctamente la Planta";
+      mensaje = "Se grabó correctamente la Embarcación";
     }
     this.embarcacionService.guardarEmbarcacion(e).forEach(value => {
-      //console.log(value);
       e = value;
-    }).then(value => {
+    }).then(() => {
       // @ts-ignore
-      if(e.idEmbarcacion > 0)
+      if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
         this.basicDataSource.push(e);
       this.basicDataSourceBkp = this.basicDataSource;
       //Ahora debo de actualizar la relación proveedor con servicio.
       Swal.fire('Exito',mensaje,'success');
+      this.editForm!.modalInstance.hide();
     }).catch( error =>{
       console.log(error);
-      Swal.fire('Error',"Hubo Problemas al grabar la Planta.",'error');
-    }).finally(()=>{
-      this.editForm!.modalInstance.hide();
+      Swal.fire('Error',"Hubo Problemas al grabar la Embaración.",'error');
     });
 
   }

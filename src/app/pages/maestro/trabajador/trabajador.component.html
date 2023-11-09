@@ -35,72 +35,73 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="idTipodoc" header="Tipo Documento" [width]="'100px'">
+              <d-column field="idTipodoc" header="Tipo Documento" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    {{ cellItem.nombre }}
+                    {{ cellItem.abreviatura }}
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="id" header="Número Documento" [width]="'200px'">
+              <d-column field="id" header="Número Documento" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
                       {{ cellItem.numeroDocumento }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="nombres" header="Nombres" [width]="'200px'">
+              <d-column field="nombres" header="Nombres" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="apellidoPat" header="Apellido Paterno" [width]="'200px'">
+              <d-column field="apellidoPat" header="Apellido Paterno" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="apellidoMat" header="Apellido Materno" [width]="'200px'">
+              <d-column field="apellidoMat" header="Apellido Materno" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idFormaPago" header="Forma de Pago" [width]="'100px'">
+              <d-column field="idBanco" header="Banco" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.nombreFormaPago }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="idBanco" header="Banco" [width]="'200px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem.nombreBanco }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idMoneda" header="Moneda" [width]="'100px'">
+              <d-column field="idMoneda" header="Moneda" [width]="'70px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'70px'">
                       {{ cellItem.nombre }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+
+              <d-column field="estado" header="Estado" [width]="'80px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                      <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
                 </d-cell>

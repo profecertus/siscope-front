@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/c
 import { DialogService, FormLayout } from '@devui';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { Subscription } from 'rxjs';
-import { ProveedorModel, RespuestaProveedor } from '../../../model/proveedor.model';
+import { ProveedorModel } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
 import { PlantaService } from '../../../service/planta.service';
 import { RespuestaPlanta } from '../../../model/planta.modelo';
@@ -81,6 +81,13 @@ export class PlantaComponent {
         required: true,
         rule:{validators: [{ required: true }]},
       },
+      {
+        label: 'Estado',
+        cabecera:'plantaDto',
+        prop: 'estado',
+        type: 'switch',
+        deep: 2,
+      },
     ],
     labelSize: '',
   };
@@ -143,10 +150,9 @@ export class PlantaComponent {
       //Obtengo los proveedores y filtro por FLETE (06)
       return this.busy = this.proveedorService.obtenerProveedoresCamara().
       pipe().subscribe((elemento : ProveedorModel[]) => {
-        let respuesta = elemento.filter(item =>
-          item.relProvTiposervDto.filter((valor:TipoServicio) => valor.idTipoServicio.id == 8).length > 0
+        this.descargaPlanta = elemento.filter(item =>
+          item.relProvTiposervDto.filter((valor: TipoServicio) => valor.idTipoServicio.id == 8).length > 0
         );
-        this.descargaPlanta = respuesta;
       });
     }
 
@@ -154,10 +160,9 @@ export class PlantaComponent {
     //Obtengo los proveedores y filtro por FLETE (06)
     return this.busy = this.proveedorService.obtenerProveedoresCamara().
     pipe().subscribe((elemento) => {
-      let respuesta = elemento.filter(item =>
-        item.relProvTiposervDto.filter((valor:TipoServicio) => valor.idTipoServicio.id == 12).length > 0
+      this.comisionPlanta = elemento.filter(item =>
+        item.relProvTiposervDto.filter((valor: TipoServicio) => valor.idTipoServicio.id == 12).length > 0
       );
-      this.comisionPlanta = respuesta;
     });
   }
 
@@ -235,10 +240,11 @@ export class PlantaComponent {
       if (result.isConfirmed) {
         this.plantaService.guardarPlanta(e).forEach(value => {
           e.plantaDto.idPlanta = value.valorDevuelto;
-        }).then(value => {
+        }).then(() => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Planta Eliminada!','success');
         }).catch( error =>{
+          console.log(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar la planta, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -286,11 +292,11 @@ export class PlantaComponent {
     //En caso sea modificación.
     if (this.accion == 1){
       e.plantaDto.idPlanta = null;
-      mensaje = "Se grabo correctamente la Planta";
+      mensaje = "Se grabó correctamente la Planta";
     }
     this.plantaService.guardarPlanta(e).forEach(value => {
       e.plantaDto.idPlanta = value.valorDevuelto;
-    }).then(value => {
+    }).then(() => {
       if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
@@ -298,10 +304,10 @@ export class PlantaComponent {
       this.basicDataSourceBkp = this.basicDataSource;
       //Ahora debo de actualizar la relación proveedor con servicio.
       Swal.fire('Exito',mensaje,'success');
-    }).catch( error =>{
-      Swal.fire('Error',"Hubo Problemas al grabar la Planta.",'error');
-    }).finally(()=>{
       this.editForm!.modalInstance.hide();
+    }).catch( error =>{
+      console.log(error);
+      Swal.fire('Error',"Hubo Problemas al grabar la Planta.",'error');
     });
   }
 
@@ -367,6 +373,21 @@ export class PlantaComponent {
 
 
   saveCliente() {
+    let ruc : number = parseInt( this.rucCliente );
+
+    if( ruc > 9999999999 ){
+      //Valido el numero de RUC
+      for (var suma = -(ruc%10<2), i = 0; i<11; i++, ruc = ruc/10|0)
+        suma += (ruc % 10) * (i % 7 + (i/7|0) + 1);
+      if(suma % 11 !== 0){
+        Swal.fire('Error',"El número de RUC ingresado NO es válido!",'error');
+        return;
+      }
+    }else{
+      Swal.fire('Error',"El número de RUC ingresado NO tiene los 11 digitos",'error');
+      return;
+    }
+
     let miCliente = new Cliente();
     miCliente.nombre = this.nombreCliente;
     miCliente.ruc = this.rucCliente;
@@ -377,18 +398,20 @@ export class PlantaComponent {
       confirmButtonText: 'Grabar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
-      this.plantaService.guardarCliente(miCliente).forEach(valor => {
-        this.clientes.push(valor);
-        this.formConfig.items[3].options = this.clientes;
-        this.eventoCliente.plantaDto.ruc = miCliente;
-        this.nombreCliente = '';
-        this.rucCliente = '';
-        Swal.fire('Exito','Cliente grabado!','success');
-      }).
-      then(()=>{}).catch(error => {
-        console.log(error);
-        Swal.fire('Error','Sucedio un error al momento de grabar - Verifique que el cliente no exista o que el RUC no esta asignado','error');
-      }).finally(()=>{this.onCloseCliente();});
+      if (result.isConfirmed){
+        this.plantaService.guardarCliente(miCliente).forEach(valor => {
+          this.clientes.push(valor);
+          this.formConfig.items[3].options = this.clientes;
+          this.eventoCliente.plantaDto.ruc = miCliente;
+          this.nombreCliente = '';
+          this.rucCliente = '';
+          Swal.fire('Exito','Cliente grabado!','success');
+        }).
+        then(()=>{}).catch(error => {
+          console.log(error);
+          Swal.fire('Error','Sucedio un error al momento de grabar - Verifique que el cliente no exista o que el RUC no esta asignado','error');
+        }).finally(()=>{this.onCloseCliente();});
+      }
     });
   }
 
@@ -402,10 +425,10 @@ export class PlantaComponent {
         if (result.isConfirmed) {
           this.relplantaproveedorService.
             actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoComPlanta.id.toString(), "12")
-            .forEach(value => {
+            .forEach(() => {
               this.relplantaproveedorService.
                 actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoDescPlanta.id.toString(), "8")
-                .forEach(value1 => {
+                .forEach(() => {
                   this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
                     this.basicDataSource.splice(this.editRowIndex, 1, valor);
                     this.onCancelado();

@@ -78,6 +78,15 @@
                   </ng-template>
                 </d-cell>
               </d-column>
+              <d-column field="plantaDto" header="Estado" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'200px'">
+                      <d-tag [tag]="cellItem.estado.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.estado.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
               <d-column field="plantaDto" header="Dirección" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
@@ -147,10 +156,10 @@
       <d-form-operation>
         <d-row>
           <d-col [dSpan]="8">
-            <d-button bsStyle="primary" class="mr-element-spacing" circled="true" style="margin-right: 4px" (click)='saveCliente()' >Grabar</d-button>
+            <d-button bsStyle="primary" class="mr-element-spacing" style="margin-right: 4px" (click)='saveCliente()' >Grabar</d-button>
           </d-col>
           <d-col [dSpan]="4"/>
-          <d-col [dSpan]="8"><d-button bsStyle="common" circled="true" (click)='onCloseCliente()'  >Cancelar</d-button></d-col>
+          <d-col [dSpan]="8"><d-button bsStyle="common"  (click)='onCloseCliente()'  >Cancelar</d-button></d-col>
           <d-col [dSpan]="2"/>
         </d-row>
       </d-form-operation>
@@ -199,10 +208,10 @@
       <d-form-operation>
         <d-row>
           <d-col [dSpan]="8">
-            <d-button bsStyle="primary" class="mr-element-spacing" (click)='grabarRel()' circled="true" style="margin-right: 4px" >Grabar</d-button>
+            <d-button bsStyle="primary" class="mr-element-spacing" (click)='grabarRel()' style="margin-right: 4px" >Grabar</d-button>
           </d-col>
           <d-col [dSpan]="4"/>
-          <d-col [dSpan]="8"><d-button bsStyle="common" circled="true" (click)='onCancelado()'  >Cancelar</d-button></d-col>
+          <d-col [dSpan]="8"><d-button bsStyle="common"  (click)='onCancelado()'  >Cancelar</d-button></d-col>
           <d-col [dSpan]="2"/>
         </d-row>
       </d-form-operation>
