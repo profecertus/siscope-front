@@ -13,8 +13,6 @@ import { MaestroRoutingModule } from './maestro-routing.module';
 import { EmbarcacionComponent } from './embarcacion/embarcacion.component';
 import { CamaraComponent } from './camara/camara.component';
 import { PlantaComponent } from './planta/planta.component';
-import { OperativoComponent } from './operativo/operativo.component';
-import { AdministrativoComponent } from './administrativo/administrativo.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -33,8 +31,6 @@ import { TrabajadorComponent } from './trabajador/trabajador.component';
     EmbarcacionComponent,
     CamaraComponent,
     PlantaComponent,
-    OperativoComponent,
-    AdministrativoComponent,
     ProveedorComponent,
     TrabajadorComponent,
   ],

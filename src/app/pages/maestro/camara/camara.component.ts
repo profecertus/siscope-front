@@ -175,7 +175,7 @@ export class CamaraComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.camaraService.guardarCamara(e).forEach(value => {
-          console.log(e)
+          //console.log(e)
           e.placa = value;
         }).then(() => {
           this.basicDataSource.splice(index, 1);
@@ -236,10 +236,10 @@ export class CamaraComponent {
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       this.basicDataSourceBkp = this.basicDataSource;
       Swal.fire('Exito',mensaje,'success');
+      this.editForm!.modalInstance.hide();
     }).catch( (error: any) =>{
       console.log(error);
       Swal.fire('Error',"Hubo Problemas al grabar la Cámara." + error,'error');
-      this.editForm!.modalInstance.hide();
     });
   }
 

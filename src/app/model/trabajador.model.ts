@@ -7,6 +7,7 @@ export class Trabajador{
   idFormaPago: IdFormaPago = new IdFormaPago();
   idBanco: IdBanco = new IdBanco();
   idMoneda: IdMoneda = new IdMoneda();
+  ctaBancaria:string = '';
   estado: boolean = true;
   estadoReg: boolean = true;
   [key:string]: any;

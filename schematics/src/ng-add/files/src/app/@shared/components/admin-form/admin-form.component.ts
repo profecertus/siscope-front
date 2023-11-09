@@ -46,4 +46,5 @@ export class AdminFormComponent implements OnInit {
 
   valorNum:string = '';
 
+  protected readonly Boolean = Boolean;
 }

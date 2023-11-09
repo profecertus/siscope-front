@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { DialogService, FormLayout } from '@devui';
 import { Subscription } from 'rxjs';
@@ -128,7 +128,7 @@ export class TrabajadorComponent {
       },
       {
         label: 'Cta Bancaria',
-        prop: 'ctabancaria',
+        prop: 'ctaBancaria',
         type: 'number',
         deep: 1,
         placeholder: 'Cuenta Bancaria',
@@ -161,7 +161,7 @@ export class TrabajadorComponent {
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
 
-  constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
+  constructor(private dialogService: DialogService,
               private trabajadorService: TrabajadorService, private tipodocumentoService: TipodocumentoService,
               private monedaService: MonedaService, private bancoService: BancoService, private formaPagoService: FormaPagoService
   ) {}
@@ -211,6 +211,7 @@ export class TrabajadorComponent {
   editRow(row: any, index: number) {
     this.accion = 0;
     this.editRowIndex = index;
+    console.log(row);
     this.formData = row;
     this.formConfig.items[0].options = this.tipoDocSource;
     this.formConfig.items[5].options = this.formaPagoSource;
@@ -268,10 +269,10 @@ export class TrabajadorComponent {
           //e.plantaDto.idPlanta = value;
         }).then(() => {
           this.basicDataSource.splice(index, 1);
-          Swal.fire('Exito','Trabajador Eliminado!','success');
+          Swal.fire('Exito', 'Trabajador Eliminado!', 'success').then(()=>{});
         }).catch( error =>{
           console.log(error);
-          Swal.fire('Error',"Hubo Problemas al Eliminar el Trabajador, intentelo más tarde",'error');
+          Swal.fire('Error', "Hubo Problemas al Eliminar el Trabajador, intentelo más tarde", 'error').then(()=>{});
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
         });
@@ -317,6 +318,7 @@ export class TrabajadorComponent {
       mensaje = "Se grabó correctamente al Trabajador";
     }
     e.id.idTipodoc = e.idTipodoc.id;
+    console.log(e);
     this.trabajadorService.guardarTrabajador(e).forEach(() => {
       //Sin accion
     }).then(() => {
@@ -326,11 +328,11 @@ export class TrabajadorComponent {
         this.basicDataSource.push(e);
       this.basicDataSourceBkp = this.basicDataSource;
       //Ahora debo de actualizar la relación proveedor con servicio.
-      Swal.fire('Exito',mensaje,'success');
+      Swal.fire('Exito', mensaje, 'success').then(()=>{});
       this.editForm!.modalInstance.hide();
     }).catch( error =>{
       console.log(error);
-      Swal.fire('Error',"Hubo Problemas al grabar al Trabajador.",'error');
+      Swal.fire('Error', "Hubo Problemas al grabar al Trabajador.", 'error').then(()  =>{});
     });
   }
 
