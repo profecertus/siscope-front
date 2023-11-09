@@ -64,6 +64,12 @@ export class EmbarcacionComponent {
         deep: 1,
         placeholder: 'Tonelaje',
       },
+      {
+        label: 'Estado',
+        prop: 'estado',
+        type: 'switch',
+        deep: 1,
+      },
     ],
     labelSize: '',
   };
@@ -121,6 +127,7 @@ export class EmbarcacionComponent {
   editRow(row: any, index: number) {
     this.editRowIndex = index;
     this.formData = row;
+    console.log(row);
     this.formConfig.items[1].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',

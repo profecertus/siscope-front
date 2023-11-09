@@ -35,13 +35,13 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="idEmbarcacion" header="Id Embarcacion" [width]="'100px'">
+              <!--d-column field="idEmbarcacion" header="Id Embarcacion" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     {{ cellItem }}
                   </ng-template>
                 </d-cell>
-              </d-column>
+              </d-column-->
               <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
@@ -74,6 +74,15 @@
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="estado" header="Estado" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
                 </d-cell>
