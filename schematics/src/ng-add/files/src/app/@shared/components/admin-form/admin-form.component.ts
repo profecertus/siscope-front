@@ -43,4 +43,7 @@ export class AdminFormComponent implements OnInit {
   adicion( formdata:any ){
     this.adicional.emit(this._formData);
   }
+
+  valorNum:string = '';
+
 }

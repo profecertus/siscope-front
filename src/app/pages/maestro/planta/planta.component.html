@@ -35,13 +35,13 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="plantaDto" header="Id" [width]="'100px'">
+              <!--d-column field="plantaDto" header="Id" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     {{ cellItem.idPlanta }}
                   </ng-template>
                 </d-cell>
-              </d-column>
+              </d-column-->
               <d-column field="plantaDto" header="Nombre" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
@@ -129,18 +129,18 @@
   <div style="margin-left: 40px">
     <form dForm [layout]="layoutDirection" ngForm>
       <d-form-item>
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'El RUC del Cliente.'">RUC</d-form-label>
-        <d-form-control>
-          <div>
-            <input dTextInput autocomplete="off" name="RUCCliente" [(ngModel)]='rucCliente' maxlength='11'/>
-          </div>
-        </d-form-control>
-      </d-form-item>
-      <d-form-item>
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Nombre del Cliente.'">Nombre</d-form-label>
         <d-form-control>
           <div>
             <input dTextInput autocomplete="off" name="nombreCliente" [(ngModel)]='nombreCliente' maxlength='70' />
+          </div>
+        </d-form-control>
+      </d-form-item>
+      <d-form-item>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'El RUC del Cliente.'">RUC</d-form-label>
+        <d-form-control>
+          <div>
+            <input dTextInput autocomplete="off" name="RUCCliente" [(ngModel)]='rucCliente' maxlength='11'/>
           </div>
         </d-form-control>
       </d-form-item>

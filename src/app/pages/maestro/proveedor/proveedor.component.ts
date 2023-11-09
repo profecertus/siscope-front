@@ -22,6 +22,7 @@ export class ProveedorComponent {
   tipoDocSource: TipoDocumento[] = [];
   tipoServicicioSource: TipoServicio[] = [];
   DatoABuscar: string = "";
+  accion:number = 0;
 
   formConfigTrab: FormConfig = {
     layout: FormLayout.Horizontal,
@@ -82,6 +83,7 @@ export class ProveedorComponent {
         prop: 'razonSocial',
         type: 'input',
         required: true,
+        maxi:100,
         deep: 2,
         cabecera: 'proveedor',
         tips: 'Consigne la razón social',
@@ -91,6 +93,7 @@ export class ProveedorComponent {
       {
         label: 'Nom Comercial',
         prop: 'nombreComercial',
+        maxi:100,
         type: 'input',
         placeholder: 'Ingrese el nombre comercial',
         deep: 2,
@@ -112,9 +115,10 @@ export class ProveedorComponent {
       {
         label: 'Num. Doc.',
         prop: 'numeroDocumento',
-        type: 'input',
+        type: 'number',
         deep: 2,
         cabecera: 'proveedor',
+        maxi:20,
         required: true,
         tips: 'Numero de Documento',
         placeholder: 'Ingrese el numero de documento',
@@ -138,13 +142,15 @@ export class ProveedorComponent {
         prop: 'direccion',
         type: 'input',
         deep: 2,
+        maxi:100,
         cabecera: 'proveedor',
         placeholder: 'Ingrese la dirección',
       },
       {
         label: 'Teléfono',
         prop: 'telefono',
-        type: 'input',
+        type: 'number',
+        maxi:15,
         deep: 2,
         cabecera: 'proveedor',
         placeholder: 'Ingrese le número telefónico',
@@ -154,6 +160,7 @@ export class ProveedorComponent {
         prop: 'correo',
         type: 'input',
         deep: 2,
+        maxi:70,
         cabecera: 'proveedor',
         placeholder: 'Ingrese el correo electrónico',
       },
@@ -238,6 +245,7 @@ export class ProveedorComponent {
   }
 
   editRow(row: any, index: number) {
+    this.accion = 0;
     this.editRowIndex = index;
     this.formData = row;
     this.formConfig.items[2].options = this.tipoDocSource;
@@ -259,6 +267,7 @@ export class ProveedorComponent {
     this.getList();
   }
   newRow():void {
+    this.accion = 1;
     let row = new RespuestaProveedor();
     this.editRowIndex = -1;
     this.formConfig.items[2].options = this.tipoDocSource;
@@ -338,7 +347,7 @@ export class ProveedorComponent {
     let mensaje:string="Se actualizo correctamente el proveedor";
     Swal.showLoading( );
     //En caso sea modificación.
-    if (!(e.proveedor.id > 0)){
+    if (this.accion == 1){
       e.proveedor.id = null;
       mensaje = "Se grabo correctamente el proveedor";
     }
@@ -346,7 +355,7 @@ export class ProveedorComponent {
     this.proveedorService.guardarProveedor(e).forEach(value => {
       e.proveedor.id = value.valorDevuelto;
     }).then(value => {
-      if(e.proveedor.id>0)
+      if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
         this.basicDataSource.push(e);

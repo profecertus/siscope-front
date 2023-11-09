@@ -29,7 +29,7 @@ export class PlantaComponent {
   idPlantaSel:number = 0;
   seleccionadoDescPlanta : any;
   seleccionadoComPlanta:any;
-
+  accion:number=0;
 
 
   formConfig: FormConfig = {
@@ -40,6 +40,7 @@ export class PlantaComponent {
         prop: 'nombre',
         type: 'input',
         required: true,
+        maxi: 80,
         deep: 2,
         cabecera: 'plantaDto',
         tips: 'Nombre',
@@ -49,6 +50,7 @@ export class PlantaComponent {
       {
         label: 'Dirección',
         prop: 'direccion',
+        maxi: 100,
         type: 'input',
         deep: 2,
         cabecera: 'plantaDto',
@@ -181,6 +183,7 @@ export class PlantaComponent {
   }
 
   editRow(row: any, index: number) {
+    this.accion = 0;
     this.editRowIndex = index;
     this.formData = row;
     this.formConfig.items[2].options = this.destinos;
@@ -203,6 +206,7 @@ export class PlantaComponent {
   }
   newRow():void {
     let row = new RespuestaPlanta();
+    this.accion = 1;
     this.editRowIndex = -1;
     this.formData = row;
     this.formConfig.items[2].options = this.destinos;
@@ -280,14 +284,14 @@ export class PlantaComponent {
     let mensaje:string="Se actualizo correctamente la Planta";
     Swal.showLoading( );
     //En caso sea modificación.
-    if (!(e.plantaDto.idPlanta > 0)){
+    if (this.accion == 1){
       e.plantaDto.idPlanta = null;
       mensaje = "Se grabo correctamente la Planta";
     }
     this.plantaService.guardarPlanta(e).forEach(value => {
       e.plantaDto.idPlanta = value.valorDevuelto;
     }).then(value => {
-      if(e.plantaDto.idPlanta>0)
+      if(this.accion == 0)
         this.basicDataSource.splice(this.editRowIndex, 1, e);
       else
         this.basicDataSource.push(e);
@@ -318,14 +322,15 @@ export class PlantaComponent {
     this.seleccionadoDescPlanta=null;
     // @ts-ignore
     this.idPlantaSel = e.plantaDto.idPlanta;
-    for(let i = 0; i< e.relPlantaProveedorDtoList.length; i++ ){
-      if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 8){
-        this.seleccionadoDescPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+    if(e.relPlantaDestinoDto != null)
+      for(let i = 0; i< e.relPlantaProveedorDtoList.length; i++ ){
+        if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 8){
+          this.seleccionadoDescPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+        }
+        if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 12){
+          this.seleccionadoComPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+        }
       }
-      if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 12){
-        this.seleccionadoComPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
-      }
-    }
 
     this.formAddClient = this.dialogService.open({
       id: 'edit-dialog',
