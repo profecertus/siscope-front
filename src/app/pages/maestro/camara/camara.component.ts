@@ -31,6 +31,7 @@ export class CamaraComponent {
         type: 'input',
         required: true,
         deep: 1,
+        maxi:10,
         tips: 'Placa',
         placeholder: 'Placa de la Camara',
         rule:{validators: [{ required: true }]},
@@ -40,6 +41,7 @@ export class CamaraComponent {
         prop: 'marca',
         type: 'input',
         deep: 1,
+        maxi:50,
         placeholder: 'Marca',
       },
       {
@@ -47,6 +49,7 @@ export class CamaraComponent {
         prop: 'modelo',
         type: 'input',
         deep: 1,
+        maxi:50,
         placeholder: 'Modelo',
       },
       {
