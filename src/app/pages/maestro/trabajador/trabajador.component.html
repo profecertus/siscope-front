@@ -110,10 +110,13 @@
               <d-column field="Actions" header="Acciones" [width]="'100px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-                    <div class="btn-group over-flow-ellipsis">
-                      <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
-                      <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
-                    </div>
+                    <d-icon icon="icon-edit" (click)="editRow(rowItem, rowIndex)" dIconLink>
+                      <a iconSuffix class="devui-link" href="" ></a>
+                    </d-icon>
+                    &nbsp;
+                    <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)" dIconLink>
+                      <a iconSuffix class="devui-link" href=""></a>
+                    </d-icon>
                   </ng-template>
                 </d-cell>
               </d-column>

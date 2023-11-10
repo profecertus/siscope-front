@@ -41,7 +41,7 @@
                     {{ cellItem.id }}
                   </ng-template>
                 </d-cell>
-              </d-column-->
+              </d-column>
               <d-column field="proveedor" header="Razón Social" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
@@ -50,11 +50,11 @@
                     </span>
                   </ng-template>
                 </d-cell>
-              </d-column>
-              <d-column field="proveedor" header="Nombre Comercial" [width]="'200px'">
+              </d-column-->
+              <d-column field="proveedor" header="Nombre Comercial" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem.nombreComercial }}
                     </span>
                   </ng-template>
@@ -64,12 +64,12 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
-                      {{ cellItem.idTipodoc.nombre }}
+                      {{ cellItem.idTipodoc.abreviatura }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="proveedor" header="Num. Doc." [width]="'100px'">
+              <d-column field="proveedor" header="Num. Doc." [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
@@ -78,34 +78,34 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="tipoServicioDtos" header="Servicios" [width]="'300px'">
+              <d-column field="tipoServicioDtos" header="Servicios" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'300px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ getServicios(cellItem) }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="proveedor" header="Estado" [width]="'200px'">
+              <d-column field="proveedor" header="Estado" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'80px'">
                       <d-tag [tag]="cellItem.estado.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.estado.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="proveedor" header="Telefono" [width]="'100px'">
+              <d-column field="proveedor" header="Telefono" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
                       {{ cellItem.telefono }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="proveedor" header="Correo" [width]="'100px'">
+              <!--d-column field="proveedor" header="Correo" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
@@ -113,14 +113,17 @@
                     </span>
                   </ng-template>
                 </d-cell>
-              </d-column>
+              </d-column-->
               <d-column field="Actions" header="Acciones" [width]="'100px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-                    <div class="btn-group over-flow-ellipsis">
-                      <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
-                      <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
-                    </div>
+                      <d-icon icon="icon-edit" (click)="editRow(rowItem, rowIndex)" dIconLink>
+                        <a iconSuffix class="devui-link" href="" ></a>
+                      </d-icon>
+                      &nbsp;
+                      <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)" dIconLink>
+                        <a iconSuffix class="devui-link" href=""></a>
+                      </d-icon>
                   </ng-template>
                 </d-cell>
               </d-column>

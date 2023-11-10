@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import { EmbarcacionService } from '../../../service/embarcacion.service';
 import { Embarcacion } from '../../../model/embarcacion.model';
 import { ProveedorService } from '../../../service/proveedor.service';
+import { TipoServicio } from '../../../model/tipoServicio.model';
+import { RelembproveedorService } from '../../../service/relembproveedor.service';
 
 @Component({
   selector: 'app-embarcacion',
@@ -17,8 +19,13 @@ import { ProveedorService } from '../../../service/proveedor.service';
 export class EmbarcacionComponent {
   basicDataSource: Embarcacion[] = [];
   basicDataSourceBkp: Embarcacion[] = [];
+  descargaMuelle:ProveedorModel[] = [];
+  comisionEmbarcacion:ProveedorModel[] = [];
   proveedores: ProveedorModel[] = [];
   DatoABuscar: string = "";
+
+  seleccionadoDescMuelle : any;
+  seleccionadoComEmbarcacion:any;
 
 
   formConfig: FormConfig = {
@@ -76,9 +83,11 @@ export class EmbarcacionComponent {
   formData = {};
 
   editForm: any = null;
+  formRelEmbProv: any = null;
 
   editRowIndex = -1;
   accion = 0;
+  idEmbaracion : number = 0;
 
 
   pager = {
@@ -92,13 +101,19 @@ export class EmbarcacionComponent {
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
 
+  @ViewChild('RelEmbarcacionProveedor', { static: true })
+  RelEmbarcacionProveedor: TemplateRef<any> | undefined;
+
+
   constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private embarcacionService: EmbarcacionService, private proveedorService: ProveedorService
-  ) {}
+              private embarcacionService: EmbarcacionService, private proveedorService: ProveedorService,
+              private relembproveedorService: RelembproveedorService) {}
 
   ngOnInit() {
     this.getList();
     this.getListProveedor();
+    this.getListProveedorComPlanta();
+    this.getListProveedorDescPlanta();
   }
 
 
@@ -109,6 +124,25 @@ export class EmbarcacionComponent {
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
+    });
+  }
+
+  getListProveedorDescPlanta(){
+    return this.busy = this.proveedorService.obtenerProveedoresCamara().
+    pipe().subscribe((elemento : ProveedorModel[]) => {
+      this.descargaMuelle = elemento.filter(item =>
+        item.relProvTiposervDto.filter((valor: TipoServicio) => valor.idTipoServicio.id == 7).length > 0
+      );
+    });
+  }
+
+  getListProveedorComPlanta(){
+    //Obtengo los proveedores y filtro por FLETE (06)
+    return this.busy = this.proveedorService.obtenerProveedoresCamara().
+    pipe().subscribe((elemento) => {
+      this.comisionEmbarcacion = elemento.filter(item =>
+        item.relProvTiposervDto.filter((valor: TipoServicio) => valor.idTipoServicio.id == 11).length > 0
+      );
     });
   }
 
@@ -252,5 +286,70 @@ export class EmbarcacionComponent {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
   }
+
+  onCancelado() {
+    this.formRelEmbProv!.modalInstance.hide();
+    this.editRowIndex = -1;
+  }
+
+  grabarRel() {
+    Swal.fire({
+      title: '¿Seguro de grabar los Proveedores?',
+      showCancelButton: true,
+      confirmButtonText: 'Grabar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.relembproveedorService.
+        actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion.id.toString(), "11")
+          .forEach(() => {
+            this.relembproveedorService.
+            actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoDescMuelle.id.toString(), "7")
+              .forEach(() => {
+                /*this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
+                  this.basicDataSource.splice(this.editRowIndex, 1, valor);
+                  this.onCancelado();
+                });*/
+
+              });
+          } );
+      }
+    }).
+    then(()=>{}).catch(error => {
+      console.log(error);
+      Swal.fire('Error','Sucedio un error al momento de grabar.','error');
+      this.onCancelado();
+    });
+  }
+
+  onRelacional(e: any, index: number){
+    this.editRowIndex = index;
+    this.seleccionadoDescMuelle=null;
+    this.seleccionadoComEmbarcacion=null;
+    console.log(e.idEmbarcacion);
+    this.idEmbaracion = e.idEmbarcacion;
+    if(e.relPlantaDestinoDto != null)
+      for(let i = 0; i< e.relPlantaProveedorDtoList.length; i++ ){
+        if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 7){
+          this.seleccionadoDescMuelle =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+        }
+        if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 11){
+          this.seleccionadoComEmbarcacion =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+        }
+      }
+
+    this.formRelEmbProv = this.dialogService.open({
+      id: 'edit-dialog',
+      width: '600px',
+      maxHeight: '600px',
+      title: 'Proveedores en Embarcacion',
+      showAnimate: false,
+      contentTemplate: this.RelEmbarcacionProveedor,
+      backdropCloseable: true,
+      onClose: () => {},
+      buttons: [],
+    });
+  }
+
 }
 

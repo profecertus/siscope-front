@@ -19,6 +19,7 @@ export const environment = {
   sufijoEmbarcacion: '/embarcacion/v1',
   sufijoRelPlantaProv: '/relplantaproveedor/v1',
   sufijoSemana: '/semana/v1',
+  sufijoRelEmbProv: '/relembprov/v1',
 };
 
 /*

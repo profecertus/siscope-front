@@ -90,11 +90,17 @@
               <d-column field="Actions" header="Acciones" [width]="'100px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-                    <div class="btn-group over-flow-ellipsis">
-                      <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
-                      <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
-                      <d-button icon="icon-connect" bsStyle="text-dark" title="Relacionar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
-                    </div>
+                    <d-icon icon="icon-edit" (click)="editRow(rowItem, rowIndex)" dIconLink>
+                      <a iconSuffix class="devui-link" href="" ></a>
+                    </d-icon>
+                    &nbsp;
+                    <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)" dIconLink>
+                      <a iconSuffix class="devui-link" href=""></a>
+                    </d-icon>
+                    &nbsp;
+                    <d-icon icon="icon-connect" (click)="onRelacional(rowItem, rowIndex)" dIconLink>
+                      <a iconSuffix class="devui-link" href=""></a>
+                    </d-icon>
                   </ng-template>
                 </d-cell>
               </d-column>
@@ -129,4 +135,57 @@
 <ng-template #EditorPersonal>
   <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()">
   </da-admin-form>
+</ng-template>
+
+
+<ng-template #RelEmbarcacionProveedor>
+  <div style="margin-left: 40px">
+    <form dForm ngForm>
+      <d-form-item>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Proveedor de Descarga'">Descarga</d-form-label>
+        <d-form-control>
+          <div>
+            <d-select
+              name="provDescarga"
+              [options]="descargaMuelle"
+              placeholder='Proveedor de Descarga'
+              [filterKey]="'razonSocial'"
+              [isSearch]="true"
+              [readonly]="true"
+              [(ngModel)]='seleccionadoDescMuelle'
+              required='true'
+            ></d-select>
+          </div>
+        </d-form-control>
+      </d-form-item>
+      <d-form-item/>
+      <d-form-item>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Proveedor de Comision'">Comisión</d-form-label>
+        <d-form-control>
+          <d-select
+            name="provComision"
+            [options]="comisionEmbarcacion"
+            placeholder="Proveedor Comisión"
+            [filterKey]="'razonSocial'"
+            [isSearch]="true"
+            [readonly]="true"
+            [(ngModel)]='seleccionadoComEmbarcacion'
+            required='true'
+          ></d-select>
+        </d-form-control>
+      </d-form-item>
+      <d-form-item/>
+      <d-form-item/>
+      <d-form-operation>
+        <d-row>
+          <d-col [dSpan]="8">
+            <d-button bsStyle="primary" class="mr-element-spacing" (click)='grabarRel()' style="margin-right: 4px" >Grabar</d-button>
+          </d-col>
+          <d-col [dSpan]="4"/>
+          <d-col [dSpan]="8"><d-button bsStyle="common"  (click)='onCancelado()'  >Cancelar</d-button></d-col>
+          <d-col [dSpan]="2"/>
+        </d-row>
+      </d-form-operation>
+    </form>
+  </div>
 </ng-template>
