@@ -20,6 +20,11 @@ const routes: Routes = [
           import('./maestro/maestro.module').then((m) => m.MaestroModule),
       },
       {
+        path: 'tarifario',
+        loadChildren: () =>
+          import('./tarifario/tarifario.module').then((m) => m.TarifarioModule),
+      },
+      {
         path: 'transaccion',
         loadChildren: () =>
           import('./transaccion/transaccion.module').then((m) => m.TransaccionModule),

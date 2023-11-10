@@ -43,58 +43,54 @@ export default function (values: any) {
       menuIcon: 'icon icon-modify',
     },
     {
-      title: values['tarifa']['title'],
+      title: values['tarifario']['title'],
       children: [
         {
-          title: values['tarifa']['petroleo'],
-          link: '/pages/tarifa/petroleo',
+          title: values['tarifario']['petroleo'],
+          link: '/pages/tarifario/petroleo',
         },
         {
-          title: values['tarifa']['hielo'],
-          link: '/pages/tarifa/hielo',
+          title: values['tarifario']['administrativo'],
+          link: '/pages/tarifario/administrativo',
         },
         {
-          title: values['tarifa']['administrativo'],
-          link: '/pages/tarifa/administrativo',
+          title: values['tarifario']['descarga-muelle'],
+          link: '/pages/tarifario/descarga-muelle',
         },
         {
-          title: values['tarifa']['descarga-muelle'],
-          link: '/pages/tarifa/descarga-muelle',
+          title: values['tarifario']['descarga-planta'],
+          link: '/pages/tarifario/descarga-planta',
         },
         {
-          title: values['tarifa']['descarga-planta'],
-          link: '/pages/tarifa/descarga-planta',
+          title: values['tarifario']['lavado-cubeta'],
+          link: '/pages/tarifariorio/lavado-cubeta',
         },
         {
-          title: values['tarifa']['lavado-cubeta'],
-          link: '/pages/tarifa/lavado-cubeta',
+          title: values['tarifario']['flete'],
+          link: '/pages/tarifario/flete',
         },
         {
-          title: values['tarifa']['flete'],
-          link: '/pages/tarifa/flete',
+          title: values['tarifario']['comision-planta'],
+          link: '/pages/tarifario/comision-planta',
         },
         {
-          title: values['tarifa']['comision-planta'],
-          link: '/pages/tarifa/comision-planta',
+          title: values['tarifario']['comision-embarcacion'],
+          link: '/pages/tarifario/comision-embarcacion',
         },
         {
-          title: values['tarifa']['comision-embarcacion'],
-          link: '/pages/tarifa/comision-embarcacion',
+          title: values['tarifario']['muelle'],
+          link: '/pages/tarifario/muelle',
         },
         {
-          title: values['tarifa']['muelle'],
-          link: '/pages/tarifa/muelle',
+          title: values['tarifario']['habilitacion'],
+          link: '/pages/tarifario/habilitacion',
         },
         {
-          title: values['tarifa']['habilitacion'],
-          link: '/pages/tarifa/habilitacion',
-        },
-        {
-          title: values['tarifa']['atraque'],
-          link: '/pages/tarifa/atraque',
+          title: values['tarifario']['atraque'],
+          link: '/pages/tarifario/atraque',
         },
       ],
-      link: '/pages/tarifa',
+      link: '/pages/tarifario',
       menuIcon: 'icon icon-buy',
     },
     {

@@ -1,0 +1,118 @@
+<div class="da-list-wrap">
+  <div class="da-content-banner">
+    <d-breadcrumb>
+      <d-breadcrumb-item
+      ><a routerLink="/">SISCOPE</a></d-breadcrumb-item
+      >
+      <d-breadcrumb-item>Tarifario</d-breadcrumb-item>
+      <d-breadcrumb-item>Petroleo/Hielo</d-breadcrumb-item>
+    </d-breadcrumb>
+    <div class="da-content-banner-title">
+      Mantenimiento de Precios de Petroleo / Hielo
+    </div>
+    <div>Lista de las <strong>tarifas</strong> incluidos en el sistema</div>
+  </div>
+  <div class="da-content-wrapper">
+    <da-layout-row [daGutter]="[24, 24]">
+      <da-col-item [daSpan]="24" [daXs]="24">
+        <div class="da-list-container">
+          <div class="da-list-header">
+            <div class="da-header-left">
+              <div class="da-header-item">
+                <div class="da-header-item-label">Buscar：</div>
+                <d-search style="width: 200px" [size]="'sm'" [autoFocus]="true" placeholder='Ingrese el texto' [isKeyupSearch]="true" [(ngModel)]="DatoABuscar" (searchFn)="onSearch($event)" ></d-search>
+              </div>
+            </div>
+            <div class="header-right">
+              <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
+              <d-button icon="icon-add-2" (click)="newRow()">Nuevo</d-button>&nbsp;
+              <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
+            </div>
+          </div>
+
+          <div class="list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
+            <d-data-table
+              [dataSource]="basicDataSource"
+              [scrollable]="true"
+            >
+              <d-column field="placa" header="Placa" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    {{ cellItem }}
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="marca" header="Marca" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="modelo" header="Modelo" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem.razonSocial }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="estado" header="Estado" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="Actions" header="Acciones" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                    <div class="btn-group over-flow-ellipsis">
+                      <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
+                      <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
+                    </div>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+            </d-data-table>
+          </div>
+          <div class="da-list-footer">
+            <d-pagination
+              [size]="'sm'"
+              [total]="pager.total"
+              [(pageSize)]="pager.pageSize"
+              [(pageIndex)]="pager.pageIndex"
+              [canViewTotal]="true"
+              [canChangePageSize]="true"
+              [canJumpPage]="true"
+              [maxItems]="5"
+              (pageIndexChange)="onPageChange($event)"
+              (pageSizeChange)="onSizeChange($event)"
+            >
+            </d-pagination>
+          </div>
+        </div>
+      </da-col-item>
+    </da-layout-row>
+  </div>
+</div>
+
+<ng-template #EditorTemplate>
+  <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()">
+  </da-admin-form>
+</ng-template>
+

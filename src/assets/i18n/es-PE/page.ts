@@ -17,10 +17,9 @@ export default {
       //'operativo': 'Conceptos Operativos',
       'semana': 'Semana',
     },
-    'tarifa':{
+    'tarifario':{
       'title':'Tarifario',
-      'petroleo':'Petroleo',
-      'hielo':'Hielo',
+      'petroleo':'Petroleo/Hielo',
       'administrativo':'Servicio Administrativo',
       'descarga-muelle':'Descarga Muelle',
       'descarga-planta':'Descarga Planta',
