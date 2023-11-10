@@ -301,10 +301,10 @@ export class EmbarcacionComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.relembproveedorService.
-        actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion.id.toString(), "11")
+        actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11")
           .forEach(() => {
             this.relembproveedorService.
-            actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoDescMuelle.id.toString(), "7")
+            actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7")
               .forEach(() => {
                 /*this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
                   this.basicDataSource.splice(this.editRowIndex, 1, valor);
@@ -326,15 +326,17 @@ export class EmbarcacionComponent {
     this.editRowIndex = index;
     this.seleccionadoDescMuelle=null;
     this.seleccionadoComEmbarcacion=null;
-    console.log(e.idEmbarcacion);
     this.idEmbaracion = e.idEmbarcacion;
-    if(e.relPlantaDestinoDto != null)
-      for(let i = 0; i< e.relPlantaProveedorDtoList.length; i++ ){
-        if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 7){
-          this.seleccionadoDescMuelle =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+    if(e.relEmbarcacionProveedorDto != null)
+      for(let i = 0; i< e.relEmbarcacionProveedorDto.length; i++ ){
+        console.log(e.relEmbarcacionProveedorDto[i].idTipoServicio.id);
+        if(e.relEmbarcacionProveedorDto[i].idTipoServicio.id == 7){
+          console.log(e.relEmbarcacionProveedorDto[i]);
+          this.seleccionadoDescMuelle =  e.relEmbarcacionProveedorDto[i].idProovedor.id;
         }
-        if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 11){
-          this.seleccionadoComEmbarcacion =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
+        if(e.relEmbarcacionProveedorDto[i].idTipoServicio.id == 11){
+          console.log(e.relEmbarcacionProveedorDto[i]);
+          this.seleccionadoComEmbarcacion =  e.relEmbarcacionProveedorDto[i].idProovedor.id;
         }
       }
 

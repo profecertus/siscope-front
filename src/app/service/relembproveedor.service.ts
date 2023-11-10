@@ -13,7 +13,10 @@ export class RelembproveedorService {
 
   constructor(private http: HttpClient) { }
   actualizaRelEmbProv(idEmbaracion:string, idProveedor: string, idTipoActividad:string): Observable<any> {
+    if(idProveedor == null)
+      idProveedor = "-1";
     return this.http.post(`${this.apiUrl}${this.relEmbProv}/actualizar/${idEmbaracion}/${idProveedor}/${idTipoActividad}`, null );
+
   }
 
 }
