@@ -18,6 +18,7 @@ export const environment = {
   sufijoFormaPago: '/formaPago/v1',
   sufijoEmbarcacion: '/embarcacion/v1',
   sufijoRelPlantaProv: '/relplantaproveedor/v1',
+  sufijoSemana: '/semana/v1',
 };
 
 /*

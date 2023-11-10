@@ -106,7 +106,6 @@ export class EmbarcacionComponent {
     return this.busy = this.embarcacionService.obtenerEmbarcaciones((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
       let res : Embarcacion[]  = elemento.content;
-      //console.log(res);
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
@@ -127,7 +126,6 @@ export class EmbarcacionComponent {
     this.accion = 0;
     this.editRowIndex = index;
     this.formData = row;
-    console.log(row);
     this.formConfig.items[1].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
@@ -174,7 +172,7 @@ export class EmbarcacionComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.embarcacionService.guardarEmbarcacion(e).forEach(() => {
-          //console.log(value);
+
         }).then(() => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Planta Eliminada!','success');

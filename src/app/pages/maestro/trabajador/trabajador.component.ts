@@ -211,7 +211,6 @@ export class TrabajadorComponent {
   editRow(row: any, index: number) {
     this.accion = 0;
     this.editRowIndex = index;
-    console.log(row);
     this.formData = row;
     this.formConfig.items[0].options = this.tipoDocSource;
     this.formConfig.items[5].options = this.formaPagoSource;
@@ -264,7 +263,6 @@ export class TrabajadorComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(e);
         this.trabajadorService.guardarTrabajador(e).forEach(() => {
           //e.plantaDto.idPlanta = value;
         }).then(() => {
@@ -318,7 +316,6 @@ export class TrabajadorComponent {
       mensaje = "Se grabó correctamente al Trabajador";
     }
     e.id.idTipodoc = e.idTipodoc.id;
-    console.log(e);
     this.trabajadorService.guardarTrabajador(e).forEach(() => {
       //Sin accion
     }).then(() => {

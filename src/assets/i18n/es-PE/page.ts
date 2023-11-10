@@ -15,10 +15,10 @@ export default {
       'camara': 'Camara',
       'planta': 'Planta',
       //'operativo': 'Conceptos Operativos',
-      'administrativo': 'Conceptos Administrativos',
+      'semana': 'Semana',
     },
     'tarifa':{
-      'title':'Tarifa',
+      'title':'Tarifario',
       'petroleo':'Petroleo',
       'hielo':'Hielo',
       'administrativo':'Servicio Administrativo',

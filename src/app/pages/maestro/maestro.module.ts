@@ -24,6 +24,7 @@ import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app
 
 import { DaGridModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/layouts/da-grid';
 import { TrabajadorComponent } from './trabajador/trabajador.component';
+import { SemanaComponent } from './semana/semana.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TrabajadorComponent } from './trabajador/trabajador.component';
     PlantaComponent,
     ProveedorComponent,
     TrabajadorComponent,
+    SemanaComponent,
   ],
   imports: [
     MaestroRoutingModule,

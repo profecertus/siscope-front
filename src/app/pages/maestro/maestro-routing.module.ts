@@ -6,6 +6,7 @@ import { CamaraComponent } from './camara/camara.component';
 import { PlantaComponent } from './planta/planta.component';
 import { ProveedorComponent } from './proveedor/proveedor.component';
 import { TrabajadorComponent } from './trabajador/trabajador.component';
+import { SemanaComponent } from './semana/semana.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'camara', component: CamaraComponent },
       { path: 'planta', component: PlantaComponent },
       { path: 'trabajador', component:TrabajadorComponent },
+      { path: 'semana', component:SemanaComponent },
     ],
   },
 ];

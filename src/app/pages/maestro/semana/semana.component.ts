@@ -1,22 +1,20 @@
-import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
-import { ProveedorModel } from '../../../model/proveedor.model';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { DialogService, FormLayout } from '@devui';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
-import { CamaraService } from '../../../service/camara.service';
-import { ProveedorService } from '../../../service/proveedor.service';
 import { Camara } from '../../../model/camara.model';
+import { SemanaService } from '../../../service/semana.service';
+import { SemanaModel } from '../../../model/semana.model';
 
 @Component({
-  selector: 'app-camara',
-  templateUrl: './camara.component.html',
-  styleUrls: ['./camara.component.scss']
+  selector: 'app-semana',
+  templateUrl: './semana.component.html',
+  styleUrls: ['./semana.component.scss']
 })
-export class CamaraComponent {
-  basicDataSource: Camara[] = [];
-  basicDataSourceBkp: Camara[] = [];
-  proveedores:ProveedorModel[] =[];
+export class SemanaComponent {
+  basicDataSource: SemanaModel[] = [];
+  basicDataSourceBkp: SemanaModel[] = [];
   DatoABuscar: string = "";
   accion:number = 0;
 
@@ -25,44 +23,31 @@ export class CamaraComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Placa',
-        prop: 'placa',
+        label: 'IdSemana',
+        prop: 'id',
         type: 'input',
         required: true,
         deep: 1,
-        maxi:10,
-        tips: 'Placa',
-        placeholder: 'Placa de la Camara',
+        maxi:6,
+        tips: 'Id Semana',
+        placeholder: 'Anio + Numero Semana',
         rule:{validators: [{ required: true }]},
       },
       {
-        label: 'Marca',
-        prop: 'marca',
+        label: 'Fecha Inicio',
+        prop: 'fechaInicio',
         type: 'input',
         deep: 1,
-        maxi:50,
-        placeholder: 'Marca',
+        maxi:8,
+        placeholder: 'Fecha Inicio',
       },
       {
-        label: 'Modelo',
-        prop: 'modelo',
+        label: 'Fecha Fin',
+        prop: 'fechaFin',
         type: 'input',
         deep: 1,
-        maxi:50,
-        placeholder: 'Modelo',
-      },
-      {
-        label: 'Proveedor',
-        prop: 'idProveedor',
-        cabecera:'idProveedor',
-        type: 'select',
-        deep: 1,
-        options: [], //Se cargan luego
-        placeholder: 'Proveedor',
-        filterKey: 'razonSocial',
-        multipleselect: [],
-        required: true,
-        rule:{validators: [{ required: true }]},
+        maxi:8,
+        placeholder: 'Fecha Fin',
       },
       {
         label: 'Estado',
@@ -92,33 +77,20 @@ export class CamaraComponent {
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
 
-  constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private camaraService: CamaraService, private proveedorService: ProveedorService
-  ) {}
+  constructor(private dialogService: DialogService, private semanaService: SemanaService) {}
 
   ngOnInit() {
     this.getList();
-    this.getListProveedor();
   }
 
 
   getList() {
-    return this.busy = this.camaraService.obtenerCamaras((this.pager.pageIndex - 1), this.pager.pageSize).
+    return this.busy = this.semanaService.obtenerSemanas((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
-      let res : Camara[]  = elemento.content;
+      let res : SemanaModel[]  = elemento.content;
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
-    });
-  }
-
-  getListProveedor(){
-    //Obtengo los proveedores y filtro por FLETE (06)
-    return this.busy = this.proveedorService.obtenerProveedoresCamara().
-    pipe().subscribe((elemento) => {
-      this.proveedores = elemento.filter(item =>
-          item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 6).length > 0
-      );
     });
   }
 
@@ -127,12 +99,11 @@ export class CamaraComponent {
     this.editRowIndex = index;
     this.accion = 0;
     this.formData = row;
-    this.formConfig.items[3].options = this.proveedores;
-    this.editForm = this.dialogService.open({
+      this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
       maxHeight: '600px',
-      title: 'Camaras - Edición',
+      title: 'Semanas - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -149,12 +120,11 @@ export class CamaraComponent {
     this.editRowIndex = -1;
     this.accion = 1;
     this.formData = row;
-    this.formConfig.items[3].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
       maxHeight: '600px',
-      title: 'Camaras - Nuevo',
+      title: 'Semanas - Nuevo',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -167,18 +137,19 @@ export class CamaraComponent {
     e.estadoReg = false;
     this.accion = -1;
     Swal.fire({
-      title: '¿Seguro de eliminar la Cámara?',
+      title: '¿Seguro de eliminar la Semana?',
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.camaraService.guardarCamara(e).forEach(value => {
+        // @ts-ignore
+        this.semanaService.guardarSemana(e).forEach((value: string) => {
           e.placa = value;
         }).then(() => {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Cámara Eliminada!','success');
-        }).catch( error =>{
+        }).catch( (error: any) =>{
           console.log(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar la Cámara, intentelo más tarde",'error');
         }).finally(()=>{
@@ -227,11 +198,16 @@ export class CamaraComponent {
     if (this.accion == 1){
       mensaje = "Se grabó correctamente la Cámara";
     }
-    this.camaraService.guardarCamara(e).forEach(() => {}).then(()  => {
+    // @ts-ignore
+    this.semanaService.guardarSemana(e).forEach(() => {}).then(()  => {
       if(this.accion == 1)
-        this.basicDataSource.push(e);
+        { // @ts-ignore
+          this.basicDataSource.push(e);
+        }
       else
-        this.basicDataSource.splice(this.editRowIndex, 1, e);
+        { // @ts-ignore
+          this.basicDataSource.splice(this.editRowIndex, 1, e);
+        }
       this.basicDataSourceBkp = this.basicDataSource;
       Swal.fire('Exito',mensaje,'success');
       this.editForm!.modalInstance.hide();
