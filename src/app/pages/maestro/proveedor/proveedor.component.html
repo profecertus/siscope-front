@@ -35,22 +35,6 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <!--d-column field="proveedor" header="Id" [width]="'100px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    {{ cellItem.id }}
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="proveedor" header="Razón Social" [width]="'200px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.razonSocial }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column-->
               <d-column field="proveedor" header="Nombre Comercial" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
@@ -105,15 +89,6 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <!--d-column field="proveedor" header="Correo" [width]="'100px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
-                      {{ cellItem.correo }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column-->
               <d-column field="Actions" header="Acciones" [width]="'100px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
