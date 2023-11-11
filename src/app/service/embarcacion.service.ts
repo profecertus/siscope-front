@@ -18,6 +18,10 @@ export class EmbarcacionService {
     return this.http.get(`${this.apiUrl}${this.embarcacion}/getAllEmbarcacion/${numpage}/${numsize}`);
   }
 
+  obtenerEmbarcacion(idEmbarcacion:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.embarcacion}/getEmbarcacion/${idEmbarcacion}`);
+  }
+
   guardarEmbarcacion(embarcacion:Embarcacion){
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Realizar la solicitud PUT enviando el objeto JSON

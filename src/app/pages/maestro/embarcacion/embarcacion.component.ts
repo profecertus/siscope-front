@@ -120,7 +120,7 @@ export class EmbarcacionComponent {
   getList() {
     return this.busy = this.embarcacionService.obtenerEmbarcaciones((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
-      let res : Embarcacion[]  = elemento.content;
+      let res   = elemento.content;
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
@@ -293,6 +293,10 @@ export class EmbarcacionComponent {
   }
 
   grabarRel() {
+    if (this.seleccionadoDescMuelle == null && this.seleccionadoComEmbarcacion == null){
+      Swal.fire("Error", "Debe seleccionar al menos un proveedor", "error");
+      return;
+    }
     Swal.fire({
       title: '¿Seguro de grabar los Proveedores?',
       showCancelButton: true,
@@ -300,25 +304,47 @@ export class EmbarcacionComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.relembproveedorService.
-        actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11")
-          .forEach(() => {
-            this.relembproveedorService.
-            actualizaRelEmbProv(this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7")
-              .forEach(() => {
-                /*this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
-                  this.basicDataSource.splice(this.editRowIndex, 1, valor);
-                  this.onCancelado();
-                });*/
+        if(this.seleccionadoComEmbarcacion == null && this.seleccionadoDescMuelle != null){
+          this.relembproveedorService.actualizaRelEmbProv(
+          this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7").
+          subscribe(valor=>{
+            this.basicDataSource[this.editRowIndex] = valor;
+            Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
+            this.onCancelado();
+            return;
+          });
+        }
 
-              });
-          } );
+        if(this.seleccionadoComEmbarcacion != null && this.seleccionadoDescMuelle == null){
+          this.relembproveedorService.actualizaRelEmbProv(
+          this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11").
+          subscribe(valor=>{
+            this.basicDataSource[this.editRowIndex] = valor;
+            Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
+            this.onCancelado();
+            return;
+          });
+        }
+
+        if(this.seleccionadoComEmbarcacion != null && this.seleccionadoDescMuelle != null){
+          this.relembproveedorService.actualizaRelEmbProv(
+            this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7").
+          subscribe(valor=>{
+            this.relembproveedorService.actualizaRelEmbProv(
+              this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11").
+            subscribe(valor=>{
+              this.basicDataSource[this.editRowIndex] = valor;
+              Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
+              this.onCancelado();
+              return;
+            });
+          });
+        }
       }
     }).
     then(()=>{}).catch(error => {
       console.log(error);
       Swal.fire('Error','Sucedio un error al momento de grabar.','error');
-      this.onCancelado();
     });
   }
 
@@ -329,17 +355,13 @@ export class EmbarcacionComponent {
     this.idEmbaracion = e.idEmbarcacion;
     if(e.relEmbarcacionProveedorDto != null)
       for(let i = 0; i< e.relEmbarcacionProveedorDto.length; i++ ){
-        console.log(e.relEmbarcacionProveedorDto[i].idTipoServicio.id);
         if(e.relEmbarcacionProveedorDto[i].idTipoServicio.id == 7){
-          console.log(e.relEmbarcacionProveedorDto[i]);
-          this.seleccionadoDescMuelle =  e.relEmbarcacionProveedorDto[i].idProovedor.id;
+          this.seleccionadoDescMuelle =  e.relEmbarcacionProveedorDto[i].idProovedor.razonSocial;
         }
         if(e.relEmbarcacionProveedorDto[i].idTipoServicio.id == 11){
-          console.log(e.relEmbarcacionProveedorDto[i]);
-          this.seleccionadoComEmbarcacion =  e.relEmbarcacionProveedorDto[i].idProovedor.id;
+          this.seleccionadoComEmbarcacion =  e.relEmbarcacionProveedorDto[i].idProovedor.razonSocial;
         }
       }
-
     this.formRelEmbProv = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',

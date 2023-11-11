@@ -328,7 +328,8 @@ export class PlantaComponent {
     this.seleccionadoDescPlanta=null;
     // @ts-ignore
     this.idPlantaSel = e.plantaDto.idPlanta;
-    if(e.relPlantaDestinoDto != null)
+
+    if(e.relPlantaProveedorDtoList != null)
       for(let i = 0; i< e.relPlantaProveedorDtoList.length; i++ ){
         if(e.relPlantaProveedorDtoList[i].id.idTipoServicio == 8){
           this.seleccionadoDescPlanta =  e.relPlantaProveedorDtoList[i].relProvTiposerv.idProveedor;
@@ -416,6 +417,11 @@ export class PlantaComponent {
   }
 
   grabarRel() {
+    if (this.seleccionadoComPlanta == null && this.seleccionadoDescPlanta == null){
+      Swal.fire("Error", "Debe seleccionar al menos un proveedor", "error");
+      return;
+    }
+
     Swal.fire({
       title: '¿Seguro de grabar los Proveedores?',
       showCancelButton: true,
@@ -423,25 +429,57 @@ export class PlantaComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
         if (result.isConfirmed) {
-          this.relplantaproveedorService.
+          if (this.seleccionadoComPlanta == null && this.seleccionadoDescPlanta != null){
+            this.relplantaproveedorService.
+            actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoDescPlanta.id.toString(), "8").forEach(
+              () => {
+                this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
+                  this.basicDataSource.splice(this.editRowIndex, 1, valor);
+                });
+              }
+            ).then(()=>{
+              Swal.fire('Exito','Se grabo correctamente el proveedor de Descarga.','success');
+              this.onCancelado();
+            });
+
+          }
+
+          if (this.seleccionadoComPlanta != null && this.seleccionadoDescPlanta == null){
+            this.relplantaproveedorService.
+            actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoComPlanta.id.toString(), "12").forEach(
+              () => {
+                this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
+                  this.basicDataSource.splice(this.editRowIndex, 1, valor);
+                });
+              }
+            ).then(()=>{
+              Swal.fire('Exito','Se grabo correctamente el proveedor de Comisión.','success');
+              this.onCancelado();
+            });
+          }
+
+          if (this.seleccionadoComPlanta != null && this.seleccionadoDescPlanta != null){
+            this.relplantaproveedorService.
             actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoComPlanta.id.toString(), "12")
             .forEach(() => {
               this.relplantaproveedorService.
-                actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoDescPlanta.id.toString(), "8")
-                .forEach(() => {
-                  this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
-                    this.basicDataSource.splice(this.editRowIndex, 1, valor);
-                    this.onCancelado();
-                  });
-
+              actualizaRelPlantaProv(this.idPlantaSel.toString(), this.seleccionadoDescPlanta.id.toString(), "8")
+              .forEach(() => {
+                this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
+                this.basicDataSource.splice(this.editRowIndex, 1, valor);
+                this.onCancelado();
                 });
-            } );
+              });
+            });
           }
+        }
       }).
-      then(()=>{}).catch(error => {
+      then(()=>{
+        Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
+      }).catch(error => {
         console.log(error);
         Swal.fire('Error','Sucedio un error al momento de grabar.','error');
-      this.onCancelado();
+        return;
       });
   }
 
