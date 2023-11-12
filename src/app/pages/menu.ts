@@ -46,48 +46,20 @@ export default function (values: any) {
       title: values['tarifario']['title'],
       children: [
         {
-          title: values['tarifario']['petroleo'],
-          link: '/pages/tarifario/petroleo',
+          title: values['tarifario']['general'],
+          link: '/pages/tarifario/general',
         },
         {
-          title: values['tarifario']['administrativo'],
-          link: '/pages/tarifario/administrativo',
+          title: values['tarifario']['embarcacion'],
+          link: '/pages/tarifario/embarcacion',
         },
         {
-          title: values['tarifario']['descarga-muelle'],
-          link: '/pages/tarifario/descarga-muelle',
+          title: values['tarifario']['planta'],
+          link: '/pages/tarifario/planta',
         },
         {
-          title: values['tarifario']['descarga-planta'],
-          link: '/pages/tarifario/descarga-planta',
-        },
-        {
-          title: values['tarifario']['lavado-cubeta'],
-          link: '/pages/tarifariorio/lavado-cubeta',
-        },
-        {
-          title: values['tarifario']['flete'],
-          link: '/pages/tarifario/flete',
-        },
-        {
-          title: values['tarifario']['comision-planta'],
-          link: '/pages/tarifario/comision-planta',
-        },
-        {
-          title: values['tarifario']['comision-embarcacion'],
-          link: '/pages/tarifario/comision-embarcacion',
-        },
-        {
-          title: values['tarifario']['muelle'],
-          link: '/pages/tarifario/muelle',
-        },
-        {
-          title: values['tarifario']['habilitacion'],
-          link: '/pages/tarifario/habilitacion',
-        },
-        {
-          title: values['tarifario']['atraque'],
-          link: '/pages/tarifario/atraque',
+          title: values['tarifario']['camara'],
+          link: '/pages/tarifario/camara',
         },
       ],
       link: '/pages/tarifario',

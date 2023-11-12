@@ -1,10 +1,10 @@
 export default {
   notice: {
-    clear: 'Empty All',
-    notificationTabName: 'Notifications',
-    messageTabName: 'Messages',
+    clear: 'Limpiar',
+    notificationTabName: 'Notificaciones',
+    messageTabName: 'Mensajes',
     todoTabName: 'Todos',
-    done: 'You have viewed all messages',
-    more: 'More Info',
+    done: 'Viste todos tus mensajes',
+    more: 'Más Info',
   },
 };

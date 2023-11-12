@@ -1,22 +1,21 @@
-import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Camara } from '../../../model/camara.model';
-import { ProveedorModel } from '../../../model/proveedor.model';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { DialogService, FormLayout } from '@devui';
 import { Subscription } from 'rxjs';
-import { CamaraService } from '../../../service/camara.service';
-import { ProveedorService } from '../../../service/proveedor.service';
 import Swal from 'sweetalert2';
+import { TarifarioService } from '../../../service/tarifario.service';
+import { SemanaService } from '../../../service/semana.service';
+import { SemanaModel } from '../../../model/semana.model';
 
 @Component({
-  selector: 'app-petroleo',
-  templateUrl: './petroleo.component.html',
-  styleUrls: ['./petroleo.component.scss']
+  selector: 'app-general',
+  templateUrl: './general.component.html',
+  styleUrls: ['./general.component.scss']
 })
-export class PetroleoComponent {
+export class GeneralComponent {
   basicDataSource: Camara[] = [];
   basicDataSourceBkp: Camara[] = [];
-  proveedores:ProveedorModel[] =[];
   DatoABuscar: string = "";
   accion:number = 0;
 
@@ -73,12 +72,10 @@ export class PetroleoComponent {
     ],
     labelSize: '',
   };
-
   formData = {};
-
   editForm: any = null;
-
   editRowIndex = -1;
+  semanaActual:SemanaModel = new SemanaModel();
 
 
   pager = {
@@ -92,42 +89,44 @@ export class PetroleoComponent {
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
 
-  constructor(private dialogService: DialogService, private cdr: ChangeDetectorRef,
-              private camaraService: CamaraService, private proveedorService: ProveedorService
+  constructor(private dialogService: DialogService,
+              private tarifarioService: TarifarioService,
+              private semanaService: SemanaService
   ) {}
 
   ngOnInit() {
     this.getList();
-    this.getListProveedor();
   }
-
 
   getList() {
-    return this.busy = this.camaraService.obtenerCamaras((this.pager.pageIndex - 1), this.pager.pageSize).
-    pipe().subscribe((elemento) => {
-      let res : Camara[]  = elemento.content;
-      this.basicDataSource = res;
-      this.basicDataSourceBkp = res;
-      this.pager.total = elemento.totalElements;
-    });
-  }
 
-  getListProveedor(){
-    //Obtengo los proveedores y filtro por FLETE (06)
-    return this.busy = this.proveedorService.obtenerProveedoresCamara().
-    pipe().subscribe((elemento) => {
-      this.proveedores = elemento.filter(item =>
-        item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 6).length > 0
-      );
-    });
+    return this.busy = this.semanaService.semanaActual().
+      subscribe((elemento:SemanaModel) => {
+        this.semanaActual = elemento;
+        this.tarifarioService.obtenerTarifario(elemento).subscribe(
+          (elemento) =>{
+            if (elemento.length <= 0){
+              Swal.fire({
+                title:"Información",
+                text:"Al parecer no tenemos productos cargados para esta semana, proceda a Cargar los Productos",
+                icon:"warning",
+                timer:1500
+              });
+            }else{
+              console.log(elemento);
+              this.basicDataSource = elemento;
+              this.basicDataSourceBkp = elemento;
+            }
+          }
+        );
+      }
+    );
   }
-
 
   editRow(row: any, index: number) {
     this.editRowIndex = index;
     this.accion = 0;
     this.formData = row;
-    this.formConfig.items[3].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -149,7 +148,6 @@ export class PetroleoComponent {
     this.editRowIndex = -1;
     this.accion = 1;
     this.formData = row;
-    this.formConfig.items[3].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -173,7 +171,7 @@ export class PetroleoComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.camaraService.guardarCamara(e).forEach(value => {
+        /*this.camaraService.guardarCamara(e).forEach(value => {
           e.placa = value;
         }).then(() => {
           this.basicDataSource.splice(index, 1);
@@ -183,7 +181,7 @@ export class PetroleoComponent {
           Swal.fire('Error',"Hubo Problemas al Eliminar la Cámara, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
-        });
+        });*/
       }
     })
   }
@@ -227,7 +225,7 @@ export class PetroleoComponent {
     if (this.accion == 1){
       mensaje = "Se grabó correctamente la Cámara";
     }
-    this.camaraService.guardarCamara(e).forEach(() => {}).then(()  => {
+    /*this.camaraService.guardarCamara(e).forEach(() => {}).then(()  => {
       if(this.accion == 1)
         this.basicDataSource.push(e);
       else
@@ -238,11 +236,36 @@ export class PetroleoComponent {
     }).catch( (error: any) =>{
       console.log(error);
       Swal.fire('Error',"Hubo Problemas al grabar la Cámara." + error,'error');
-    });
+    });*/
   }
 
   onCanceled() {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
+  }
+
+  cargarProductos() {
+    Swal.fire({
+      title: "¿Desea cargar los productos a esta semana?",
+      showCancelButton: true,
+      confirmButtonText: "Si, cargar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.tarifarioService.crearSemana(this.semanaActual).subscribe(
+          (elemento) => {
+            this.refresh();
+            Swal.fire("Cargado!", "Se cargaron los productos", "success");
+          }
+        );
+
+      }
+    });
+
+  }
+
+  cargarPrecios() {
+
   }
 }

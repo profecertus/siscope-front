@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PetroleoComponent } from './petroleo.component';
+import { GeneralComponent } from './general.component';
 
 describe('PetroleoComponent', () => {
-  let component: PetroleoComponent;
-  let fixture: ComponentFixture<PetroleoComponent>;
+  let component: GeneralComponent;
+  let fixture: ComponentFixture<GeneralComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PetroleoComponent]
+      declarations: [GeneralComponent]
     });
-    fixture = TestBed.createComponent(PetroleoComponent);
+    fixture = TestBed.createComponent(GeneralComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

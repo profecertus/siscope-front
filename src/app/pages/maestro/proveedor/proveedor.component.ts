@@ -391,11 +391,10 @@ export class ProveedorComponent {
       this.basicDataSourceBkp = this.basicDataSource;
       //Ahora debo de actualizar la relación proveedor con servicio.
       Swal.fire('Exito',mensaje,'success');
+      this.editForm!.modalInstance.hide();
     }).catch( error =>{
       console.log(error);
       Swal.fire('Error',"Hubo Problemas al grabar el proveedor, verifique que el tipo y numero de documento no Exista",'error');
-    }).finally(()=>{
-      this.editForm!.modalInstance.hide();
     });
   }
 

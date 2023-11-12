@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { TarifarioComponent } from './tarifario.component';
 import { RouterOutlet } from '@angular/router';
-import { PetroleoComponent } from './petroleo/petroleo.component';
+import { GeneralComponent } from './general/general.component';
 import { TarifarioRoutingModule } from './tarifario-routing.module';
 import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/components/admin-form';
 import {
@@ -24,7 +24,7 @@ import { I18nModule } from 'ng-devui/i18n';
 @NgModule({
   declarations: [
     TarifarioComponent,
-    PetroleoComponent
+    GeneralComponent
   ],
   imports: [
     TarifarioRoutingModule,

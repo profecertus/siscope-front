@@ -5,10 +5,10 @@
       ><a routerLink="/">SISCOPE</a></d-breadcrumb-item
       >
       <d-breadcrumb-item>Tarifario</d-breadcrumb-item>
-      <d-breadcrumb-item>Petroleo/Hielo</d-breadcrumb-item>
+      <d-breadcrumb-item>General</d-breadcrumb-item>
     </d-breadcrumb>
     <div class="da-content-banner-title">
-      Mantenimiento de Precios de Petroleo / Hielo
+      Mantenimiento de Precios de Tarifario General
     </div>
     <div>Lista de las <strong>tarifas</strong> incluidos en el sistema</div>
   </div>
@@ -24,8 +24,17 @@
               </div>
             </div>
             <div class="header-right">
+              <div class="da-header-item">
+                <div class="da-header-item-label">Semana：</div>
+                <d-search style="width: 200px" [size]="'sm'" [autoFocus]="true" placeholder='Ingrese el texto' [isKeyupSearch]="true" [(ngModel)]="DatoABuscar" (searchFn)="onSearch($event)" ></d-search>
+              </div>
+              &nbsp;
               <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
-              <d-button icon="icon-add-2" (click)="newRow()">Nuevo</d-button>&nbsp;
+              &nbsp;
+              <d-button icon="icon-go-module" (click)="cargarProductos( )">Cargar Productos</d-button>
+              &nbsp;
+              <d-button icon="icon-setting" dTooltip='Carga Precios Semana Anterior' (click)="cargarPrecios( )">Cargar Precios</d-button>
+              &nbsp;
               <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
             </div>
           </div>
@@ -35,14 +44,32 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="placa" header="Placa" [width]="'100px'">
+              <d-column field="id" header="Semana"   [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    {{ cellItem }}
+                    {{ cellItem.idAnio }}
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="marca" header="Marca" [width]="'200px'">
+              <d-column field="proveedor" header="Proveedor" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem.nombreComercial }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="servicio" header="Servicio" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem.nombre }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idMoneda" header="Moneda" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
@@ -51,20 +78,11 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="modelo" header="Modelo" [width]="'200px'">
+              <d-column field="monto" header="Precio" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.razonSocial }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -78,11 +96,19 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="Actions" header="Acciones" [width]="'100px'">
+              <d-column field="Actions" header="M" [width]="'40px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
                     <div class="btn-group over-flow-ellipsis">
                       <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
+                    </div>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="Actions" header="E" [width]="'40px'">
+                <d-cell>
+                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                    <div class="btn-group over-flow-ellipsis">
                       <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
                     </div>
                   </ng-template>
