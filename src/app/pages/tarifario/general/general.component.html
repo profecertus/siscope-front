@@ -51,7 +51,7 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="proveedor" header="Proveedor" [width]="'200px'">
+              <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
@@ -60,7 +60,7 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="servicio" header="Servicio" [width]="'200px'">
+              <d-column field="idTipoServicio" header="Servicio" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
@@ -73,7 +73,7 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem }}
+                      {{ cellItem == null?"":cellItem.abreviatura }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -101,15 +101,6 @@
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
                     <div class="btn-group over-flow-ellipsis">
                       <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
-                    </div>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="Actions" header="E" [width]="'40px'">
-                <d-cell>
-                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-                    <div class="btn-group over-flow-ellipsis">
-                      <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
                     </div>
                   </ng-template>
                 </d-cell>

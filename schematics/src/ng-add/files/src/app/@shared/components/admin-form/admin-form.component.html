@@ -34,6 +34,7 @@
         [placeholder]='item.placeholder'
         *ngIf="item.type === 'input'"
         [dValidateRules]="item.required ? item.rule : {}"
+        [disabled] = "item['soloLectura'] == null? false: true"
       />
 
         <d-toggle

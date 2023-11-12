@@ -1,5 +1,4 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { Camara } from '../../../model/camara.model';
 import { FormConfig } from '../../../@shared/components/admin-form';
 import { DialogService, FormLayout } from '@devui';
 import { Subscription } from 'rxjs';
@@ -7,6 +6,9 @@ import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
 import { SemanaModel } from '../../../model/semana.model';
+import { TarifarioModel } from '../../../model/tarifario.model';
+import { Moneda } from '../../../model/moneda.model';
+import { MonedaService } from '../../../service/moneda.service';
 
 @Component({
   selector: 'app-general',
@@ -14,52 +16,58 @@ import { SemanaModel } from '../../../model/semana.model';
   styleUrls: ['./general.component.scss']
 })
 export class GeneralComponent {
-  basicDataSource: Camara[] = [];
-  basicDataSourceBkp: Camara[] = [];
+  basicDataSource: TarifarioModel[] = [];
+  basicDataSourceBkp: TarifarioModel[] = [];
   DatoABuscar: string = "";
-  accion:number = 0;
+  editRowIndex:number = 0;
 
 
   formConfig: FormConfig = {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Placa',
-        prop: 'placa',
+        label: 'Semana',
+        prop: 'idAnio',
+        cabecera: 'id',
         type: 'input',
-        required: true,
-        deep: 1,
-        maxi:10,
-        tips: 'Placa',
-        placeholder: 'Placa de la Camara',
-        rule:{validators: [{ required: true }]},
-      },
-      {
-        label: 'Marca',
-        prop: 'marca',
-        type: 'input',
-        deep: 1,
-        maxi:50,
-        placeholder: 'Marca',
-      },
-      {
-        label: 'Modelo',
-        prop: 'modelo',
-        type: 'input',
-        deep: 1,
-        maxi:50,
-        placeholder: 'Modelo',
+        deep: 2,
+        soloLectura:true,
       },
       {
         label: 'Proveedor',
-        prop: 'idProveedor',
-        cabecera:'idProveedor',
+        prop: 'nombreComercial',
+        cabecera: 'idProveedor',
+        type: 'input',
+        deep: 2,
+        soloLectura:true,
+      },
+      {
+        label: 'Servicio',
+        prop: 'nombre',
+        cabecera: 'idTipoServicio',
+        type: 'input',
+        deep: 2,
+        soloLectura:true,
+      },
+      {
+        label: 'Moneda',
+        prop: 'idMoneda',
+        cabecera:'idMoneda',
         type: 'select',
         deep: 1,
         options: [], //Se cargan luego
-        placeholder: 'Proveedor',
-        filterKey: 'razonSocial',
+        placeholder: 'Moneda',
+        filterKey: 'nombre',
         multipleselect: [],
+        required: true,
+        rule:{validators: [{ required: true }]},
+      },
+      {
+        label: 'Precio',
+        prop: 'monto',
+        type: 'number',
+        placeholder: 'Precio del producto',
+        deep: 1,
         required: true,
         rule:{validators: [{ required: true }]},
       },
@@ -70,11 +78,11 @@ export class GeneralComponent {
         deep: 1,
       },
     ],
-    labelSize: '',
+    labelSize: 'lg',
   };
   formData = {};
   editForm: any = null;
-  editRowIndex = -1;
+  monedas : Moneda[] =[];
   semanaActual:SemanaModel = new SemanaModel();
 
 
@@ -91,20 +99,29 @@ export class GeneralComponent {
 
   constructor(private dialogService: DialogService,
               private tarifarioService: TarifarioService,
-              private semanaService: SemanaService
+              private semanaService: SemanaService,
+              private monedaService: MonedaService,
   ) {}
 
   ngOnInit() {
     this.getList();
+    this.getMonedas();
+  }
+
+  getMonedas(){
+    return this.busy = this.monedaService.obtenerMonedas().subscribe(
+      (elemento: Moneda[]) =>{
+        this.monedas = elemento;
+      }
+    )
   }
 
   getList() {
-
     return this.busy = this.semanaService.semanaActual().
       subscribe((elemento:SemanaModel) => {
         this.semanaActual = elemento;
         this.tarifarioService.obtenerTarifario(elemento).subscribe(
-          (elemento) =>{
+          (elemento:TarifarioModel[]) =>{
             if (elemento.length <= 0){
               Swal.fire({
                 title:"Información",
@@ -113,7 +130,6 @@ export class GeneralComponent {
                 timer:1500
               });
             }else{
-              console.log(elemento);
               this.basicDataSource = elemento;
               this.basicDataSourceBkp = elemento;
             }
@@ -125,13 +141,13 @@ export class GeneralComponent {
 
   editRow(row: any, index: number) {
     this.editRowIndex = index;
-    this.accion = 0;
     this.formData = row;
+    this.formConfig.items[3].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
       maxHeight: '600px',
-      title: 'Camaras - Edición',
+      title: 'Precio Tarifario - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -143,50 +159,9 @@ export class GeneralComponent {
   refresh():void{
     this.getList();
   }
-  newRow():void {
-    let row = new Camara();
-    this.editRowIndex = -1;
-    this.accion = 1;
-    this.formData = row;
-    this.editForm = this.dialogService.open({
-      id: 'edit-dialog',
-      width: '700px',
-      maxHeight: '600px',
-      title: 'Camaras - Nuevo',
-      showAnimate: false,
-      contentTemplate: this.EditorTemplate,
-      backdropCloseable: true,
-      onClose: () => {},
-      buttons: [],
-    });
-  }
-
-  deleteRow(e: Camara, index: number) {
-    e.estadoReg = false;
-    this.accion = -1;
-    Swal.fire({
-      title: '¿Seguro de eliminar la Cámara?',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        /*this.camaraService.guardarCamara(e).forEach(value => {
-          e.placa = value;
-        }).then(() => {
-          this.basicDataSource.splice(index, 1);
-          Swal.fire('Exito','Cámara Eliminada!','success');
-        }).catch( error =>{
-          console.log(error);
-          Swal.fire('Error',"Hubo Problemas al Eliminar la Cámara, intentelo más tarde",'error');
-        }).finally(()=>{
-          this.editForm!.modalInstance.hide();
-        });*/
-      }
-    })
-  }
 
   onSearch(term: any) {
+    /*
     this.basicDataSource = this.basicDataSourceBkp;
     this.basicDataSource = this.basicDataSource.filter(element => {
       for (const key in element) {
@@ -196,9 +171,9 @@ export class GeneralComponent {
             return true;
           }
         }
-      }
+      }*/
       return false;
-    });
+    //});
 
 
   }
@@ -219,24 +194,20 @@ export class GeneralComponent {
     this.getList();
   }
 
-  onSubmitted(e: Camara) {
-    let mensaje:string="Se actualizo correctamente la Cámara";
+  onSubmitted(e: TarifarioModel) {
+    let mensaje:string="Se actualizo correctamente la Tarifa";
     Swal.showLoading( );
-    if (this.accion == 1){
-      mensaje = "Se grabó correctamente la Cámara";
-    }
-    /*this.camaraService.guardarCamara(e).forEach(() => {}).then(()  => {
-      if(this.accion == 1)
-        this.basicDataSource.push(e);
-      else
-        this.basicDataSource.splice(this.editRowIndex, 1, e);
+
+    this.tarifarioService.grabarTarifario(e).forEach(() => {}).then(()  => {
+      console.log(e)
+      this.basicDataSource.splice(this.editRowIndex, 1, e);
       this.basicDataSourceBkp = this.basicDataSource;
       Swal.fire('Exito',mensaje,'success');
       this.editForm!.modalInstance.hide();
     }).catch( (error: any) =>{
       console.log(error);
-      Swal.fire('Error',"Hubo Problemas al grabar la Cámara." + error,'error');
-    });*/
+      Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
+    });
   }
 
   onCanceled() {
@@ -266,6 +237,15 @@ export class GeneralComponent {
   }
 
   cargarPrecios() {
-
+    Swal.fire({
+      title: "¿Desea cargar los precios de la semana pasada?",
+      showCancelButton: true,
+      confirmButtonText: "Si, cargar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+            Swal.fire("Cargado!", "Se cargaron los precios!!", "success");
+      }
+    });
   }
 }
