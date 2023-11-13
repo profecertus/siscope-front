@@ -112,6 +112,7 @@ export class GeneralComponent {
     return this.busy = this.monedaService.obtenerMonedas().subscribe(
       (elemento: Moneda[]) =>{
         this.monedas = elemento;
+
       }
     )
   }
@@ -120,6 +121,7 @@ export class GeneralComponent {
     return this.busy = this.semanaService.semanaActual().
       subscribe((elemento:SemanaModel) => {
         this.semanaActual = elemento;
+
         this.tarifarioService.obtenerTarifario(elemento).subscribe(
           (elemento:TarifarioModel[]) =>{
             if (elemento.length <= 0){
@@ -199,7 +201,6 @@ export class GeneralComponent {
     Swal.showLoading( );
 
     this.tarifarioService.grabarTarifario(e).forEach(() => {}).then(()  => {
-      console.log(e)
       this.basicDataSource.splice(this.editRowIndex, 1, e);
       this.basicDataSourceBkp = this.basicDataSource;
       Swal.fire('Exito',mensaje,'success');

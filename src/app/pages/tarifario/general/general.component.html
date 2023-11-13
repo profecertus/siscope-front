@@ -44,53 +44,53 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="id" header="Semana"   [width]="'100px'">
+              <d-column field="id" header="Semana"   [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     {{ cellItem.idAnio }}
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
+              <d-column field="idProveedor" header="Proveedor" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.nombreComercial }}
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem == null?"":cellItem.nombreComercial }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idTipoServicio" header="Servicio" [width]="'200px'">
+              <d-column field="idTipoServicio" header="Servicio" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.nombre }}
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem == null?"":cellItem.nombre  }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idMoneda" header="Moneda" [width]="'200px'">
+              <d-column field="idMoneda" header="Moneda" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
                       {{ cellItem == null?"":cellItem.abreviatura }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="monto" header="Precio" [width]="'200px'">
+              <d-column field="monto" header="Precio" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="estado" header="Estado" [width]="'200px'">
+              <d-column field="estado" header="Estado" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
                       <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
