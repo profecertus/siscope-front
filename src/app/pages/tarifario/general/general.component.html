@@ -44,10 +44,10 @@
               [dataSource]="basicDataSource"
               [scrollable]="true"
             >
-              <d-column field="id" header="Semana"   [width]="'80px'">
+              <d-column field="idDia" header="Dia"   [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    {{ cellItem.idAnio }}
+                    {{ cellItem.idDia }}
                   </ng-template>
                 </d-cell>
               </d-column>
@@ -60,11 +60,20 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idTipoServicio" header="Servicio" [width]="'100px'">
+              <d-column field="idTipoServicio" header="Servicio" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem == null?"":cellItem.nombre  }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idTipoServicio" header="UM" [width]="'50px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'50px'">
+                      {{ cellItem.idUm.abreviatura  }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -72,16 +81,16 @@
               <d-column field="idMoneda" header="Moneda" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'40px'">
                       {{ cellItem == null?"":cellItem.abreviatura }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="monto" header="Precio" [width]="'100px'">
+              <d-column field="monto" header="Precio" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>

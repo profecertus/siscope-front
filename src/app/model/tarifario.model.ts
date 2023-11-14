@@ -1,5 +1,6 @@
 import { Moneda } from './moneda.model';
 import { ProveedorModel } from './proveedor.model';
+import { DiaSemana } from './semana.model';
 
 export interface  TipoDocumento {
   idTipodoc: number;
@@ -52,13 +53,13 @@ export interface Identificacion {
 
 // Clase principal que representa la estructura completa
 export interface TarifarioModel {
-  id: Identificacion;
-  idProveedor: ProveedorModel;
+  idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
-  idMoneda: Moneda; // Define el tipo correcto para idMoneda
-  monto: number; // Define el tipo correcto para monto
-  estado: boolean;
-  estadoReg: boolean;
+  idDia: DiaSemana;
+  idMoneda:Moneda;
+  monto:number;
+  estado:boolean;
+  estadoReg:boolean;
 }
 
 

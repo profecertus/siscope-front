@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
-import { SemanaModel } from '../../../model/semana.model';
+import { DiaSemana, SemanaModel } from '../../../model/semana.model';
 import { TarifarioModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
@@ -27,8 +27,8 @@ export class GeneralComponent {
     items: [
       {
         label: 'Semana',
-        prop: 'idAnio',
-        cabecera: 'id',
+        prop: 'idDia',
+        cabecera: 'idDia',
         type: 'input',
         deep: 2,
         soloLectura:true,
@@ -47,6 +47,15 @@ export class GeneralComponent {
         cabecera: 'idTipoServicio',
         type: 'input',
         deep: 2,
+        soloLectura:true,
+      },
+      {
+        label: 'UM',
+        prop: 'abreviatura',
+        cuerpo:'idUm',
+        cabecera: 'idTipoServicio',
+        type: 'input',
+        deep: 3,
         soloLectura:true,
       },
       {
@@ -83,7 +92,7 @@ export class GeneralComponent {
   formData = {};
   editForm: any = null;
   monedas : Moneda[] =[];
-  semanaActual:SemanaModel = new SemanaModel();
+  DiaActual:DiaSemana = new DiaSemana();
 
 
   pager = {
@@ -119,10 +128,9 @@ export class GeneralComponent {
 
   getList() {
     return this.busy = this.semanaService.semanaActual().
-      subscribe((elemento:SemanaModel) => {
-        this.semanaActual = elemento;
-
-        this.tarifarioService.obtenerTarifario(elemento).subscribe(
+      subscribe((elemento:DiaSemana) => {
+        this.DiaActual = elemento;
+        this.tarifarioService.obtenerTarifario(elemento.idDia).subscribe(
           (elemento:TarifarioModel[]) =>{
             if (elemento.length <= 0){
               Swal.fire({
@@ -147,7 +155,7 @@ export class GeneralComponent {
     this.formConfig.items[3].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '700px',
+      width: '400px',
       maxHeight: '600px',
       title: 'Precio Tarifario - Edición',
       showAnimate: false,
@@ -225,7 +233,8 @@ export class GeneralComponent {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.tarifarioService.crearSemana(this.semanaActual).subscribe(
+        console.log(this.DiaActual);
+        this.tarifarioService.crearSemana(this.DiaActual).subscribe(
           (elemento) => {
             this.refresh();
             Swal.fire("Cargado!", "Se cargaron los productos", "success");
