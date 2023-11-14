@@ -152,7 +152,7 @@ export class GeneralComponent {
   editRow(row: any, index: number) {
     this.editRowIndex = index;
     this.formData = row;
-    this.formConfig.items[3].options = this.monedas;
+    this.formConfig.items[4].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '400px',
