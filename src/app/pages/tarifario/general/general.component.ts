@@ -245,10 +245,18 @@ export class GeneralComponent {
   }
 
   cargarProductos() {
-    console.log(this.DiaActual);
     this.tarifarioService.crearSemana(this.DiaActual).subscribe(
     (elemento) => {
-      this.refresh();
+          this.tarifarioService.obtenerTarifario(this.DiaActual.idDia).subscribe(
+            (elemento:TarifarioModel[]) =>{
+              if (elemento.length <= 0){
+                //this.cargarProductos();
+              }else{
+                this.basicDataSource = elemento;
+                this.basicDataSourceBkp = elemento;
+              }
+            }
+          );
       }
     );
   }
