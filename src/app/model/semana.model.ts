@@ -12,5 +12,7 @@ export class DiaSemana{
   idSemana:SemanaModel = new SemanaModel();
   nombreDia: string = '';
   caracteristica:string = '';
+  [key:string]:any;
+
 }
 

@@ -15,7 +15,7 @@ export class TarifarioService {
 
   constructor(private http: HttpClient) { }
   obtenerTarifario(diaSemana:number): Observable<any> {
-    return this.http.post(`${this.apiUrl}${this.tarifario}/getAllTarifario`, diaSemana);
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifario/${diaSemana}`);
   }
 
   grabarTarifario(tarifario:TarifarioModel): Observable<any> {

@@ -21,7 +21,7 @@ export const environment = {
   sufijoSemana: '/semana/v1',
   sufijoRelEmbProv: '/relembprov/v1',
 
-  urlServiceTarifario: 'http://localhost:8081',
+  urlServiceTarifario: 'http://www.arquitecturabi.pe:8081',
   sufijoTarifario: '/tarifario/v1',
 };
 

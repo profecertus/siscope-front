@@ -9,6 +9,7 @@ import { DiaSemana, SemanaModel } from '../../../model/semana.model';
 import { TarifarioModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
+import { format, parse } from 'date-fns';
 
 @Component({
   selector: 'app-general',
@@ -149,6 +150,33 @@ export class GeneralComponent {
     );
   }
 
+
+  fechaSeleccionada = null;
+  today = new Date();
+  min = new Date(this.today.setDate(this.today.getDate() - 1));
+  max = new Date(this.today.setDate(this.today.getDate() + 1));
+
+  getValue(value: any) {
+    if (value.selectedDate == null) return;
+    let fecha : Date = value.selectedDate;
+    console.log(format(fecha, 'yyyyMMdd'));
+
+    this.tarifarioService.obtenerTarifario(Number( format(fecha, 'yyyyMMdd') )).subscribe(
+      (elemento:TarifarioModel[]) =>{
+        if (elemento.length <= 0){
+          Swal.fire({
+            title:"Información",
+            text:"Al parecer no tenemos productos cargados para esta semana, proceda a Cargar los Productos",
+            icon:"warning",
+            timer:1500
+          });
+        }else{
+          this.basicDataSource = elemento;
+          this.basicDataSourceBkp = elemento;
+        }
+      });
+  }
+
   editRow(row: any, index: number) {
     this.editRowIndex = index;
     this.formData = row;
@@ -207,7 +235,6 @@ export class GeneralComponent {
   onSubmitted(e: TarifarioModel) {
     let mensaje:string="Se actualizo correctamente la Tarifa";
     Swal.showLoading( );
-
     this.tarifarioService.grabarTarifario(e).forEach(() => {}).then(()  => {
       this.basicDataSource.splice(this.editRowIndex, 1, e);
       this.basicDataSourceBkp = this.basicDataSource;
@@ -243,7 +270,6 @@ export class GeneralComponent {
 
       }
     });
-
   }
 
   cargarPrecios() {
@@ -257,5 +283,14 @@ export class GeneralComponent {
             Swal.fire("Cargado!", "Se cargaron los precios!!", "success");
       }
     });
+  }
+  getFecha(idDia: number):string {
+    const fechaString: string = idDia.toString();
+    const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
+
+    // Formatea la fecha como un string con el formato deseado
+    const fechaFormateada: string = format(fechaObjeto, 'dd/MM/yyyy');
+
+    return fechaFormateada;
   }
 }

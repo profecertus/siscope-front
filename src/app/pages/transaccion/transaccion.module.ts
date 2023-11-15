@@ -8,6 +8,9 @@ import { IngresoComponent } from './ingreso/ingreso.component';
 import { LiquidacionComponent } from './liquidacion/liquidacion.component';
 import { TransaccionComponent } from './transaccion.component';
 import { TransaccionRoutingModule } from './transaccion-routing.module';
+import { BreadcrumbModule } from '@devui';
+import { DaGridModule } from '../../@shared/layouts/da-grid';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -23,7 +26,10 @@ import { TransaccionRoutingModule } from './transaccion-routing.module';
   ],
   imports: [
     TransaccionRoutingModule,
-    CommonModule
-  ]
+    CommonModule,
+    BreadcrumbModule,
+    DaGridModule,
+    TranslateModule,
+  ],
 })
 export class TransaccionModule { }

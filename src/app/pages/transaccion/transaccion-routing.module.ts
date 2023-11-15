@@ -5,6 +5,9 @@ import { DescargaComponent } from './descarga/descarga.component';
 import { IngresoComponent } from './ingreso/ingreso.component';
 import { LiquidacionComponent } from './liquidacion/liquidacion.component';
 import { PlanillaComponent } from './planilla/planilla.component';
+import { DevUIModule } from '@devui';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../@shared/shared.module';
 
 const routes: Routes = [
   {
@@ -20,7 +23,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), DevUIModule, FormsModule, SharedModule],
   exports: [RouterModule],
+  declarations: [
+
+  ],
 })
 export class TransaccionRoutingModule {}
