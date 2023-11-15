@@ -22,12 +22,16 @@ export class Ruc {
 }
 
 export class CodUbigeo {
-  codUbigeo?: string = "A000000";
-  departamento?: string = "DESCONOCIDO";
-  provincia?: string = "DESCONOCIDO";
-  distrito?: string = "DESCONOCIDO";
-  estadoReg?: boolean = true;
+  codUbigeo: string = "";
+  departamento: string = "";
+  provincia: string = "";
+  distrito: string = "";
+  estadoReg: boolean = true;
+  nombreCompleto: string = '';
   [key: string]: any; // Agregar la firma de índice
+  getNombre():string{
+    return this.codUbigeo + " - " + this.departamento + "/" + this.provincia + "/" + this.distrito;
+  }
 }
 
 export class RelPlantaDestinoDto{

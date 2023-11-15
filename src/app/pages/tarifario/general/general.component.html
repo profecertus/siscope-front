@@ -40,9 +40,7 @@
                       dDatepicker
                       #datePicker3="datepicker"
                       (selectedDateChange)="getValue($event)"
-                      [minDate]="min"
-                      [maxDate]="max"
-                      [autoOpen]="true"
+                      [autoOpen]="false"
                     />
                     <div *ngIf="fechaSeleccionada" class="devui-input-group-addon close-icon-wrapper" (click)="datePicker3.clearAll()">
                       <i class="icon icon-close"></i>
@@ -59,6 +57,7 @@
               <!--&nbsp;
               <d-button icon="icon-go-module" (click)="cargarProductos( )">Cargar Productos</d-button>
               &nbsp;
+
               <d-button icon="icon-setting" dTooltip='Carga Precios Semana Anterior' (click)="cargarPrecios( )">Cargar Precios</d-button>
               -->
               &nbsp;

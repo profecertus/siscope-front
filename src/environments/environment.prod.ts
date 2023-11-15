@@ -20,6 +20,7 @@ export const environment = {
   sufijoRelPlantaProv: '/relplantaproveedor/v1',
   sufijoSemana: '/semana/v1',
   sufijoRelEmbProv: '/relembprov/v1',
+  sufijoUbigeo: '/ubigeo/v1',
 
   urlServiceTarifario: 'http://www.arquitecturabi.pe:8081',
   sufijoTarifario: '/tarifario/v1',

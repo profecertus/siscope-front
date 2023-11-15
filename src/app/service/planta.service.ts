@@ -16,11 +16,16 @@ export class PlantaService {
   private planta = environment.sufijoPlanta;
   private destino = environment.sufijoDestino;
   private cliente = environment.sufijoCliente;
+  private ubigeo = environment.sufijoUbigeo;
 
   constructor(private http: HttpClient) { }
 
   obtenerPlantas(numpage:number, numsize:number): Observable<any> {
     return this.http.get(`${this.apiUrl}${this.planta}/getAllPage/${numpage}/${numsize}`);
+  }
+
+  obtenerUbigeo():Observable<any>{
+    return  this.http.get(`${this.apiUrl}${this.ubigeo}/getAllUbigeo`);
   }
 
   obtenerPlanta(idPlanta:number):Observable<any>{

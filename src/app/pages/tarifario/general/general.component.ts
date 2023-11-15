@@ -94,6 +94,10 @@ export class GeneralComponent {
   editForm: any = null;
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
+  fechaSeleccionada = null;
+  today = new Date();
+  min = new Date(this.today.setDate(this.today.getDate() - 1));
+  max = new Date(this.today.setDate(this.today.getDate() + 100));
 
 
   pager = {
@@ -134,12 +138,7 @@ export class GeneralComponent {
         this.tarifarioService.obtenerTarifario(elemento.idDia).subscribe(
           (elemento:TarifarioModel[]) =>{
             if (elemento.length <= 0){
-              Swal.fire({
-                title:"Información",
-                text:"Al parecer no tenemos productos cargados para esta semana, proceda a Cargar los Productos",
-                icon:"warning",
-                timer:1500
-              });
+              this.cargarProductos();
             }else{
               this.basicDataSource = elemento;
               this.basicDataSourceBkp = elemento;
@@ -151,22 +150,16 @@ export class GeneralComponent {
   }
 
 
-  fechaSeleccionada = null;
-  today = new Date();
-  min = new Date(this.today.setDate(this.today.getDate() - 1));
-  max = new Date(this.today.setDate(this.today.getDate() + 1));
-
   getValue(value: any) {
     if (value.selectedDate == null) return;
     let fecha : Date = value.selectedDate;
-    console.log(format(fecha, 'yyyyMMdd'));
 
     this.tarifarioService.obtenerTarifario(Number( format(fecha, 'yyyyMMdd') )).subscribe(
       (elemento:TarifarioModel[]) =>{
         if (elemento.length <= 0){
           Swal.fire({
             title:"Información",
-            text:"Al parecer no tenemos productos cargados para esta semana, proceda a Cargar los Productos",
+            text:"Lo sentimos, No tenemos tarifario cargado para esta fecha",
             icon:"warning",
             timer:1500
           });
@@ -252,24 +245,12 @@ export class GeneralComponent {
   }
 
   cargarProductos() {
-    Swal.fire({
-      title: "¿Desea cargar los productos a esta semana?",
-      showCancelButton: true,
-      confirmButtonText: "Si, cargar",
-      cancelButtonText: "Cancelar"
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        console.log(this.DiaActual);
-        this.tarifarioService.crearSemana(this.DiaActual).subscribe(
-          (elemento) => {
-            this.refresh();
-            Swal.fire("Cargado!", "Se cargaron los productos", "success");
-          }
-        );
-
+    console.log(this.DiaActual);
+    this.tarifarioService.crearSemana(this.DiaActual).subscribe(
+    (elemento) => {
+      this.refresh();
       }
-    });
+    );
   }
 
   cargarPrecios() {

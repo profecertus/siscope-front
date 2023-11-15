@@ -5,12 +5,13 @@ import { Subscription } from 'rxjs';
 import { ProveedorModel } from '../../../model/proveedor.model';
 import Swal from 'sweetalert2';
 import { PlantaService } from '../../../service/planta.service';
-import { RespuestaPlanta } from '../../../model/planta.modelo';
+import { CodUbigeo, RespuestaPlanta } from '../../../model/planta.modelo';
 import { Destino } from '../../../model/destino.model';
 import { Cliente } from '../../../model/cliente.model';
 import { ProveedorService } from '../../../service/proveedor.service';
 import { TipoServicio } from '../../../model/tipoServicio.model';
 import { RelplantaproveedorService } from '../../../service/relplantaproveedor.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-planta',
@@ -45,6 +46,20 @@ export class PlantaComponent {
         cabecera: 'plantaDto',
         tips: 'Nombre',
         placeholder: 'Nombre de la Planta',
+        rule:{validators: [{ required: true }]},
+      },
+      {
+        label: 'Localización',
+        cuerpo:'codUbigeo',
+        cabecera: 'plantaDto',
+        prop: 'nombreCompleto',
+        type: 'select',
+        deep: 3,
+        options: [], //Se cargan luego
+        placeholder: 'Ubigeo',
+        filterKey: 'nombreCompleto',
+        multipleselect: [],
+        required: true,
         rule:{validators: [{ required: true }]},
       },
       {
@@ -96,6 +111,7 @@ export class PlantaComponent {
   eventoCliente:any;
   editForm: any = null;
   formAddClient: any = null;
+  ubigeo:[] = [];
 
   editRowIndex = -1;
 
@@ -133,6 +149,7 @@ export class PlantaComponent {
     this.getListCliente();
     this.getListProveedorDescPlanta();
     this.getListProveedorComPlanta();
+    this.getUbigeo();
   }
 
 
@@ -140,10 +157,27 @@ export class PlantaComponent {
     return this.busy = this.plantaService.obtenerPlantas((this.pager.pageIndex - 1), this.pager.pageSize).
     pipe().subscribe((elemento) => {
       let res : RespuestaPlanta[]  = elemento.content;
+      let r:any;
+      for (r in res){
+        // @ts-ignore
+        res[r].plantaDto.codUbigeo.nombreCompleto = res[r].plantaDto.codUbigeo.departamento + " - " + res[r].plantaDto.codUbigeo.provincia + " - " + res[r].plantaDto.codUbigeo.distrito;
+      }
       this.basicDataSource = res;
       this.basicDataSourceBkp = res;
       this.pager.total = elemento.totalElements;
     });
+  }
+
+  getUbigeo(){
+      return this.busy = this.plantaService.obtenerUbigeo().
+        pipe().subscribe((elemento) => {
+          this.ubigeo = elemento;
+          let dato:any;
+          for(dato in this.ubigeo){
+            // @ts-ignore
+            this.ubigeo[dato].nombreCompleto =this.ubigeo[dato].departamento + " - " + this.ubigeo[dato].provincia + " - " + this.ubigeo[dato].distrito;
+          }
+      });
   }
 
   getListProveedorDescPlanta(){
@@ -191,8 +225,9 @@ export class PlantaComponent {
     this.accion = 0;
     this.editRowIndex = index;
     this.formData = row;
-    this.formConfig.items[2].options = this.destinos;
-    this.formConfig.items[3].options = this.clientes;
+    this.formConfig.items[1].options = this.ubigeo;
+    this.formConfig.items[3].options = this.destinos;
+    this.formConfig.items[4].options = this.clientes;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
@@ -214,8 +249,9 @@ export class PlantaComponent {
     this.accion = 1;
     this.editRowIndex = -1;
     this.formData = row;
-    this.formConfig.items[2].options = this.destinos;
-    this.formConfig.items[3].options = this.clientes;
+    this.formConfig.items[1].options = this.ubigeo;
+    this.formConfig.items[3].options = this.destinos;
+    this.formConfig.items[4].options = this.clientes;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
@@ -287,6 +323,8 @@ export class PlantaComponent {
   }
 
   onSubmitted(e: any) {
+    e.plantaDto.codUbigeo = e.plantaDto.codUbigeo.nombreCompleto;
+    console.log(e);
     let mensaje:string="Se actualizo correctamente la Planta";
     Swal.showLoading( );
     //En caso sea modificación.

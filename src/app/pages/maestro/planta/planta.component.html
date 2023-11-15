@@ -81,17 +81,17 @@
               <d-column field="plantaDto" header="Estado" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'80px'">
                       <d-tag [tag]="cellItem.estado.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.estado.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="plantaDto" header="Dirección" [width]="'80px'">
+              <d-column field="plantaDto" header="Localización" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
-                      {{ cellItem.direccion }}
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem.codUbigeo.nombreCompleto }}
                     </span>
                   </ng-template>
                 </d-cell>
