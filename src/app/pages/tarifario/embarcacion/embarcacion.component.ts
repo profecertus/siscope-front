@@ -28,9 +28,9 @@ export class EmbarcacionComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Semana',
-        prop: 'idDia',
-        cabecera: 'idDia',
+        label: 'Embarcacion',
+        prop: 'nombre',
+        cabecera: 'idEmbarcacion',
         type: 'input',
         deep: 2,
         soloLectura:true,
@@ -136,8 +136,9 @@ export class EmbarcacionComponent {
     return this.busy = this.semanaService.semanaActual().
     subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
-        this.tarifarioService.obtenerTarifario(elemento.idDia).subscribe(
+        this.tarifarioService.obtenerTarifarioEmbarcacion(elemento.idDia).subscribe(
           (elemento:TarifarioEmbarcacionModel[]) =>{
+            console.log(elemento)
             if (elemento.length <= 0){
               //this.cargarProductos();
             }else{

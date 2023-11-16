@@ -54,13 +54,6 @@
               </div>
               &nbsp;
               <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
-              <!--&nbsp;
-              <d-button icon="icon-go-module" (click)="cargarProductos( )">Cargar Productos</d-button>
-              &nbsp;
-
-              <d-button icon="icon-setting" dTooltip='Carga Precios Semana Anterior' (click)="cargarPrecios( )">Cargar Precios</d-button>
-              -->
-              &nbsp;
               <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
             </div>
           </div>
@@ -74,6 +67,16 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     {{ getFecha(cellItem.idDia) }}
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idEmbarcacion" header="Embarcacion" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'"><strong>
+                      {{ cellItem == null?"":cellItem.nombre }}
+                      </strong>
+                    </span>
                   </ng-template>
                 </d-cell>
               </d-column>

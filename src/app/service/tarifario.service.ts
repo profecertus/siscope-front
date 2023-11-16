@@ -19,7 +19,7 @@ export class TarifarioService {
   }
 
   obtenerTarifarioEmbarcacion(diaSemana:number): Observable<any> {
-    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioEmbaracacion/${diaSemana}`);
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioEmbarcacion/${diaSemana}`);
   }
 
   obtenerTarifarioPlanta(diaSemana:number): Observable<any> {
