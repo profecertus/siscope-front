@@ -1,6 +1,8 @@
 import { Moneda } from './moneda.model';
 import { ProveedorModel } from './proveedor.model';
 import { DiaSemana } from './semana.model';
+import { Embarcacion } from './embarcacion.model';
+import { PlantaDto } from './planta.modelo';
 
 export interface  TipoDocumento {
   idTipodoc: number;
@@ -53,6 +55,38 @@ export interface Identificacion {
 
 // Clase principal que representa la estructura completa
 export interface TarifarioModel {
+  idProveedor: ProveedorModel ;
+  idTipoServicio: TipoServicio;
+  idDia: DiaSemana;
+  idMoneda:Moneda;
+  monto:number;
+  estado:boolean;
+  estadoReg:boolean;
+}
+
+export interface TarifarioEmbarcacionModel {
+  idEmbarcacion: Embarcacion;
+  idProveedor: ProveedorModel ;
+  idTipoServicio: TipoServicio;
+  idDia: DiaSemana;
+  idMoneda:Moneda;
+  monto:number;
+  estado:boolean;
+  estadoReg:boolean;
+}
+
+export interface TarifarioPlantaModel {
+  idPlanta: PlantaDto;
+  idProveedor: ProveedorModel ;
+  idTipoServicio: TipoServicio;
+  idDia: DiaSemana;
+  idMoneda:Moneda;
+  monto:number;
+  estado:boolean;
+  estadoReg:boolean;
+}
+
+export interface TarifarioCamaraModel {
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;

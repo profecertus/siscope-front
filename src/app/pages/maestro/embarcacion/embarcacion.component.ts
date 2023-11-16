@@ -297,6 +297,7 @@ export class EmbarcacionComponent {
       Swal.fire("Error", "Debe seleccionar al menos un proveedor", "error");
       return;
     }
+
     Swal.fire({
       title: '¿Seguro de grabar los Proveedores?',
       showCancelButton: true,
@@ -304,41 +305,31 @@ export class EmbarcacionComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        if(this.seleccionadoComEmbarcacion == null && this.seleccionadoDescMuelle != null){
-          this.relembproveedorService.actualizaRelEmbProv(
-          this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7").
-          subscribe(valor=>{
-            this.basicDataSource[this.editRowIndex] = valor;
-            Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
-            this.onCancelado();
-            return;
-          });
-        }
 
-        if(this.seleccionadoComEmbarcacion != null && this.seleccionadoDescMuelle == null){
-          this.relembproveedorService.actualizaRelEmbProv(
-          this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11").
-          subscribe(valor=>{
-            this.basicDataSource[this.editRowIndex] = valor;
-            Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
-            this.onCancelado();
-            return;
-          });
-        }
-
-        if(this.seleccionadoComEmbarcacion != null && this.seleccionadoDescMuelle != null){
-          this.relembproveedorService.actualizaRelEmbProv(
-            this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7").
-          subscribe(valor=>{
+        if(this.seleccionadoDescMuelle != null){
+          if(typeof this.seleccionadoDescMuelle != 'string') {
             this.relembproveedorService.actualizaRelEmbProv(
-              this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11").
-            subscribe(valor=>{
-              this.basicDataSource[this.editRowIndex] = valor;
-              Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
+              this.idEmbaracion.toString(), this.seleccionadoDescMuelle?.id.toString(), "7").forEach(value => {
+              this.basicDataSource[this.editRowIndex] = value;
+            }).then(valor => {
+              Swal.fire('Exito', 'Se grabo correctamente los Proveedores.', 'success');
               this.onCancelado();
               return;
             });
-          });
+          }
+        }
+
+        if(this.seleccionadoComEmbarcacion != null ){
+          if(typeof  this.seleccionadoComEmbarcacion != 'string') {
+            this.relembproveedorService.actualizaRelEmbProv(
+              this.idEmbaracion.toString(), this.seleccionadoComEmbarcacion?.id.toString(), "11").forEach(value => {
+              this.basicDataSource[this.editRowIndex] = value;
+            }) .then(valor => {
+              //Swal.fire('Exito', 'Se grabo correctamente los Proveedores.', 'success');
+              this.onCancelado();
+              return;
+            });
+          }
         }
       }
     }).

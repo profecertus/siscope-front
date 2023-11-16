@@ -1,0 +1,170 @@
+<div class="da-list-wrap">
+  <div class="da-content-banner">
+    <d-breadcrumb>
+      <d-breadcrumb-item
+      ><a routerLink="/">SISCOPE</a></d-breadcrumb-item
+      >
+      <d-breadcrumb-item>Tarifario por</d-breadcrumb-item>
+      <d-breadcrumb-item>Embarcación</d-breadcrumb-item>
+    </d-breadcrumb>
+    <div class="da-content-banner-title">
+      Mantenimiento de Precios de Tarifario por Embarcación
+    </div>
+    <div>Lista de las <strong>tarifas por Embarcación</strong> incluidos en el sistema</div>
+  </div>
+  <div class="da-content-wrapper">
+    <da-layout-row [daGutter]="[24, 24]">
+      <da-col-item [daSpan]="24" [daXs]="24">
+        <div class="da-list-container">
+          <div class="da-list-header">
+            <div class="da-header-left">
+              <div class="da-header-item">
+                <div class="da-header-item-label">Buscar：</div>
+                <d-search style="width: 200px" [size]="'sm'" [autoFocus]="true" placeholder='Ingrese el texto' [isKeyupSearch]="true" [(ngModel)]="DatoABuscar" (searchFn)="onSearch($event)" ></d-search>
+              </div>
+            </div>
+            <div class="header-right">
+              <div class="da-header-item">
+                <div class="da-header-item-label">Dia：</div>
+
+                <div class="col-md-6">
+                  <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
+                    <input
+                      class="devui-input devui-form-control"
+                      placeholder="dd/MM/y"
+                      (click)="datePicker3.toggle()"
+                      name="dp"
+                      [(ngModel)]="fechaSeleccionada"
+                      [dateFormat]="'dd/MM/yy'"
+                      autocomplete="off"
+                      dDatepicker
+                      #datePicker3="datepicker"
+                      (selectedDateChange)="getValue($event)"
+                      [autoOpen]="false"
+                    />
+                    <div *ngIf="fechaSeleccionada" class="devui-input-group-addon close-icon-wrapper" (click)="datePicker3.clearAll()">
+                      <i class="icon icon-close"></i>
+                    </div>
+                    <div class="devui-input-group-addon" (click)="datePicker3.toggle()">
+                      <i class="icon icon-calendar"></i>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              &nbsp;
+              <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
+              <!--&nbsp;
+              <d-button icon="icon-go-module" (click)="cargarProductos( )">Cargar Productos</d-button>
+              &nbsp;
+
+              <d-button icon="icon-setting" dTooltip='Carga Precios Semana Anterior' (click)="cargarPrecios( )">Cargar Precios</d-button>
+              -->
+              &nbsp;
+              <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
+            </div>
+          </div>
+
+          <div class="list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
+            <d-data-table
+              [dataSource]="basicDataSource"
+              [scrollable]="true"
+            >
+              <d-column field="idDia" header="Dia"   [width]="'80px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    {{ getFecha(cellItem.idDia) }}
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idProveedor" header="Proveedor" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem == null?"":cellItem.nombreComercial }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idTipoServicio" header="Servicio" [width]="'200px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem == null?"":cellItem.nombre  }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idTipoServicio" header="UM" [width]="'50px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'50px'">
+                      {{ cellItem.idUm.abreviatura  }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="idMoneda" header="Moneda" [width]="'80px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'40px'">
+                      {{ cellItem == null?"":cellItem.abreviatura }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="monto" header="Precio" [width]="'80px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="estado" header="Estado" [width]="'80px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                      <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="Actions" header="M" [width]="'40px'">
+                <d-cell>
+                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                    <div class="btn-group over-flow-ellipsis">
+                      <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
+                    </div>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+            </d-data-table>
+          </div>
+          <div class="da-list-footer">
+            <d-pagination
+              [size]="'sm'"
+              [total]="pager.total"
+              [(pageSize)]="pager.pageSize"
+              [(pageIndex)]="pager.pageIndex"
+              [canViewTotal]="true"
+              [canChangePageSize]="true"
+              [canJumpPage]="true"
+              [maxItems]="5"
+              (pageIndexChange)="onPageChange($event)"
+              (pageSizeChange)="onSizeChange($event)"
+            >
+            </d-pagination>
+          </div>
+        </div>
+      </da-col-item>
+    </da-layout-row>
+  </div>
+</div>
+
+<ng-template #EditorTemplate>
+  <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()">
+  </da-admin-form>
+</ng-template>
+

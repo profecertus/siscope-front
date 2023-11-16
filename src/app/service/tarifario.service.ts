@@ -18,6 +18,18 @@ export class TarifarioService {
     return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifario/${diaSemana}`);
   }
 
+  obtenerTarifarioEmbarcacion(diaSemana:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioEmbaracacion/${diaSemana}`);
+  }
+
+  obtenerTarifarioPlanta(diaSemana:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioPlanta/${diaSemana}`);
+  }
+
+  obtenerTarifarioCamara(diaSemana:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioCamara/${diaSemana}`);
+  }
+
   grabarTarifario(tarifario:TarifarioModel): Observable<any> {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifa`, tarifario);
   }

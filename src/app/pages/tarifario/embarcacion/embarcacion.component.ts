@@ -6,17 +6,18 @@ import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
 import { DiaSemana } from '../../../model/semana.model';
-import { TarifarioModel } from '../../../model/tarifario.model';
+import { TarifarioEmbarcacionModel, TarifarioModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
 import { format, parse } from 'date-fns';
 
 @Component({
-  selector: 'app-general',
-  templateUrl: './general.component.html',
-  styleUrls: ['./general.component.scss']
+  selector: 'app-embarcacion',
+  templateUrl:
+    './embarcacion.component.html',
+  styleUrls: ['./embarcacion.component.scss']
 })
-export class GeneralComponent {
+export class EmbarcacionComponent {
   basicDataSource: TarifarioModel[] = [];
   basicDataSourceBkp: TarifarioModel[] = [];
   DatoABuscar: string = "";
@@ -133,12 +134,12 @@ export class GeneralComponent {
 
   getList() {
     return this.busy = this.semanaService.semanaActual().
-      subscribe((elemento:DiaSemana) => {
+    subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
         this.tarifarioService.obtenerTarifario(elemento.idDia).subscribe(
-          (elemento:TarifarioModel[]) =>{
+          (elemento:TarifarioEmbarcacionModel[]) =>{
             if (elemento.length <= 0){
-              this.cargarProductos();
+              //this.cargarProductos();
             }else{
               this.basicDataSource = elemento;
               this.basicDataSourceBkp = elemento;
@@ -203,7 +204,7 @@ export class GeneralComponent {
           }
         }
       }*/
-      return false;
+    return false;
     //});
 
 
@@ -244,35 +245,6 @@ export class GeneralComponent {
     this.editRowIndex = -1;
   }
 
-  cargarProductos() {
-    this.tarifarioService.crearSemana(this.DiaActual).subscribe(
-    (elemento) => {
-          this.tarifarioService.obtenerTarifario(this.DiaActual.idDia).subscribe(
-            (elemento:TarifarioModel[]) =>{
-              if (elemento.length <= 0){
-                //this.cargarProductos();
-              }else{
-                this.basicDataSource = elemento;
-                this.basicDataSourceBkp = elemento;
-              }
-            }
-          );
-      }
-    );
-  }
-
-  cargarPrecios() {
-    Swal.fire({
-      title: "¿Desea cargar los precios de la semana pasada?",
-      showCancelButton: true,
-      confirmButtonText: "Si, cargar",
-      cancelButtonText: "Cancelar"
-    }).then((result) => {
-      if (result.isConfirmed) {
-            Swal.fire("Cargado!", "Se cargaron los precios!!", "success");
-      }
-    });
-  }
   getFecha(idDia: number):string {
     const fechaString: string = idDia.toString();
     const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());

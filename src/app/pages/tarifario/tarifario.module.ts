@@ -18,13 +18,19 @@ import { DaGridModule } from '../../../../schematics/src/ng-add/files/src/app/@s
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { I18nModule } from 'ng-devui/i18n';
+import { PlantaComponent } from './planta/planta.component';
+import { CamaraComponent } from './camara/camara.component';
+import { EmbarcacionComponent } from './embarcacion/embarcacion.component';
 
 
 
 @NgModule({
   declarations: [
     TarifarioComponent,
-    GeneralComponent
+    GeneralComponent,
+    PlantaComponent,
+    CamaraComponent,
+    EmbarcacionComponent
   ],
   imports: [
     TarifarioRoutingModule,
