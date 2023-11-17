@@ -65,6 +65,7 @@ export interface TarifarioModel {
 }
 
 export interface TarifarioEmbarcacionModel {
+  id:Id;
   idEmbarcacion: Embarcacion;
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
@@ -73,6 +74,13 @@ export interface TarifarioEmbarcacionModel {
   monto:number;
   estado:boolean;
   estadoReg:boolean;
+}
+
+export interface  Id{
+  idDia:number;
+  idEmbarcacion:number;
+  idProveedor:number;
+  idTipoServicio:number;
 }
 
 export interface TarifarioPlantaModel {

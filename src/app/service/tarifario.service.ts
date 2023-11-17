@@ -34,6 +34,13 @@ export class TarifarioService {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifa`, tarifario);
   }
 
+  grabarTarifarioEmbarcacion(tarifario:TarifarioModel): Observable<any> {
+    return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaEmbarcacion`, tarifario);
+  }
+
+  grabarTarifarioPlanta(tarifario:TarifarioModel): Observable<any> {
+    return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaPlanta`, tarifario);
+  }
   crearSemana(diaSemana:DiaSemana):Observable<any>{
     return this.http.post(`${this.apiUrl}${this.tarifario}/createWeek`, diaSemana);
   }

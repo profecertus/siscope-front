@@ -18,8 +18,8 @@ import { format, parse } from 'date-fns';
   styleUrls: ['./embarcacion.component.scss']
 })
 export class EmbarcacionComponent {
-  basicDataSource: TarifarioModel[] = [];
-  basicDataSourceBkp: TarifarioModel[] = [];
+  basicDataSource: TarifarioEmbarcacionModel[] = [];
+  basicDataSourceBkp: TarifarioEmbarcacionModel[] = [];
   DatoABuscar: string = "";
   editRowIndex:number = 0;
 
@@ -29,7 +29,7 @@ export class EmbarcacionComponent {
     items: [
       {
         label: 'Embarcacion',
-        prop: 'nombre',
+        prop: 'nombreEmbarcacion',
         cabecera: 'idEmbarcacion',
         type: 'input',
         deep: 2,
@@ -107,7 +107,7 @@ export class EmbarcacionComponent {
     pageSize: 10,
   };
 
-  busy: Subscription = new Subscription() ;
+  busy: Subscription = new Subscription();
 
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
@@ -124,21 +124,19 @@ export class EmbarcacionComponent {
   }
 
   getMonedas(){
-    return this.busy = this.monedaService.obtenerMonedas().subscribe(
+    this.busy = this.monedaService.obtenerMonedas().subscribe(
       (elemento: Moneda[]) =>{
         this.monedas = elemento;
-
       }
-    )
+    );
   }
 
   getList() {
-    return this.busy = this.semanaService.semanaActual().
+    this.busy = this.semanaService.semanaActual().
     subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
         this.tarifarioService.obtenerTarifarioEmbarcacion(elemento.idDia).subscribe(
           (elemento:TarifarioEmbarcacionModel[]) =>{
-            console.log(elemento)
             if (elemento.length <= 0){
               //this.cargarProductos();
             }else{
@@ -156,8 +154,8 @@ export class EmbarcacionComponent {
     if (value.selectedDate == null) return;
     let fecha : Date = value.selectedDate;
 
-    this.tarifarioService.obtenerTarifario(Number( format(fecha, 'yyyyMMdd') )).subscribe(
-      (elemento:TarifarioModel[]) =>{
+    this.tarifarioService.obtenerTarifarioEmbarcacion(Number( format(fecha, 'yyyyMMdd') )).subscribe(
+      (elemento:TarifarioEmbarcacionModel[]) =>{
         if (elemento.length <= 0){
           Swal.fire({
             title:"Información",
@@ -172,8 +170,8 @@ export class EmbarcacionComponent {
       });
   }
 
-  editRow(row: any, index: number) {
-    this.editRowIndex = index;
+  editRow(row: any) {
+    //this.editRowIndex = index;
     this.formData = row;
     this.formConfig.items[4].options = this.monedas;
     this.editForm = this.dialogService.open({
@@ -227,18 +225,27 @@ export class EmbarcacionComponent {
     this.getList();
   }
 
-  onSubmitted(e: TarifarioModel) {
-    let mensaje:string="Se actualizo correctamente la Tarifa";
-    Swal.showLoading( );
-    this.tarifarioService.grabarTarifario(e).forEach(() => {}).then(()  => {
-      this.basicDataSource.splice(this.editRowIndex, 1, e);
-      this.basicDataSourceBkp = this.basicDataSource;
-      Swal.fire('Exito',mensaje,'success');
-      this.editForm!.modalInstance.hide();
-    }).catch( (error: any) =>{
-      console.log(error);
-      Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
-    });
+  onSubmitted(e: TarifarioEmbarcacionModel) {
+    console.log(e.id)
+    const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
+      objeto.id.idEmbarcacion == e.id.idEmbarcacion && objeto.id.idTipoServicio == e.id.idTipoServicio && objeto.id.idProveedor == e.id.idProveedor);
+    if (objetoAModificar) {
+      let mensaje:string="Se actualizo correctamente la Tarifa";
+      Swal.showLoading( );
+      this.tarifarioService.grabarTarifarioEmbarcacion(e).forEach(() => {}).then(()  => {
+        //this.basicDataSource.splice(this.editRowIndex, 1, e);
+        objetoAModificar.idMoneda = e.idMoneda;
+        objetoAModificar.monto = e.monto;
+        this.basicDataSourceBkp = this.basicDataSource;
+        Swal.fire('Exito',mensaje,'success');
+        this.editForm!.modalInstance.hide();
+      }).catch( (error: any) =>{
+        console.error(error);
+        Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
+      });
+    } else {
+      console.error('Objeto no encontrado');
+    }
   }
 
   onCanceled() {

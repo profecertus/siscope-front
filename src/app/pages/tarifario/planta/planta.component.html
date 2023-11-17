@@ -1,1 +1,102 @@
-<p>planta works!</p>
+<div class="da-list-wrap">
+  <div class="da-content-banner">
+    <d-breadcrumb>
+      <d-breadcrumb-item
+      ><a routerLink="/">SISCOPE</a></d-breadcrumb-item
+      >
+      <d-breadcrumb-item>Tarifario</d-breadcrumb-item>
+      <d-breadcrumb-item>Planta</d-breadcrumb-item>
+    </d-breadcrumb>
+    <div class="da-content-banner-title">
+      Mantenimiento de Precios de Tarifario por Planta
+    </div>
+    <div>Lista de las <strong>tarifas por Planta</strong> incluidos en el sistema</div>
+  </div>
+
+  <div class="da-content-wrapper">
+    <da-layout-row [daGutter]="[24, 24]">
+      <da-col-item [daSpan]="24" [daXs]="24">
+        <div class="da-list-container">
+          <div class="da-list-header">
+            <div class="da-header-left">
+              <div class="da-header-item">
+                <div class="da-header-item-label">Buscar：</div>
+                <d-search style="width: 200px" [size]="'sm'" [autoFocus]="true" placeholder='Ingrese el texto' [isKeyupSearch]="true" [(ngModel)]="DatoABuscar" (searchFn)="onSearch($event)" ></d-search>
+              </div>
+            </div>
+            <div class="header-right">
+              <div class="da-header-item">
+                <div class="da-header-item-label">Dia：</div>
+
+                <div class="col-md-6">
+                  <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
+                    <input
+                      class="devui-input devui-form-control"
+                      placeholder="dd/MM/y"
+                      (click)="datePicker3.toggle()"
+                      name="dp"
+                      [(ngModel)]="fechaSeleccionada"
+                      [dateFormat]="'dd/MM/yy'"
+                      autocomplete="off"
+                      dDatepicker
+                      #datePicker3="datepicker"
+                      (selectedDateChange)="getValue($event)"
+                      [autoOpen]="false"
+                    />
+                    <div *ngIf="fechaSeleccionada" class="devui-input-group-addon close-icon-wrapper" (click)="datePicker3.clearAll()">
+                      <i class="icon icon-close"></i>
+                    </div>
+                    <div class="devui-input-group-addon" (click)="datePicker3.toggle()">
+                      <i class="icon icon-calendar"></i>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              &nbsp;
+              <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
+              <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
+            </div>
+          </div>
+
+          <div class="da-list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'">
+            <d-card *ngFor="let item of basicDataSource" class="card-item">
+              <d-card-header>
+                <d-avatar dCardAvatar [name]="item.idEmbarcacion.nombreEmbarcacion"></d-avatar>
+                <d-card-title>{{ item.idEmbarcacion.nombreEmbarcacion }}</d-card-title>
+                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{item.idTipoServicio.nombre}}</span></d-card-subtitle>
+              </d-card-header>
+              <d-card-content>
+                Este servicio es brindado por el proveedor <strong> {{ item.idProveedor.razonSocial }} </strong> y  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por cada {{ item.idTipoServicio.idUm.nombre }}
+              </d-card-content>
+              <d-card-actions [align]="'start'">
+                <div class="card-block"><i class="icon-edit card-icon" (click)='editRow(item)' ></i><span (click)='editRow(item)'>Editar</span></div>
+              </d-card-actions>
+            </d-card>
+          </div>
+          <div class="da-list-footer">
+            <d-pagination
+              [size]="'sm'"
+              [total]="pager.total"
+              [(pageSize)]="pager.pageSize"
+              [(pageIndex)]="pager.pageIndex"
+              [canViewTotal]="true"
+              [canChangePageSize]="true"
+              [canJumpPage]="true"
+              [maxItems]="5"
+              (pageIndexChange)="onPageChange($event)"
+              (pageSizeChange)="onSizeChange($event)"
+            >
+            </d-pagination>
+          </div>
+        </div>
+      </da-col-item>
+    </da-layout-row>
+  </div>
+</div>
+
+<ng-template #EditorTemplate>
+  <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()">
+  </da-admin-form>
+</ng-template>
+
