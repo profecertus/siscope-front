@@ -9,8 +9,10 @@ import { SemanaModel } from '../model/semana.model';
 })
 export class SemanaService {
 
-  private apiUrl = environment.urlServiceTarifario;
+  private apiUrl = environment.urlService;
   private semana = environment.sufijoSemana;
+  private apiUrlTarifario = environment.urlServiceTarifario;
+
 
   constructor(private http: HttpClient) { }
 
@@ -19,10 +21,10 @@ export class SemanaService {
   }
 
   guardarSemana(semana: SemanaModel){
-    return;
+    return this.http.post(`${this.apiUrl}${this.semana}/saveSemana`, semana);
   }
 
   semanaActual():Observable<any>{
-    return this.http.get(`${this.apiUrl}${this.semana}/semanaActual`)
+    return this.http.get(`${this.apiUrlTarifario}${this.semana}/semanaActual`)
   }
 }

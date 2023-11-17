@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Camara } from '../../../model/camara.model';
 import { SemanaService } from '../../../service/semana.service';
 import { SemanaModel } from '../../../model/semana.model';
+import { format, parse } from 'date-fns';
 
 @Component({
   selector: 'app-semana',
@@ -23,31 +24,26 @@ export class SemanaComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'IdSemana',
+        label: 'Semana',
         prop: 'id',
         type: 'input',
-        required: true,
         deep: 1,
-        maxi:6,
+        soloLectura:true,
         tips: 'Id Semana',
-        placeholder: 'Anio + Numero Semana',
-        rule:{validators: [{ required: true }]},
       },
       {
         label: 'Fecha Inicio',
         prop: 'fechaInicio',
         type: 'input',
         deep: 1,
-        maxi:8,
-        placeholder: 'Fecha Inicio',
+        soloLectura:true,
       },
       {
         label: 'Fecha Fin',
         prop: 'fechaFin',
         type: 'input',
         deep: 1,
-        maxi:8,
-        placeholder: 'Fecha Fin',
+        soloLectura:true,
       },
       {
         label: 'Estado',
@@ -220,5 +216,22 @@ export class SemanaComponent {
   onCanceled() {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
+  }
+
+  getFecha(idDia: number):string {
+    const fechaString: string = idDia.toString();
+    const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
+
+    // Formatea la fecha como un string con el formato deseado
+    const fechaFormateada: string = format(fechaObjeto, 'dd/MM/yyyy');
+
+    return fechaFormateada;
+  }
+
+  valor:boolean = true;
+  onChange(rowItem:SemanaModel, rowIndex:number, status:any) {
+    rowItem.estado = status;
+    this.basicDataSource[rowIndex] = rowItem;
+    this.semanaService.guardarSemana(rowItem).subscribe();
   }
 }

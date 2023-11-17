@@ -25,7 +25,6 @@
             </div>
             <div class="header-right">
               <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
-              <d-button icon="icon-add-2" (click)="newRow()">Nuevo</d-button>&nbsp;
               <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
             </div>
           </div>
@@ -46,7 +45,7 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem }}
+                      {{ getFecha( cellItem ) }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -55,7 +54,7 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem }}
+                      {{ getFecha( cellItem ) }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -69,21 +68,20 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="estado" header="Estado" [width]="'200px'">
+              <d-column field="estado"  header="Estado" [width]="'200px'">
                 <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'CERRADO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
+                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                    <span [title]="rowIndex" class="over-flow-ellipsis" [style.width]="'200px'">
+                      <d-toggle [checked]=rowItem.estado (change)="onChange(rowItem, rowIndex, $event)" ></d-toggle>
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="Actions" header="Acciones" [width]="'100px'">
+              <d-column field="estado" header="ACTIVO / INACTIVO" [width]="'200px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
                     <div class="btn-group over-flow-ellipsis">
-                      <d-button icon="icon-edit" bsStyle="text-dark" title="Modificar" (click)="editRow(rowItem, rowIndex)"></d-button>
-                      <d-button icon="icon-delete" bsStyle="text-dark" title="Eliminar" (click)="deleteRow(rowItem, rowIndex)"></d-button>
+                      <d-tag [tag]="rowItem.estado==true?'ACTIVO':'CERRADO'" [labelStyle]="rowItem.estado==true?'blue-w98':'red-w98'"></d-tag>
                     </div>
                   </ng-template>
                 </d-cell>
