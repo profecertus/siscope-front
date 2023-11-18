@@ -191,19 +191,15 @@ export class PlantaComponent {
   }
 
   onSearch(term: any) {
-    /*
+
     this.basicDataSource = this.basicDataSourceBkp;
     this.basicDataSource = this.basicDataSource.filter(element => {
-      for (const key in element) {
-        if (Object.hasOwnProperty.call(element, key)) {
-          if (element[key] == null) continue;
-          if (element[key].toString().toLowerCase().includes(term.toLowerCase())) {
-            return true;
-          }
-        }
-      }*/
-    return false;
-    //});
+      if(term == null || term.toString().trim().length == 0)
+        return true;
+      if(JSON.stringify(element, null, 2).toLowerCase().indexOf( term.toLowerCase() ) > 0)
+        return true;
+      return false;
+    });
 
 
   }
