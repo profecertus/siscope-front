@@ -6,7 +6,7 @@ export class RespuestaPlanta{
 
 export class PlantaDto{
   idPlanta: Number = 0;
-  nombre: String = '';
+  nombrePlanta: String = '';
   ruc: Ruc = new Ruc();
   direccion: String = '';
   codUbigeo: CodUbigeo = new CodUbigeo();

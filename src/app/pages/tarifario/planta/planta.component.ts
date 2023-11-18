@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
 import { DiaSemana } from '../../../model/semana.model';
-import { TarifarioEmbarcacionModel, TarifarioModel, TarifarioPlantaModel } from '../../../model/tarifario.model';
+import { TarifarioPlantaModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
 import { format, parse } from 'date-fns';
@@ -27,9 +27,9 @@ export class PlantaComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Embarcacion',
-        prop: 'nombreEmbarcacion',
-        cabecera: 'idEmbarcacion',
+        label: 'Planta',
+        prop: 'nombrePlanta',
+        cabecera: 'idPlanta',
         type: 'input',
         deep: 2,
         soloLectura:true,
@@ -155,7 +155,6 @@ export class PlantaComponent {
 
     this.tarifarioService.obtenerTarifarioPlanta(Number( format(fecha, 'yyyyMMdd') )).subscribe(
       (elemento:TarifarioPlantaModel[]) =>{
-        console.log(elemento);
         if (elemento.length <= 0){
           Swal.fire({
             title:"Información",
@@ -226,13 +225,12 @@ export class PlantaComponent {
   }
 
   onSubmitted(e: TarifarioPlantaModel) {
-    console.log(e.id)
     const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
       objeto.id.idPlanta == e.id.idPlanta && objeto.id.idTipoServicio == e.id.idTipoServicio && objeto.id.idProveedor == e.id.idProveedor);
     if (objetoAModificar) {
       let mensaje:string="Se actualizo correctamente la Tarifa";
       Swal.showLoading( );
-      this.tarifarioService.grabarTarifarioEmbarcacion(e).forEach(() => {}).then(()  => {
+      this.tarifarioService.grabarTarifarioPlanta(e).forEach(() => {}).then(()  => {
         //this.basicDataSource.splice(this.editRowIndex, 1, e);
         objetoAModificar.idMoneda = e.idMoneda;
         objetoAModificar.monto = e.monto;
