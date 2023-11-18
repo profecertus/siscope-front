@@ -26,9 +26,7 @@ export default {
     'transaccion': {
       'title': 'Transacciones',
       'descarga': 'Descarga de Pesca',
-      'planilla': 'Planilla Trabajadores',
-      'gastosope': 'Gastos Operativos',
-      'gastosadm': 'Gastos Administrarivos',
+      'gastosEmbarcacion': 'Gastos Embarcacion',
       'ingresos': 'Ingresos',
       'liquidacion':'Liquidación'
     },

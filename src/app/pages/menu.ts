@@ -68,13 +68,8 @@ export default function (values: any) {
     {
       title: values['transaccion']['title'],
       children: [
+        { title: values['transaccion']['gastosEmbarcacion'], link: '/pages/transaccion/gastosEmbarcacion' },
         { title: values['transaccion']['descarga'], link: '/pages/transaccion/descarga' },
-        { title: values['transaccion']['planilla'], link: '/pages/transaccion/planilla' },
-        {
-          title: values['transaccion']['gastosope'],
-          link: '/pages/transaccion/operativo',
-        },
-        { title: values['transaccion']['gastosadm'], link: '/pages/transaccion/administrativo' },
         { title: values['transaccion']['ingresos'], link: '/pages/transaccion/ingreso' },
         { title: values['transaccion']['liquidacion'], link: '/pages/transaccion/liquidacion' },
       ],

@@ -39,7 +39,7 @@
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem.nombreComercial }}
+                      {{ cellItem.razonSocial }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -113,7 +113,7 @@
               [canViewTotal]="true"
               [canChangePageSize]="true"
               [canJumpPage]="true"
-              [maxItems]="5"
+              [maxItems]="10"
               (pageIndexChange)="onPageChange($event)"
               (pageSizeChange)="onSizeChange($event)"
             >
