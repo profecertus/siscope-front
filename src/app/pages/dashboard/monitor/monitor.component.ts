@@ -96,7 +96,7 @@ export class MonitorComponent implements OnInit, OnDestroy, AfterViewInit {
       value.push(temp);
     });
     value.push({
-      name: '南海诸岛',
+      name: 'Total',
       value: 10,
     });
     this.mapOptions.series[0]['data'] = value;
