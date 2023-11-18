@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
 import { DiaSemana } from '../../../model/semana.model';
-import { TarifarioEmbarcacionModel, TarifarioModel } from '../../../model/tarifario.model';
+import { TarifarioEmbarcacionModel, TarifarioModel, TarifarioPlantaModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
 import { format, parse } from 'date-fns';
@@ -17,10 +17,10 @@ import { format, parse } from 'date-fns';
   styleUrls: ['./planta.component.scss']
 })
 export class PlantaComponent {
-  basicDataSource: TarifarioEmbarcacionModel[] = [];
-  basicDataSourceBkp: TarifarioEmbarcacionModel[] = [];
+  basicDataSource: TarifarioPlantaModel[] = [];
+  basicDataSourceBkp: TarifarioPlantaModel[] = [];
   DatoABuscar: string = "";
-  editRowIndex:number = 0;
+  editRowIndex: number = 0;
 
 
   formConfig: FormConfig = {
@@ -134,8 +134,8 @@ export class PlantaComponent {
     this.busy = this.semanaService.semanaActual().
     subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
-        this.tarifarioService.obtenerTarifarioEmbarcacion(elemento.idDia).subscribe(
-          (elemento:TarifarioEmbarcacionModel[]) =>{
+        this.tarifarioService.obtenerTarifarioPlanta(elemento.idDia).subscribe(
+          (elemento) =>{
             if (elemento.length <= 0){
               //this.cargarProductos();
             }else{
@@ -153,8 +153,9 @@ export class PlantaComponent {
     if (value.selectedDate == null) return;
     let fecha : Date = value.selectedDate;
 
-    this.tarifarioService.obtenerTarifarioEmbarcacion(Number( format(fecha, 'yyyyMMdd') )).subscribe(
-      (elemento:TarifarioEmbarcacionModel[]) =>{
+    this.tarifarioService.obtenerTarifarioPlanta(Number( format(fecha, 'yyyyMMdd') )).subscribe(
+      (elemento:TarifarioPlantaModel[]) =>{
+        console.log(elemento);
         if (elemento.length <= 0){
           Swal.fire({
             title:"Información",
@@ -224,10 +225,10 @@ export class PlantaComponent {
     this.getList();
   }
 
-  onSubmitted(e: TarifarioEmbarcacionModel) {
+  onSubmitted(e: TarifarioPlantaModel) {
     console.log(e.id)
     const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
-      objeto.id.idEmbarcacion == e.id.idEmbarcacion && objeto.id.idTipoServicio == e.id.idTipoServicio && objeto.id.idProveedor == e.id.idProveedor);
+      objeto.id.idPlanta == e.id.idPlanta && objeto.id.idTipoServicio == e.id.idTipoServicio && objeto.id.idProveedor == e.id.idProveedor);
     if (objetoAModificar) {
       let mensaje:string="Se actualizo correctamente la Tarifa";
       Swal.showLoading( );

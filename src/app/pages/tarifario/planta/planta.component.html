@@ -62,12 +62,12 @@
           <div class="da-list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'">
             <d-card *ngFor="let item of basicDataSource" class="card-item">
               <d-card-header>
-                <d-avatar dCardAvatar [name]="item.idEmbarcacion.nombreEmbarcacion"></d-avatar>
-                <d-card-title>{{ item.idEmbarcacion.nombreEmbarcacion }}</d-card-title>
+                <d-avatar dCardAvatar [name]="'item.idPlanta.nombre'"></d-avatar>
+                <d-card-title>{{ item.idPlanta.nombre }}</d-card-title>
                 <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{item.idTipoServicio.nombre}}</span></d-card-subtitle>
               </d-card-header>
               <d-card-content>
-                Este servicio es brindado por el proveedor <strong> {{ item.idProveedor.razonSocial }} </strong> y  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por cada {{ item.idTipoServicio.idUm.nombre }}
+                Este servicio es brindado por el proveedor <strong> {{ item.idProveedor.razonSocial }} </strong> y  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por cada
               </d-card-content>
               <d-card-actions [align]="'start'">
                 <div class="card-block"><i class="icon-edit card-icon" (click)='editRow(item)' ></i><span (click)='editRow(item)'>Editar</span></div>

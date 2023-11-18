@@ -16,41 +16,41 @@ export interface  TipoDocumento {
 
 // Clase para el objeto idProveedor
 export interface Proveedor {
-  idProveedor: number;
-  razonSocial: string;
-  nombreComercial: string;
+  idProveedor: Number;
+  razonSocial: String;
+  nombreComercial: String;
   idTipodoc: TipoDocumento;
-  numeroDocumento: string;
-  direccion: string;
-  telefono: string;
-  correo: string;
-  estado: boolean;
-  estadoReg: boolean;
+  numeroDocumento: String;
+  direccion: String;
+  telefono: String;
+  correo: String;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 // Clase para el objeto idUm
 export interface UnidadMedida {
-  idUm: number;
-  nombre: string;
-  abreviatura: string;
-  estado: boolean;
-  estadoReg: boolean;
+  idUm: Number;
+  nombre: String;
+  abreviatura: String;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 // Clase para el objeto idTipoServicio
 export interface TipoServicio {
-  idTipoServicio: number;
-  nombre: string;
+  idTipoServicio: Number;
+  nombre: String;
   idUm: UnidadMedida;
-  estado: boolean;
-  estadoReg: boolean;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 // Clase para el objeto id
 export interface Identificacion {
-  idProveedor: number;
-  idTipoServicio: number;
-  idAnio: number;
+  idProveedor: Number;
+  idTipoServicio: Number;
+  idAnio: Number;
 }
 
 // Clase principal que representa la estructura completa
@@ -58,50 +58,59 @@ export interface TarifarioModel {
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;
-  idMoneda:Moneda;
-  monto:number;
-  estado:boolean;
-  estadoReg:boolean;
+  idMoneda: Moneda;
+  monto: Number;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 export interface TarifarioEmbarcacionModel {
-  id:Id;
+  id: Id;
   idEmbarcacion: Embarcacion;
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;
-  idMoneda:Moneda;
-  monto:number;
-  estado:boolean;
-  estadoReg:boolean;
+  idMoneda: Moneda;
+  monto: Number;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 export interface  Id{
-  idDia:number;
-  idEmbarcacion:number;
-  idProveedor:number;
-  idTipoServicio:number;
+  idDia: Number;
+  idEmbarcacion: Number;
+  idProveedor: Number;
+  idTipoServicio: Number;
+}
+
+export  interface TarifarioPlantaIdModel{
+  idDia: number;
+  idPlanta: number;
+  idProveedor: number;
+  idTipoServicio: number;
+
 }
 
 export interface TarifarioPlantaModel {
+  id: TarifarioPlantaIdModel;
   idPlanta: PlantaDto;
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;
-  idMoneda:Moneda;
-  monto:number;
-  estado:boolean;
-  estadoReg:boolean;
+  idMoneda: Moneda;
+  monto: Number;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 export interface TarifarioCamaraModel {
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;
-  idMoneda:Moneda;
-  monto:number;
-  estado:boolean;
-  estadoReg:boolean;
+  idMoneda: Moneda;
+  monto: Number;
+  estado: Boolean;
+  estadoReg: Boolean;
 }
 
 

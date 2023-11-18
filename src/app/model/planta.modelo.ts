@@ -5,39 +5,39 @@ export class RespuestaPlanta{
 }
 
 export class PlantaDto{
-  idPlanta?:number;
-  nombre?:string = '';
-  ruc?:Ruc = new Ruc();
-  direccion?:string = '';
-  codUbigeo:CodUbigeo = new CodUbigeo();
-  estado?: boolean = true;
-  estadoReg?: boolean = true;
+  idPlanta: Number = 0;
+  nombre: String = '';
+  ruc: Ruc = new Ruc();
+  direccion: String = '';
+  codUbigeo: CodUbigeo = new CodUbigeo();
+  estado: Boolean = true;
+  estadoReg: Boolean = true;
   [key: string]: any; // Agregar la firma de índice
 }
 
 export class Ruc {
-  ruc?: string = "";
-  nombre?: string = "";
+  ruc?: String = '';
+  nombre?: String = '';
   [key: string]: any; // Agregar la firma de índice
 }
 
 export class CodUbigeo {
-  codUbigeo: string = "";
-  departamento: string = "";
-  provincia: string = "";
-  distrito: string = "";
-  estadoReg: boolean = true;
-  nombreCompleto: string = '';
+  codUbigeo: String = '';
+  departamento: String = '';
+  provincia: String = '';
+  distrito: String = '';
+  estadoReg: Boolean = true;
+  nombreCompleto: String = '';
   [key: string]: any; // Agregar la firma de índice
-  getNombre():string{
-    return this.codUbigeo + " - " + this.departamento + "/" + this.provincia + "/" + this.distrito;
+  getNombre(): String{
+    return this.codUbigeo + ' - ' + this.departamento + '/' + this.provincia + '/' + this.distrito;
   }
 }
 
 export class RelPlantaDestinoDto{
-  idDestino?:number = 0;
-  nombre?:string = '';
-  abreviatura:string='';
-  estado?: boolean = true;
-  estadoReg?: boolean = true;
+  idDestino: Number = 0;
+  nombre: String = '';
+  abreviatura: String = '';
+  estado: Boolean = true;
+  estadoReg: Boolean = true;
 }

@@ -15,7 +15,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "tslint": "tslint --fix -c ./tslint.json 'src/**/*{.ts}'",
+
     "prettier": "prettier --config ./.prettierrc --write \"src/app/pages/**/**/*.html\"",
     "stylelint": "stylelint \"src/app/pages/**/**/*.{scss,css}\" --config ./.stylelintrc.json --fix"
   },
@@ -51,7 +51,10 @@
     "@types/jasmine": "~4.3.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
     "codelyzer": "^6.0.0",
+    "eslint": "^8.54.0",
     "jasmine-core": "~4.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.4.0",
@@ -66,7 +69,6 @@
     "stylelint-config-standard": "^22.0.0",
     "stylelint-scss": "^3.19.0",
     "ts-node": "~8.3.0",
-    "tslint": "~6.1.0",
     "typescript": "~5.0.4"
   }
 }
