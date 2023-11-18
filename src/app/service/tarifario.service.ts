@@ -14,8 +14,8 @@ export class TarifarioService {
   private tarifario = environment.sufijoTarifario;
 
   constructor(private http: HttpClient) { }
-  obtenerTarifario(diaSemana:number): Observable<any> {
-    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifario/${diaSemana}`);
+  obtenerTarifario(diaSemana:number, numpag: number, totalPag: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifario/${diaSemana}/${numpag}/${totalPag}`);
   }
 
   obtenerTarifarioEmbarcacion(diaSemana:number): Observable<any> {

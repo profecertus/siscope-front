@@ -95,10 +95,6 @@ export class GeneralComponent {
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
   fechaSeleccionada:any;
-  today = new Date();
-  min = new Date(this.today.setDate(this.today.getDate() - 1));
-  max = new Date(this.today.setDate(this.today.getDate() + 100));
-
 
   pager = {
     total: 0,
@@ -133,16 +129,18 @@ export class GeneralComponent {
 
   getList() {
     return this.busy = this.semanaService.semanaActual().
-      subscribe((elemento:DiaSemana) => {
+    subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
-      this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
-        this.tarifarioService.obtenerTarifario(elemento.idDia).subscribe(
-          (elemento:TarifarioModel[]) =>{
+        this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
+        this.tarifarioService.obtenerTarifario(this.DiaActual.idDia, (this.pager.pageIndex - 1), this.pager.pageSize).subscribe(
+          (elemento) =>{
             if (elemento.length <= 0){
               this.cargarProductos();
             }else{
-              this.basicDataSource = elemento;
-              this.basicDataSourceBkp = elemento;
+              let tm: TarifarioModel[] = elemento.content;
+              this.basicDataSource = tm;
+              this.basicDataSourceBkp = tm;
+              this.pager.total = elemento.totalElements;
             }
           }
         );
@@ -150,14 +148,31 @@ export class GeneralComponent {
     );
   }
 
+  getListBusca() {
+    return this.busy = this.tarifarioService.
+    obtenerTarifario( parseInt(format(this.fechaSeleccionada, 'yyyyMMdd')), (this.pager.pageIndex - 1),
+      this.pager.pageSize).subscribe(
+          (elemento) =>{
+            if (elemento.length <= 0){
+              this.cargarProductos();
+            }else{
+              let tm: TarifarioModel[] = elemento.content;
+              this.basicDataSource = tm;
+              this.basicDataSourceBkp = tm;
+              this.pager.total = elemento.totalElements;
+            }
+          }
+        );
+  }
+
 
   getValue(value: any) {
     if (value.selectedDate == null) return;
     let fecha : Date = value.selectedDate;
 
-    this.tarifarioService.obtenerTarifario(Number( format(fecha, 'yyyyMMdd') )).subscribe(
-      (elemento:TarifarioModel[]) =>{
-        if (elemento.length <= 0){
+    this.tarifarioService.obtenerTarifario(Number( format(fecha, 'yyyyMMdd') ), (this.pager.pageIndex - 1), this.pager.pageSize).subscribe(
+      (elemento) =>{
+        if (elemento.content.length <= 0){
           Swal.fire({
             title:"Información",
             text:"Lo sentimos, No tenemos tarifario cargado para esta fecha",
@@ -165,9 +180,17 @@ export class GeneralComponent {
             timer:1500
           });
           this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
+          this.tarifarioService.obtenerTarifario(this.DiaActual.idDia, (this.pager.pageIndex - 1), this.pager.pageSize).subscribe(
+            (elem) => {
+              this.basicDataSource = elem.content;
+              this.basicDataSourceBkp = elem.content;
+              this.pager.total = elem.totalElements;
+          });
         }else{
-          this.basicDataSource = elemento;
-          this.basicDataSourceBkp = elemento;
+          this.fechaSeleccionada = fecha;
+          this.basicDataSource = elemento.content;
+          this.basicDataSourceBkp = elemento.content;
+          this.pager.total = elemento.totalElements;
         }
       });
   }
@@ -208,12 +231,12 @@ export class GeneralComponent {
 
   onPageChange(e: number) {
     this.pager.pageIndex = e;
-    this.getList();
+    this.getListBusca();
   }
 
   onSizeChange(e: number) {
     this.pager.pageSize = e;
-    this.getList();
+    this.getListBusca();
   }
 
   reset() {
@@ -244,13 +267,12 @@ export class GeneralComponent {
   cargarProductos() {
     this.tarifarioService.crearSemana(this.DiaActual).subscribe(
     (elemento) => {
-          this.tarifarioService.obtenerTarifario(this.DiaActual.idDia).subscribe(
-            (elemento:TarifarioModel[]) =>{
-              if (elemento.length <= 0){
-                //this.cargarProductos();
-              }else{
-                this.basicDataSource = elemento;
-                this.basicDataSourceBkp = elemento;
+          this.tarifarioService.obtenerTarifario(this.DiaActual.idDia, (this.pager.pageIndex - 1), this.pager.pageSize).subscribe(
+            (elemento) =>{
+              if (elemento.length > 0){
+                this.basicDataSource = elemento.content;
+                this.basicDataSourceBkp = elemento.content;
+                this.pager.total = elemento.content.totalElements;
               }
             }
           );
