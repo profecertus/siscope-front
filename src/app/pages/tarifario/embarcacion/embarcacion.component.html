@@ -32,11 +32,10 @@
                   <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
                     <input
                       class="devui-input devui-form-control"
-                      placeholder="dd/MM/y"
                       (click)="datePicker3.toggle()"
                       name="dp"
                       [(ngModel)]="fechaSeleccionada"
-                      [dateFormat]="'dd/MM/yy'"
+                      [dateFormat]="'dd/MM/yyyy'"
                       autocomplete="off"
                       dDatepicker
                       #datePicker3="datepicker"

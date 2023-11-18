@@ -94,7 +94,7 @@ export class PlantaComponent {
   editForm: any = null;
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
-  fechaSeleccionada = null;
+  fechaSeleccionada: any;
   today = new Date();
   min = new Date(this.today.setDate(this.today.getDate() - 1));
   max = new Date(this.today.setDate(this.today.getDate() + 100));
@@ -134,6 +134,7 @@ export class PlantaComponent {
     this.busy = this.semanaService.semanaActual().
     subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
+        this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
         this.tarifarioService.obtenerTarifarioPlanta(elemento.idDia).subscribe(
           (elemento) =>{
             if (elemento.length <= 0){

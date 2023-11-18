@@ -95,7 +95,7 @@ export class EmbarcacionComponent {
   editForm: any = null;
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
-  fechaSeleccionada = null;
+  fechaSeleccionada:any;
   today = new Date();
   min = new Date(this.today.setDate(this.today.getDate() - 1));
   max = new Date(this.today.setDate(this.today.getDate() + 100));
@@ -135,6 +135,7 @@ export class EmbarcacionComponent {
     this.busy = this.semanaService.semanaActual().
     subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
+      this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
         this.tarifarioService.obtenerTarifarioEmbarcacion(elemento.idDia).subscribe(
           (elemento:TarifarioEmbarcacionModel[]) =>{
             if (elemento.length <= 0){

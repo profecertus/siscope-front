@@ -94,7 +94,7 @@ export class GeneralComponent {
   editForm: any = null;
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
-  fechaSeleccionada = null;
+  fechaSeleccionada:any;
   today = new Date();
   min = new Date(this.today.setDate(this.today.getDate() - 1));
   max = new Date(this.today.setDate(this.today.getDate() + 100));
@@ -135,6 +135,7 @@ export class GeneralComponent {
     return this.busy = this.semanaService.semanaActual().
       subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
+      this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
         this.tarifarioService.obtenerTarifario(elemento.idDia).subscribe(
           (elemento:TarifarioModel[]) =>{
             if (elemento.length <= 0){
@@ -163,6 +164,7 @@ export class GeneralComponent {
             icon:"warning",
             timer:1500
           });
+          this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
         }else{
           this.basicDataSource = elemento;
           this.basicDataSourceBkp = elemento;
@@ -256,18 +258,6 @@ export class GeneralComponent {
     );
   }
 
-  cargarPrecios() {
-    Swal.fire({
-      title: "¿Desea cargar los precios de la semana pasada?",
-      showCancelButton: true,
-      confirmButtonText: "Si, cargar",
-      cancelButtonText: "Cancelar"
-    }).then((result) => {
-      if (result.isConfirmed) {
-            Swal.fire("Cargado!", "Se cargaron los precios!!", "success");
-      }
-    });
-  }
   getFecha(idDia: number):string {
     const fechaString: string = idDia.toString();
     const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
