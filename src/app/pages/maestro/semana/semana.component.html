@@ -33,6 +33,10 @@
             <d-data-table
               [dataSource]="basicDataSource"
               [scrollable]="true"
+              [striped]="true"
+              [headerBg]="true"
+              [resizeable]='true'
+              [tableLayout]="'auto'"
             >
               <d-column field="id" header="Id Semana" [width]="'100px'">
                 <d-cell>

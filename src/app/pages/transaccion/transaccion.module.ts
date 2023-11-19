@@ -8,9 +8,12 @@ import { IngresoComponent } from './ingreso/ingreso.component';
 import { LiquidacionComponent } from './liquidacion/liquidacion.component';
 import { TransaccionComponent } from './transaccion.component';
 import { TransaccionRoutingModule } from './transaccion-routing.module';
-import { BreadcrumbModule } from '@devui';
-import { DaGridModule } from '../../@shared/layouts/da-grid';
+import { BreadcrumbModule, DevUIModule } from '@devui';
 import { TranslateModule } from '@ngx-translate/core';
+import { GastosEmbarcacionComponent } from './gastos-embarcacion/gastos-embarcacion.component';
+import { FormsModule } from '@angular/forms';
+import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/components/admin-form';
+import { DaGridModule } from '../../@shared/layouts/da-grid';
 
 
 
@@ -22,7 +25,8 @@ import { TranslateModule } from '@ngx-translate/core';
     OperativosComponent,
     AdministrativosComponent,
     IngresoComponent,
-    LiquidacionComponent
+    LiquidacionComponent,
+    GastosEmbarcacionComponent
   ],
   imports: [
     TransaccionRoutingModule,
@@ -30,6 +34,11 @@ import { TranslateModule } from '@ngx-translate/core';
     BreadcrumbModule,
     DaGridModule,
     TranslateModule,
+    DevUIModule,
+    FormsModule,
+    AdminFormModule,
+    DaGridModule,
+    DaGridModule,
   ],
 })
 export class TransaccionModule { }

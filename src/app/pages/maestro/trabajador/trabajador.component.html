@@ -34,6 +34,10 @@
             <d-data-table
               [dataSource]="basicDataSource"
               [scrollable]="true"
+              [striped]="true"
+              [headerBg]="true"
+              [resizeable]='true'
+              [tableLayout]="'auto'"
             >
               <d-column field="idTipodoc" header="Tipo Documento" [width]="'80px'">
                 <d-cell>

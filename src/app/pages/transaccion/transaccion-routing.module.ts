@@ -8,13 +8,14 @@ import { PlanillaComponent } from './planilla/planilla.component';
 import { DevUIModule } from '@devui';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../@shared/shared.module';
+import { GastosEmbarcacionComponent } from './gastos-embarcacion/gastos-embarcacion.component';
 
 const routes: Routes = [
   {
     path: '',
     component: TransaccionComponent,
     children: [
-      { path: 'descarga', component: DescargaComponent },
+      { path: 'gastosEmbarcacion', component: GastosEmbarcacionComponent },
       { path: 'planilla', component: PlanillaComponent },
       { path: 'ingreso', component: IngresoComponent },
       { path: 'liquidacion', component: LiquidacionComponent },

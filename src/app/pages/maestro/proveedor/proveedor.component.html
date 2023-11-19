@@ -34,8 +34,12 @@
             <d-data-table
               [dataSource]="basicDataSource"
               [scrollable]="true"
+              [striped]="true"
+              [headerBg]="true"
+              [resizeable]='true'
+              [tableLayout]="'auto'"
             >
-              <d-column field="proveedor" header="Nombre Comercial" [width]="'150px'">
+              <d-column field="proveedor" header="Nombre Comercial"  [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
