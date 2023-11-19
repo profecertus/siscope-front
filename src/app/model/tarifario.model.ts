@@ -3,6 +3,8 @@ import { ProveedorModel } from './proveedor.model';
 import { DiaSemana } from './semana.model';
 import { Embarcacion } from './embarcacion.model';
 import { PlantaDto } from './planta.modelo';
+import { Camara } from './camara.model';
+import { TipoServicio } from './tipoServicio.model';
 
 export interface  TipoDocumento {
   idTipodoc: number;
@@ -38,7 +40,7 @@ export interface UnidadMedida {
 }
 
 // Clase para el objeto idTipoServicio
-export interface TipoServicio {
+export interface ITipoServicio {
   idTipoServicio: Number;
   nombre: String;
   idUm: UnidadMedida;
@@ -96,6 +98,39 @@ export interface TarifarioPlantaModel {
   idPlanta: PlantaDto;
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
+  idDia: DiaSemana;
+  idMoneda: Moneda;
+  monto: Number;
+  estado: Boolean;
+  estadoReg: Boolean;
+}
+
+export interface TarifarioCamaraIdModel{
+  idPlanta: string;
+  placa: string;
+  idDia: Number;
+}
+
+export class TarifarioCamara implements TarifarioCamaraModel{
+  estado: Boolean = true;
+  estadoReg: Boolean = true;
+  id: TarifarioCamaraIdModel = new class implements TarifarioCamaraIdModel {
+    idDia: Number = 0;
+    idPlanta: string = "";
+    placa: string = "";
+  };
+  idDia: DiaSemana = new DiaSemana();
+  idMoneda: Moneda = new Moneda();
+  idPlanta: PlantaDto = new PlantaDto();
+  idProveedor: ProveedorModel = new ProveedorModel();
+  idTipoServicio: TipoServicio = new TipoServicio()
+  monto: Number = 0;
+  placa: Camara = new Camara();
+}
+export interface TarifarioCamaraModel {
+  id: TarifarioCamaraIdModel;
+  idPlanta: PlantaDto;
+  placa: Camara;
   idDia: DiaSemana;
   idMoneda: Moneda;
   monto: Number;

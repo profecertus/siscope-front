@@ -51,11 +51,10 @@
                     </div>
                   </div>
                 </div>
-
-              </div>
-              &nbsp;
+              </div>              &nbsp;
               <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
-              <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
+              <d-button icon="icon-refresh" (click)="refresh( )">Refrescar</d-button>&nbsp;
+              <d-button icon="icon-add" (click)="newRow()">Nuevo</d-button>
             </div>
           </div>
 
@@ -63,11 +62,11 @@
             <d-card *ngFor="let item of basicDataSource" class="card-item">
               <d-card-header>
                 <d-avatar dCardAvatar [name]="'item.idPlanta.nombre'"></d-avatar>
-                <d-card-title>{{ item.idPlanta.nombrePlanta }}</d-card-title>
-                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{item.idTipoServicio.nombre}}</span></d-card-subtitle>
+                <d-card-title>{{ item.placa.idProveedor.razonSocial }} - {{ item.idPlanta.nombrePlanta }} </d-card-title>
+                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{ item.id.placa }}</span></d-card-subtitle>
               </d-card-header>
               <d-card-content>
-                Este servicio es brindado por el proveedor <strong> {{ item.idProveedor.razonSocial }} </strong> y  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por cada {{ item.idTipoServicio.idUm.nombre }}
+                El servicio de flete  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por CAJA enviada.
               </d-card-content>
               <d-card-actions [align]="'start'">
                 <div class="card-block"><i class="icon-edit card-icon" (click)='editRow(item)' ></i><span (click)='editRow(item)'>Editar</span></div>

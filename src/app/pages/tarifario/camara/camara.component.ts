@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
 import { DiaSemana } from '../../../model/semana.model';
-import { TarifarioPlantaModel } from '../../../model/tarifario.model';
+import { TarifarioCamara, TarifarioCamaraModel, TarifarioPlantaModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
 import { format, parse } from 'date-fns';
@@ -17,8 +17,8 @@ import { format, parse } from 'date-fns';
   styleUrls: ['./camara.component.scss']
 })
 export class CamaraComponent {
-  basicDataSource: TarifarioPlantaModel[] = [];
-  basicDataSourceBkp: TarifarioPlantaModel[] = [];
+  basicDataSource: TarifarioCamaraModel[] = [];
+  basicDataSourceBkp: TarifarioCamaraModel[] = [];
   DatoABuscar: string = "";
   editRowIndex: number = 0;
 
@@ -135,7 +135,7 @@ export class CamaraComponent {
     subscribe((elemento:DiaSemana) => {
         this.DiaActual = elemento;
         this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
-        this.tarifarioService.obtenerTarifarioPlanta(elemento.idDia).subscribe(
+        this.tarifarioService.obtenerTarifarioCamara(elemento.idDia).subscribe(
           (elemento) =>{
             if (elemento.length <= 0){
               //this.cargarProductos();
@@ -155,7 +155,7 @@ export class CamaraComponent {
     let fecha : Date = value.selectedDate;
 
     this.tarifarioService.obtenerTarifarioPlanta(Number( format(fecha, 'yyyyMMdd') )).subscribe(
-      (elemento:TarifarioPlantaModel[]) =>{
+      (elemento:TarifarioCamaraModel[]) =>{
         if (elemento.length <= 0){
           Swal.fire({
             title:"Información",
@@ -173,6 +173,23 @@ export class CamaraComponent {
   editRow(row: any) {
     //this.editRowIndex = index;
     this.formData = row;
+    this.formConfig.items[4].options = this.monedas;
+    this.editForm = this.dialogService.open({
+      id: 'edit-dialog',
+      width: '400px',
+      maxHeight: '600px',
+      title: 'Precio Tarifario - Edición',
+      showAnimate: false,
+      contentTemplate: this.EditorTemplate,
+      backdropCloseable: true,
+      onClose: () => {},
+      buttons: [],
+    });
+  }
+
+  newRow() {
+    //this.editRowIndex = index;
+    this.formData = new TarifarioCamara();
     this.formConfig.items[4].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
@@ -221,9 +238,9 @@ export class CamaraComponent {
     this.getList();
   }
 
-  onSubmitted(e: TarifarioPlantaModel) {
+  onSubmitted(e: TarifarioCamaraModel) {
     const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
-      objeto.id.idPlanta == e.id.idPlanta && objeto.id.idTipoServicio == e.id.idTipoServicio && objeto.id.idProveedor == e.id.idProveedor);
+      objeto.id.idPlanta == e.id.idPlanta && objeto.id.placa == e.id.placa);
     if (objetoAModificar) {
       let mensaje:string="Se actualizo correctamente la Tarifa";
       Swal.showLoading( );
