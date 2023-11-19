@@ -38,7 +38,7 @@ export class PlantaComponent {
     items: [
       {
         label: 'Nombre',
-        prop: 'nombre',
+        prop: 'nombrePlanta',
         type: 'input',
         required: true,
         maxi: 80,
