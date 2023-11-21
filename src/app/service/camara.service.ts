@@ -15,6 +15,7 @@ export class CamaraService {
 
   private apiUrl = environment.urlService;
   private camara = environment.sufijoCamara;
+  private apiUrlCamara = environment.urlServiceTarifario;
 
   constructor(private http: HttpClient) { }
   obtenerCamaras(numpage:number, numsize:number): Observable<any> {
@@ -25,5 +26,11 @@ export class CamaraService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Realizar la solicitud PUT enviando el objeto JSON
     return this.http.post(`${this.apiUrl}${this.camara}/saveCamara`, datos, { headers });
+  }
+
+  getAllCamara():Observable<any>{
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // Realizar la solicitud PUT enviando el objeto JSON
+    return this.http.get(`${this.apiUrlCamara}${this.camara}/getAllCamara`, { headers });
   }
 }

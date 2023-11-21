@@ -64,6 +64,7 @@
         [name]="item.prop"
         [filterKey]="item.filterKey"
         [placeholder]='item.placeholder'
+        [disabled] = "item['soloLectura'] == null || item['soloLectura'] == false? false: true"
         (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"
         [ngModel]="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]:_formData[item.prop]): _formData[item.cabecera][item.cuerpo][item.prop]"
         [dValidateRules]="item.required ? item.rule : {}"

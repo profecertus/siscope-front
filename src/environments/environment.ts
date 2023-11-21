@@ -24,6 +24,7 @@ export const environment = {
 
   urlServiceTarifario: 'http://www.arquitecturabi.pe:8081',
   sufijoTarifario: '/tarifario/v1',
+
 };
 
 /*

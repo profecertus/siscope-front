@@ -10,6 +10,10 @@ import { TarifarioCamara, TarifarioCamaraModel, TarifarioPlantaModel } from '../
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
 import { format, parse } from 'date-fns';
+import { UbigeoService } from '../../../service/ubigeo.service';
+import { CodUbigeo } from '../../../model/planta.modelo';
+import { CamaraService } from '../../../service/camara.service';
+import { Camara } from '../../../model/camara.model';
 
 @Component({
   selector: 'app-camara',
@@ -27,37 +31,28 @@ export class CamaraComponent {
     layout: FormLayout.Horizontal,
     items: [
       {
-        label: 'Planta',
-        prop: 'nombrePlanta',
-        cabecera: 'idPlanta',
-        type: 'input',
-        deep: 2,
-        soloLectura:true,
+        label: 'Camara',
+        prop: 'placa',
+        type: 'select',
+        deep: 1,
+        filterKey: 'placa',
+        required: true,
+        options:[{}],
+        tips: 'Camara Placa',
+        placeholder: 'Camara',
+        rule:{validators: [{ required: true }]},
       },
       {
-        label: 'Proveedor',
-        prop: 'nombreComercial',
-        cabecera: 'idProveedor',
-        type: 'input',
-        deep: 2,
-        soloLectura:true,
-      },
-      {
-        label: 'Servicio',
-        prop: 'nombre',
-        cabecera: 'idTipoServicio',
-        type: 'input',
-        deep: 2,
-        soloLectura:true,
-      },
-      {
-        label: 'UM',
-        prop: 'abreviatura',
-        cuerpo:'idUm',
-        cabecera: 'idTipoServicio',
-        type: 'input',
-        deep: 3,
-        soloLectura:true,
+        label: 'Destino',
+        prop: 'codUbigeo',
+        type: 'select',
+        deep: 1,
+        filterKey: 'distrito',
+        required: true,
+        options:[{}],
+        tips: 'Destino de Camara',
+        placeholder: 'Destino',
+        rule:{validators: [{ required: true }]},
       },
       {
         label: 'Moneda',
@@ -92,12 +87,12 @@ export class CamaraComponent {
   };
   formData = {};
   editForm: any = null;
+  ubigeos : CodUbigeo[] =[];
+  camaras: Camara[] = [];
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
   fechaSeleccionada: any;
   today = new Date();
-  min = new Date(this.today.setDate(this.today.getDate() - 1));
-  max = new Date(this.today.setDate(this.today.getDate() + 100));
 
 
   pager = {
@@ -114,12 +109,32 @@ export class CamaraComponent {
   constructor(private dialogService: DialogService,
               private tarifarioService: TarifarioService,
               private semanaService: SemanaService,
+              private ubigeoService: UbigeoService,
+              private camaraService: CamaraService,
               private monedaService: MonedaService,
   ) {}
 
   ngOnInit() {
     this.getList();
+    this.getUbigeo();
+    this.getCamara();
     this.getMonedas();
+  }
+
+  getUbigeo(){
+    this.busy = this.ubigeoService.obtenerUbigeos().subscribe(
+      (elemento: CodUbigeo[]) =>{
+        this.ubigeos = elemento;
+      }
+    );
+  }
+
+  getCamara(){
+    this.busy = this.camaraService.getAllCamara().subscribe(
+      (elemento: Camara[]) =>{
+        this.camaras = elemento;
+      }
+    );
   }
 
   getMonedas(){
@@ -171,12 +186,12 @@ export class CamaraComponent {
   }
 
   editRow(row: any) {
-    //this.editRowIndex = index;
     this.formData = row;
-    this.formConfig.items[4].options = this.monedas;
+    this.formConfig.items[0].soloLectura = true;
+    this.formConfig.items[1].soloLectura = true;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '400px',
+      width: '600px',
       maxHeight: '600px',
       title: 'Precio Tarifario - Edición',
       showAnimate: false,
@@ -190,10 +205,14 @@ export class CamaraComponent {
   newRow() {
     //this.editRowIndex = index;
     this.formData = new TarifarioCamara();
-    this.formConfig.items[4].options = this.monedas;
+    this.formConfig.items[0].soloLectura = false;
+    this.formConfig.items[1].soloLectura = false;
+    this.formConfig.items[0].options = this.camaras;
+    this.formConfig.items[1].options = this.ubigeos;
+    this.formConfig.items[2].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '400px',
+      width: '600px',
       maxHeight: '600px',
       title: 'Precio Tarifario - Edición',
       showAnimate: false,
@@ -239,13 +258,17 @@ export class CamaraComponent {
   }
 
   onSubmitted(e: TarifarioCamaraModel) {
+    e.idDia = this.DiaActual;
+    e.id.idDia = e.idDia.idDia;
+    e.id.codUbigeo = e.codUbigeo.codUbigeo;
+    e.id.placa  = e.placa.placa;
     const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
-      objeto.id.idPlanta == e.id.idPlanta && objeto.id.placa == e.id.placa);
+      objeto.id.codUbigeo == e.id.codUbigeo && objeto.id.placa == e.id.placa);
+
     if (objetoAModificar) {
       let mensaje:string="Se actualizo correctamente la Tarifa";
       Swal.showLoading( );
-      this.tarifarioService.grabarTarifarioPlanta(e).forEach(() => {}).then(()  => {
-        //this.basicDataSource.splice(this.editRowIndex, 1, e);
+      this.tarifarioService.grabarTarifarioCamara(e).forEach(() => {}).then(()  => {
         objetoAModificar.idMoneda = e.idMoneda;
         objetoAModificar.monto = e.monto;
         this.basicDataSourceBkp = this.basicDataSource;
@@ -256,8 +279,17 @@ export class CamaraComponent {
         Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
       });
     } else {
-      console.error('Objeto no encontrado');
+      //Inserto el
+      this.tarifarioService.grabarTarifarioCamara(e).forEach(() => {}).then(()  => {
+        this.basicDataSource.push(e);
+        Swal.fire('Exito',"Se grabo correctamente la tarifa de la camara",'success');
+      }).catch( (error: any) =>{
+        console.error(error);
+        Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
+      });
+
     }
+
   }
 
   onCanceled() {
@@ -265,13 +297,6 @@ export class CamaraComponent {
     this.editRowIndex = -1;
   }
 
-  getFecha(idDia: number):string {
-    const fechaString: string = idDia.toString();
-    const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
 
-    // Formatea la fecha como un string con el formato deseado
-    const fechaFormateada: string = format(fechaObjeto, 'dd/MM/yyyy');
 
-    return fechaFormateada;
-  }
 }

@@ -62,8 +62,8 @@
             <d-card *ngFor="let item of basicDataSource" class="card-item">
               <d-card-header>
                 <d-avatar dCardAvatar [name]="'item.idPlanta.nombre'"></d-avatar>
-                <d-card-title>{{ item.placa.idProveedor.razonSocial }} - {{ item.idPlanta.nombrePlanta }} </d-card-title>
-                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{ item.id.placa }}</span></d-card-subtitle>
+                <d-card-title>{{ item.placa.placa }} - {{ item.codUbigeo.distrito }} </d-card-title>
+                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{ item.placa.idProveedor.razonSocial }}</span></d-card-subtitle>
               </d-card-header>
               <d-card-content>
                 El servicio de flete  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por CAJA enviada.

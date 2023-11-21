@@ -2,7 +2,7 @@ import { Moneda } from './moneda.model';
 import { ProveedorModel } from './proveedor.model';
 import { DiaSemana } from './semana.model';
 import { Embarcacion } from './embarcacion.model';
-import { PlantaDto } from './planta.modelo';
+import { CodUbigeo, PlantaDto } from './planta.modelo';
 import { Camara } from './camara.model';
 import { TipoServicio } from './tipoServicio.model';
 
@@ -106,7 +106,7 @@ export interface TarifarioPlantaModel {
 }
 
 export interface TarifarioCamaraIdModel{
-  idPlanta: string;
+  codUbigeo: String;
   placa: string;
   idDia: Number;
 }
@@ -116,20 +116,18 @@ export class TarifarioCamara implements TarifarioCamaraModel{
   estadoReg: Boolean = true;
   id: TarifarioCamaraIdModel = new class implements TarifarioCamaraIdModel {
     idDia: Number = 0;
-    idPlanta: string = "";
-    placa: string = "";
+    codUbigeo: string = '';
+    placa: string = '';
   };
   idDia: DiaSemana = new DiaSemana();
   idMoneda: Moneda = new Moneda();
-  idPlanta: PlantaDto = new PlantaDto();
-  idProveedor: ProveedorModel = new ProveedorModel();
-  idTipoServicio: TipoServicio = new TipoServicio()
   monto: Number = 0;
   placa: Camara = new Camara();
+  codUbigeo: CodUbigeo = new CodUbigeo();
 }
 export interface TarifarioCamaraModel {
   id: TarifarioCamaraIdModel;
-  idPlanta: PlantaDto;
+  codUbigeo: CodUbigeo;
   placa: Camara;
   idDia: DiaSemana;
   idMoneda: Moneda;
@@ -137,7 +135,7 @@ export interface TarifarioCamaraModel {
   estado: Boolean;
   estadoReg: Boolean;
 }
-
+/*
 export interface TarifarioCamaraModel {
   idProveedor: ProveedorModel ;
   idTipoServicio: TipoServicio;
@@ -147,5 +145,5 @@ export interface TarifarioCamaraModel {
   estado: Boolean;
   estadoReg: Boolean;
 }
-
+*/
 

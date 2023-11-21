@@ -61,7 +61,7 @@
           <div class="da-list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'">
             <d-card *ngFor="let item of basicDataSource" class="card-item">
               <d-card-header>
-                <d-avatar dCardAvatar [name]="item.idEmbarcacion.nombreEmbarcacion"></d-avatar>
+                <d-avatar dCardAvatar  [name]="item.idEmbarcacion.nombreEmbarcacion"></d-avatar>
                 <d-card-title>{{ item.idEmbarcacion.nombreEmbarcacion }}</d-card-title>
                 <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{item.idTipoServicio.nombre}}</span></d-card-subtitle>
               </d-card-header>

@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DiaSemana, SemanaModel } from '../model/semana.model';
-import { TarifarioModel } from '../model/tarifario.model';
+import { TarifarioCamaraModel, TarifarioModel } from '../model/tarifario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,9 @@ export class TarifarioService {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifa`, tarifario);
   }
 
+  grabarTarifarioCamara(tarifario:TarifarioCamaraModel): Observable<any> {
+    return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaCamara`, tarifario);
+  }
   grabarTarifarioEmbarcacion(tarifario:TarifarioModel): Observable<any> {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaEmbarcacion`, tarifario);
   }
