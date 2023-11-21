@@ -4,7 +4,7 @@
 
 export const environment = {
   production: true,
-  urlService: 'http://www.arquitecturabi.pe:8080',
+  urlService: 'http://161.132.47.74:8080',
   sufijoProveedor: '/proveedor/v1',
   sufijoTipoDocumento: '/documento/v1',
   sufijoTipoServicio: '/tipoServicio/v1',
@@ -22,7 +22,7 @@ export const environment = {
   sufijoRelEmbProv: '/relembprov/v1',
   sufijoUbigeo: '/ubigeo/v1',
 
-  urlServiceTarifario: 'http://www.arquitecturabi.pe:8081',
+  urlServiceTarifario: 'http://161.132.47.74:8081',
   sufijoTarifario: '/tarifario/v1',
 
 };
