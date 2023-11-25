@@ -1,6 +1,9 @@
+import { Cliente } from './cliente.model';
+
 export class RespuestaPlanta{
   plantaDto?: PlantaDto = new PlantaDto();
   relPlantaDestinoDto: RelPlantaDestinoDto[] = [];
+  relCliente: Cliente[] = [];
   [key: string]: any; // Agregar la firma de índice
 }
 

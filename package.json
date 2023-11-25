@@ -15,7 +15,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-
     "prettier": "prettier --config ./.prettierrc --write \"src/app/pages/**/**/*.html\"",
     "stylelint": "stylelint \"src/app/pages/**/**/*.{scss,css}\" --config ./.stylelintrc.json --fix"
   },
@@ -50,7 +49,7 @@
     "@angular/compiler-cli": "^16.0.0",
     "@types/jasmine": "~4.3.0",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^12.11.1",
+    "@types/node": "^12.20.55",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "codelyzer": "^6.0.0",

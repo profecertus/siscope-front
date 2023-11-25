@@ -80,6 +80,7 @@
               [isSearch]="true"
               [options]='item.options'
               [name]="item.prop"
+              [multiple] = "true"
               [filterKey]="item.filterKey"
               [placeholder]='item.placeholder'
               (ngModelChange)="item.deep != 3? (item.deep == 2? _formData[item.cabecera][item.prop]=$event:_formData[item.prop]=$event): _formData[item.cabecera][item.cuerpo][item.prop]=$event"

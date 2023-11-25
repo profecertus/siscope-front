@@ -64,25 +64,16 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="plantaDto" header="Cliente" [width]="'200px'">
+              <d-column field="relCliente" header="Cliente" [width]="'300px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.ruc.nombre }}
+                    <span class="over-flow-ellipsis" [style.width]="'300px'">
+                      <div [innerHTML]="getNombre(cellItem)"></div>
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="plantaDto" header="R.U.C." [width]="'200px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.ruc.ruc }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="plantaDto" header="Estado" [width]="'200px'">
+              <d-column field="plantaDto" header="Estado" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'80px'">
@@ -91,16 +82,16 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="plantaDto" header="Localización" [width]="'200px'">
+              <d-column field="plantaDto" header="Localización" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.codUbigeo.nombreCompleto }}
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem.codUbigeo.distrito }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="Actions" header="Acciones" [width]="'100px'">
+              <d-column field="Actions" header="Acciones" [width]="'150px'">
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
                     <d-icon icon="icon-edit" (click)="editRow(rowItem, rowIndex)" dIconLink>

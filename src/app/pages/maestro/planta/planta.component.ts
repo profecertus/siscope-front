@@ -11,7 +11,6 @@ import { Cliente } from '../../../model/cliente.model';
 import { ProveedorService } from '../../../service/proveedor.service';
 import { TipoServicio } from '../../../model/tipoServicio.model';
 import { RelplantaproveedorService } from '../../../service/relplantaproveedor.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-planta',
@@ -85,10 +84,10 @@ export class PlantaComponent {
       },
       {
         label: 'Cliente',
-        cabecera: 'plantaDto',
-        prop: 'ruc',
+        //cabecera: 'relCliente',
+        prop: 'relCliente',
         type: 'selectButton',
-        deep: 2,
+        deep: 1,
         options: [], //Se cargan luego
         placeholder: 'Cliente',
         filterKey: 'cliente',
@@ -280,7 +279,7 @@ export class PlantaComponent {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Planta Eliminada!','success');
         }).catch( error =>{
-          console.log(error);
+          console.error(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar la planta, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -328,8 +327,9 @@ export class PlantaComponent {
   }
 
   onSubmitted(e: any) {
-    e.plantaDto.codUbigeo = e.plantaDto.codUbigeo.nombreCompleto;
-    console.log(e);
+    if(typeof e.plantaDto.codUbigeo.nombreCompleto == 'object'){
+      e.plantaDto.codUbigeo = e.plantaDto.codUbigeo.nombreCompleto;
+    }
     let mensaje:string="Se actualizo correctamente la Planta";
     Swal.showLoading( );
     //En caso sea modificación.
@@ -349,7 +349,7 @@ export class PlantaComponent {
       Swal.fire('Exito',mensaje,'success');
       this.editForm!.modalInstance.hide();
     }).catch( error =>{
-      console.log(error);
+      console.error(error);
       Swal.fire('Error',"Hubo Problemas al grabar la Planta.",'error');
     });
   }
@@ -415,14 +415,17 @@ export class PlantaComponent {
     this.formAddClient!.modalInstance.hide();
   }
 
-
   saveCliente() {
-    let ruc : number = parseInt( this.rucCliente );
 
+    //let ruc : number = parseInt( this.rucCliente );
+
+    //var isValid = ruc.validateRuc( this.rucCliente );
+    /*
     if( ruc > 9999999999 ){
       //Valido el numero de RUC
       for (var suma = -(ruc%10<2), i = 0; i<11; i++, ruc = ruc/10|0)
         suma += (ruc % 10) * (i % 7 + (i/7|0) + 1);
+      console.log(suma)
       if(suma % 11 !== 0){
         Swal.fire('Error',"El número de RUC ingresado NO es válido!",'error');
         return;
@@ -431,7 +434,8 @@ export class PlantaComponent {
       Swal.fire('Error',"El número de RUC ingresado NO tiene los 11 digitos",'error');
       return;
     }
-
+    */
+    //console.log(idsValid)
     let miCliente = new Cliente();
     miCliente.nombre = this.nombreCliente;
     miCliente.ruc = this.rucCliente;
@@ -452,7 +456,7 @@ export class PlantaComponent {
           Swal.fire('Exito','Cliente grabado!','success');
         }).
         then(()=>{}).catch(error => {
-          console.log(error);
+          console.error(error);
           Swal.fire('Error','Sucedio un error al momento de grabar - Verifique que el cliente no exista o que el RUC no esta asignado','error');
         }).finally(()=>{this.onCloseCliente();});
       }
@@ -510,7 +514,7 @@ export class PlantaComponent {
               .forEach(() => {
                 this.plantaService.obtenerPlanta(this.idPlantaSel).forEach(valor=>{
                 this.basicDataSource.splice(this.editRowIndex, 1, valor);
-                this.onCancelado();
+                  this.onCancelado();
                 });
               });
             });
@@ -519,11 +523,21 @@ export class PlantaComponent {
       }).
       then(()=>{
         Swal.fire('Exito','Se grabo correctamente los Proveedores.','success');
+        this.onCancelado();
       }).catch(error => {
-        console.log(error);
+        console.error(error);
         Swal.fire('Error','Sucedio un error al momento de grabar.','error');
         return;
       });
+  }
+
+  getNombre(clientes: Cliente[]):String{
+    let respuesta = '';
+    clientes.forEach((elemento) =>{
+        respuesta = respuesta + elemento.cliente + '<br>';
+      });
+    respuesta = respuesta.replace(/<br>(?!.*<br>)/, '');
+    return respuesta;
   }
 
 }
