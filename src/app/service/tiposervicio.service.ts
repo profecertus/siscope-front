@@ -10,10 +10,15 @@ import { Observable } from 'rxjs';
 export class TiposervicioService {
   private apiUrl = environment.urlService;
   private tipoServicio = environment.sufijoTipoServicio;
+  private banco = environment.sufijoBanco;
 
   constructor(private http: HttpClient) { }
 
   obtenerTiposServicios(): Observable<any> {
     return this.http.get(`${this.apiUrl}${this.tipoServicio}/getAll`);
+  }
+
+  obtenerBancos():Observable<any>{
+    return this.http.get(`${this.apiUrl}${this.banco}/getAllBanco`);
   }
 }

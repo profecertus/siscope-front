@@ -8,9 +8,7 @@ import { TiposervicioService } from '../../../service/tiposervicio.service';
 import { RespuestaProveedor, TipoDocumento } from '../../../model/proveedor.model';
 import { TipoServicio } from '../../../model/tipoServicio.model';
 import  Swal  from 'sweetalert2';
-
-
-
+import { Banco } from '../../../model/banco.model';
 
 @Component({
   selector: 'app-proveedor',
@@ -22,60 +20,9 @@ export class ProveedorComponent {
   basicDataSourceBkp: RespuestaProveedor[] = [];
   tipoDocSource: TipoDocumento[] = [];
   tipoServicicioSource: TipoServicio[] = [];
+  tipoBancosSource: Banco[] = [];
   DatoABuscar: string = "";
   accion:number = 0;
-
-
-  formConfigTrab: FormConfig = {
-    layout: FormLayout.Horizontal,
-    items:[
-      {
-        label: 'Tipo Doc.',
-        prop: 'id_tipodoc',
-        type: 'select',
-        filterKey: 'nombre',
-        required: true,
-        deep: 1,
-        options:[{}],
-        cabecera: 'id_tipodoc',
-        tips: 'Tipo Documento',
-        placeholder: 'Tipo de Documento',
-        rule:{validators: [{ required: true }]},
-      },
-      {
-        label: 'Num Doc.',
-        prop: 'numero_documento',
-        type: 'input',
-        required: true,
-        deep: 1,
-        tips: 'Número Documento',
-        placeholder: 'Numero de Documento',
-        rule:{validators: [{ required: true }]},
-      },
-      {
-        label: 'Nombre',
-        prop: 'nombre',
-        type: 'input',
-        placeholder: 'Apellido Paterno',
-        deep: 1,
-      },
-      {
-        label: 'Ape Pat.',
-        prop: 'apellido_pat',
-        type: 'input',
-        deep: 1,
-        placeholder: 'Apellido Paterno',
-      },
-      {
-        label: 'Ape Mat.',
-        prop: 'apellido_mat',
-        type: 'input',
-        deep: 1,
-        placeholder: 'Apellido Materno',
-      },
-    ],
-    labelSize: '',
-  };
 
   formConfig: FormConfig = {
     layout: FormLayout.Horizontal,
@@ -158,13 +105,28 @@ export class ProveedorComponent {
         placeholder: 'Ingrese le número telefónico',
       },
       {
-        label: 'Correo',
-        prop: 'correo',
-        type: 'input',
+        label: 'Banco',
+        prop: 'idBanco',
+        type: 'select',
         deep: 2,
         maxi:70,
-        cabecera: 'proveedor',
-        placeholder: 'Ingrese el correo electrónico',
+        cabecera: 'cuenta',
+        placeholder: 'Seleccione el Banco',
+        options: [], //Se cargan luego
+        filterKey: 'nombreBanco',
+        multipleselect: [],
+        required: true,
+        rule:{validators: [{ required: true }]},
+      },
+      {
+        label: 'Cuenta',
+        prop: 'numeroCuenta',
+        type: 'input',
+        deep: 3,
+        maxi:20,
+        cuerpo: 'id',
+        cabecera: 'cuenta',
+        placeholder: 'Numero de Cuenta',
       },
       {
         label: 'Estado',
@@ -210,6 +172,7 @@ export class ProveedorComponent {
     this.getListTipoServicio();
     this.getListTipoDocumento();
     this.getList();
+    this.getBancos()
   }
 
   ordenarPorCampo(data: any[], campo: string) {
@@ -247,6 +210,12 @@ export class ProveedorComponent {
     });
   }
 
+  getBancos() {
+    this.busy = this.tiposervicioService.obtenerBancos().subscribe((res:Banco[]) => {
+      this.tipoBancosSource = res;
+    });
+  }
+
   getListTipoDocumento() {
     this.busy = this.tipodocumentoService.obtenerTipoDocumentos().subscribe((res:TipoDocumento[]) => {
       this.tipoDocSource =res;
@@ -259,6 +228,7 @@ export class ProveedorComponent {
     this.formData = row;
     this.formConfig.items[2].options = this.tipoDocSource;
     this.formConfig.items[4].options = this.tipoServicicioSource;
+    this.formConfig.items[7].options = this.tipoBancosSource;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -281,6 +251,7 @@ export class ProveedorComponent {
     this.editRowIndex = -1;
     this.formConfig.items[2].options = this.tipoDocSource;
     this.formConfig.items[4].options = this.tipoServicicioSource;
+    this.formConfig.items[7].options = this.tipoBancosSource;
     this.formData = row;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
@@ -310,7 +281,7 @@ export class ProveedorComponent {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito','Proveedor Eliminado!','success');
         }).catch( error =>{
-          console.log(error);
+          console.error(error);
           Swal.fire('Error',"Hubo Problemas al Eliminar el proveedor, intentelo más tarde",'error');
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -359,11 +330,12 @@ export class ProveedorComponent {
     this.getList();
   }
 
-  onSubmitted(e: any) {
+  onSubmitted(e: RespuestaProveedor) {
     let mensaje:string="Se actualizo correctamente el proveedor";
     Swal.showLoading( );
     //En caso sea modificación.
     if (this.accion == 1){
+      // @ts-ignore
       e.proveedor.id = null;
       mensaje = "Se grabó correctamente el proveedor";
     }
@@ -399,7 +371,7 @@ export class ProveedorComponent {
       Swal.fire('Exito',mensaje,'success');
       this.editForm!.modalInstance.hide();
     }).catch( error =>{
-      console.log(error);
+      console.error(error);
       Swal.fire('Error',"Hubo Problemas al grabar el proveedor, verifique que el tipo y numero de documento no Exista",'error');
     });
   }

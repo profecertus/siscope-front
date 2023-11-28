@@ -73,10 +73,19 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="tonelaje" header="Tonelaje" [width]="'200px'">
+              <d-column field="tonelaje" header="Tonelaje" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="numEje" header="Ejes" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
@@ -145,6 +154,7 @@
 <ng-template #RelEmbarcacionProveedor>
   <div style="margin-left: 40px">
     <form dForm ngForm>
+      <!--
       <d-form-item>
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Proveedor de Descarga'">Descarga</d-form-label>
         <d-form-control>
@@ -163,6 +173,7 @@
         </d-form-control>
       </d-form-item>
       <d-form-item/>
+      -->
       <d-form-item>
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Proveedor de Comision'">Comisión</d-form-label>
         <d-form-control>

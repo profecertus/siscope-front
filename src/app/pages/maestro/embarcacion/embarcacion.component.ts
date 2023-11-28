@@ -71,6 +71,13 @@ export class EmbarcacionComponent {
         placeholder: 'Tonelaje',
       },
       {
+        label: 'Ejes',
+        prop: 'numEje',
+        type: 'number',
+        deep: 1,
+        placeholder: 'Numero Ejes',
+      },
+      {
         label: 'Estado',
         prop: 'estado',
         type: 'switch',
@@ -298,19 +305,20 @@ export class EmbarcacionComponent {
   }
 
   grabarRel() {
-    if (this.seleccionadoDescMuelle == null && this.seleccionadoComEmbarcacion == null){
-      Swal.fire("Error", "Debe seleccionar al menos un proveedor", "error");
+    //if (this.seleccionadoDescMuelle == null && this.seleccionadoComEmbarcacion == null){
+    if (this.seleccionadoComEmbarcacion == null){
+      Swal.fire("Error", "Debe seleccionar un proveedor", "error");
       return;
     }
 
     Swal.fire({
-      title: '¿Seguro de grabar los Proveedores?',
+      title: '¿Seguro de grabar el comisionista?',
       showCancelButton: true,
       confirmButtonText: 'Grabar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-
+        /*
         if(this.seleccionadoDescMuelle != null){
           if(typeof this.seleccionadoDescMuelle != 'string') {
             this.relembproveedorService.actualizaRelEmbProv(
@@ -323,7 +331,7 @@ export class EmbarcacionComponent {
             });
           }
         }
-
+        */
         if(this.seleccionadoComEmbarcacion != null ){
           if(typeof  this.seleccionadoComEmbarcacion != 'string') {
             this.relembproveedorService.actualizaRelEmbProv(

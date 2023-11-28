@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProveedorModel } from '../model/proveedor.model';
+import { ProveedorModel, RespuestaProveedor } from '../model/proveedor.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class ProveedorService {
     return this.http.get(`${this.apiUrl}${this.proveedor}/getAll`);
   }
 
-  guardarProveedor(datos: ProveedorModel):Observable<any>{
+  guardarProveedor(datos: RespuestaProveedor):Observable<any>{
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Realizar la solicitud PUT enviando el objeto JSON
     return this.http.post(`${this.apiUrl}${this.proveedor}/saveProveedorWithService`, datos, { headers });

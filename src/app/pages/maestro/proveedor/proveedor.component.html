@@ -39,19 +39,19 @@
               [resizeable]='true'
               [tableLayout]="'auto'"
             >
-              <d-column field="proveedor" header="Nombre Comercial"  [width]="'150px'">
+              <d-column field="proveedor" header="Nombre Comercial"  [width]="'250px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
+                    <span [title]="cellItem.razonSocial" class="over-flow-ellipsis" [style.width]="'250px'">
                       {{ cellItem.razonSocial }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="proveedor" header="Tipo Doc." [width]="'80px'">
+              <d-column field="proveedor" header="Tipo Doc." [width]="'50px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'50px'">
                       {{ cellItem.idTipodoc.abreviatura }}
                     </span>
                   </ng-template>
