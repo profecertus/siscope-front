@@ -49,7 +49,7 @@
               <d-column field="plantaDto" header="Nombre" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem.nombrePlanta" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem.nombrePlanta }}
                     </span>
                   </ng-template>
@@ -58,7 +58,7 @@
               <d-column field="relPlantaDestinoDto" header="Destino" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="getDestino(cellItem)" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ getDestino(cellItem) }}
                     </span>
                   </ng-template>
@@ -85,7 +85,7 @@
               <d-column field="plantaDto" header="Localización" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                    <span [title]="cellItem.codUbigeo.distrito" class="over-flow-ellipsis" [style.width]="'100px'">
                       {{ cellItem.codUbigeo.distrito }}
                     </span>
                   </ng-template>

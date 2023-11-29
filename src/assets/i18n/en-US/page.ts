@@ -21,7 +21,7 @@ export default {
       'general':'General',
       'embarcacion':'Por Embarcación',
       'planta':'Por Planta',
-      'camara':'Por Cámara',
+      'camara':'Por Flete',
     },
     'transaccion': {
       'title': 'Transacciones',

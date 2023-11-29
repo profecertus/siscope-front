@@ -1,7 +1,10 @@
 import { TipoServicio } from './tipoServicio.model';
+import { Moneda } from './moneda.model';
+import { Banco } from './banco.model';
 
 export class RespuestaProveedor{
   proveedor: ProveedorModel = new ProveedorModel();
+  cuenta: Cuenta = new Cuenta();
   relProvTiposerv: RelProvTipoServ = new RelProvTipoServ();
   [key: string]: any; // Agregar la firma de índice
 }
@@ -42,4 +45,19 @@ export class idRel{
   idProveedor: number = 0;
   idTipoServicio: number = 0;
   [key: string]: any; // Agregar la firma de índice
+}
+
+export class Cuenta{
+  id: IdCuenta = new IdCuenta();
+  idProveedor: ProveedorModel = new ProveedorModel();
+  idBanco?: Banco;//new Banco();
+  idMoneda: Moneda = new Moneda();
+  estado: boolean =  true;
+  estadoReg: boolean =  true;
+}
+
+export class IdCuenta{
+  idProveedor: number =0;
+  idBanco: number = 0;
+  numeroCuenta: string = '';
 }

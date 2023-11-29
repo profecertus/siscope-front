@@ -39,7 +39,7 @@
               [resizeable]='true'
               [tableLayout]="'auto'"
             >
-              <d-column field="proveedor" header="Nombre Comercial"  [width]="'250px'">
+              <d-column field="proveedor" header="Razón Social"  [width]="'250px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem.razonSocial" class="over-flow-ellipsis" [style.width]="'250px'">
@@ -51,7 +51,7 @@
               <d-column field="proveedor" header="Tipo Doc." [width]="'50px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'50px'">
+                    <span [title]="cellItem.idTipodoc.abreviatura" class="over-flow-ellipsis" [style.width]="'50px'">
                       {{ cellItem.idTipodoc.abreviatura }}
                     </span>
                   </ng-template>
@@ -60,7 +60,7 @@
               <d-column field="proveedor" header="Num. Doc." [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                    <span [title]="cellItem.numeroDocumento" class="over-flow-ellipsis" [style.width]="'80px'">
                       {{ cellItem.numeroDocumento }}
                     </span>
                   </ng-template>
@@ -69,7 +69,7 @@
               <d-column field="tipoServicioDtos" header="Servicios" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="getServicios(cellItem)" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ getServicios(cellItem) }}
                     </span>
                   </ng-template>
@@ -78,7 +78,7 @@
               <d-column field="proveedor" header="Estado" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.estado" class="over-flow-ellipsis" [style.width]="'80px'">
+                    <span [title]="cellItem.estado.toString()=='true'?'ACTIVO':'INACTIVO'" class="over-flow-ellipsis" [style.width]="'80px'">
                       <d-tag [tag]="cellItem.estado.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.estado.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>
@@ -87,7 +87,7 @@
               <d-column field="proveedor" header="Telefono" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
+                    <span [title]="cellItem.telefono" class="over-flow-ellipsis" [style.width]="'80px'">
                       {{ cellItem.telefono }}
                     </span>
                   </ng-template>

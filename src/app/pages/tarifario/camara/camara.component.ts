@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { SemanaService } from '../../../service/semana.service';
 import { DiaSemana } from '../../../model/semana.model';
-import { TarifarioCamara, TarifarioCamaraModel, TarifarioPlantaModel } from '../../../model/tarifario.model';
+import { TarifarioFlete, TarifarioFleteModel } from '../../../model/tarifario.model';
 import { Moneda } from '../../../model/moneda.model';
 import { MonedaService } from '../../../service/moneda.service';
 import { format, parse } from 'date-fns';
@@ -21,8 +21,8 @@ import { Camara } from '../../../model/camara.model';
   styleUrls: ['./camara.component.scss']
 })
 export class CamaraComponent {
-  basicDataSource: TarifarioCamaraModel[] = [];
-  basicDataSourceBkp: TarifarioCamaraModel[] = [];
+  basicDataSource: TarifarioFleteModel[] = [];
+  basicDataSourceBkp: TarifarioFleteModel[] = [];
   DatoABuscar: string = "";
   editRowIndex: number = 0;
 
@@ -30,18 +30,6 @@ export class CamaraComponent {
   formConfig: FormConfig = {
     layout: FormLayout.Horizontal,
     items: [
-      {
-        label: 'Camara',
-        prop: 'placa',
-        type: 'select',
-        deep: 1,
-        filterKey: 'placa',
-        required: true,
-        options:[{}],
-        tips: 'Camara Placa',
-        placeholder: 'Camara',
-        rule:{validators: [{ required: true }]},
-      },
       {
         label: 'Destino',
         prop: 'codUbigeo',
@@ -147,20 +135,16 @@ export class CamaraComponent {
 
   getList() {
     this.busy = this.semanaService.semanaActual().
-    subscribe((elemento:DiaSemana) => {
+    subscribe((elemento) => {
         this.DiaActual = elemento;
         this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
-        this.tarifarioService.obtenerTarifarioCamara(elemento.idDia).subscribe(
-          (elemento) =>{
             if (elemento.length <= 0){
               //this.cargarProductos();
             }else{
               this.basicDataSource = elemento;
               this.basicDataSourceBkp = elemento;
             }
-          }
-        );
-      }
+        }
     );
   }
 
@@ -170,7 +154,7 @@ export class CamaraComponent {
     let fecha : Date = value.selectedDate;
 
     this.tarifarioService.obtenerTarifarioPlanta(Number( format(fecha, 'yyyyMMdd') )).subscribe(
-      (elemento:TarifarioCamaraModel[]) =>{
+      (elemento:TarifarioFleteModel[]) =>{
         if (elemento.length <= 0){
           Swal.fire({
             title:"Información",
@@ -188,7 +172,6 @@ export class CamaraComponent {
   editRow(row: any) {
     this.formData = row;
     this.formConfig.items[0].soloLectura = true;
-    this.formConfig.items[1].soloLectura = true;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
@@ -204,12 +187,11 @@ export class CamaraComponent {
 
   newRow() {
     //this.editRowIndex = index;
-    this.formData = new TarifarioCamara();
+    this.formData = new TarifarioFlete
+    ();
     this.formConfig.items[0].soloLectura = false;
-    this.formConfig.items[1].soloLectura = false;
-    this.formConfig.items[0].options = this.camaras;
-    this.formConfig.items[1].options = this.ubigeos;
-    this.formConfig.items[2].options = this.monedas;
+    this.formConfig.items[0].options = this.ubigeos;
+    this.formConfig.items[1].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
@@ -257,39 +239,15 @@ export class CamaraComponent {
     this.getList();
   }
 
-  onSubmitted(e: TarifarioCamaraModel) {
+  onSubmitted(e: TarifarioFleteModel) {
     e.idDia = this.DiaActual;
     e.id.idDia = e.idDia.idDia;
-    e.id.codUbigeo = e.codUbigeo.codUbigeo;
-    e.id.placa  = e.placa.placa;
-    const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
-      objeto.id.codUbigeo == e.id.codUbigeo && objeto.id.placa == e.id.placa);
-
-    if (objetoAModificar) {
-      let mensaje:string="Se actualizo correctamente la Tarifa";
-      Swal.showLoading( );
-      this.tarifarioService.grabarTarifarioCamara(e).forEach(() => {}).then(()  => {
-        objetoAModificar.idMoneda = e.idMoneda;
-        objetoAModificar.monto = e.monto;
-        this.basicDataSourceBkp = this.basicDataSource;
-        Swal.fire('Exito',mensaje,'success');
-        this.editForm!.modalInstance.hide();
-      }).catch( (error: any) =>{
-        console.error(error);
-        Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
-      });
-    } else {
-      //Inserto el
-      this.tarifarioService.grabarTarifarioCamara(e).forEach(() => {}).then(()  => {
-        this.basicDataSource.push(e);
-        Swal.fire('Exito',"Se grabo correctamente la tarifa de la camara",'success');
-      }).catch( (error: any) =>{
-        console.error(error);
-        Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
-      });
-
-    }
-
+    console.log(e)
+    this.tarifarioService.grabarTarifarioFlete(e).subscribe(
+      (value) =>{
+        console.log(value);
+      }
+    )
   }
 
   onCanceled() {

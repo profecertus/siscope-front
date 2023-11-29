@@ -73,37 +73,37 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idProveedor" header="Proveedor" [width]="'100px'">
+              <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                    <span [title]="cellItem == null?'':cellItem.nombreComercial" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem == null?"":cellItem.nombreComercial }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idTipoServicio" header="Servicio" [width]="'200px'">
+              <d-column field="idTipoServicio" header="Servicio" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem == null?'':cellItem.nombre" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem == null?"":cellItem.nombre  }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idTipoServicio" header="UM" [width]="'50px'">
+              <d-column field="idTipoServicio" header="UM" [width]="'30px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'50px'">
+                    <span [title]="cellItem.idUm.abreviatura" class="over-flow-ellipsis" [style.width]="'30px'">
                       {{ cellItem.idUm.abreviatura  }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="idMoneda" header="Moneda" [width]="'80px'">
+              <d-column field="idMoneda" header="Moneda" [width]="'50px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'40px'">
+                    <span [title]="cellItem == null?'':cellItem.abreviatura" class="over-flow-ellipsis" [style.width]="'50px'">
                       {{ cellItem == null?"":cellItem.abreviatura }}
                     </span>
                   </ng-template>

@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DiaSemana, SemanaModel } from '../model/semana.model';
-import { TarifarioCamaraModel, TarifarioModel } from '../model/tarifario.model';
+import { TarifarioFleteModel, TarifarioModel } from '../model/tarifario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +26,16 @@ export class TarifarioService {
     return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioPlanta/${diaSemana}`);
   }
 
-  obtenerTarifarioCamara(diaSemana:number): Observable<any> {
-    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioCamara/${diaSemana}`);
+  obtenerTarifarioFlete(diaSemana:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioFlete/${diaSemana}`);
   }
 
   grabarTarifario(tarifario:TarifarioModel): Observable<any> {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifa`, tarifario);
   }
 
-  grabarTarifarioCamara(tarifario:TarifarioCamaraModel): Observable<any> {
-    return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaCamara`, tarifario);
+  grabarTarifarioFlete(tarifario:TarifarioFleteModel): Observable<any> {
+    return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaFlete`, tarifario);
   }
   grabarTarifarioEmbarcacion(tarifario:TarifarioModel): Observable<any> {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifaEmbarcacion`, tarifario);

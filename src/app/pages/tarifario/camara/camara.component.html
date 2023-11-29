@@ -5,12 +5,12 @@
       ><a routerLink="/">SISCOPE</a></d-breadcrumb-item
       >
       <d-breadcrumb-item>Tarifario</d-breadcrumb-item>
-      <d-breadcrumb-item>Camara</d-breadcrumb-item>
+      <d-breadcrumb-item>Por Flete - Destino</d-breadcrumb-item>
     </d-breadcrumb>
     <div class="da-content-banner-title">
-      Mantenimiento de Precios de Camara por Destino
+      Mantenimiento de Precios de Flete por Destino
     </div>
-    <div>Lista de las <strong>camaras por destino</strong> incluidos en el sistema</div>
+    <div>Lista de las <strong>fletes por destino</strong> incluidos en el sistema</div>
   </div>
 
   <div class="da-content-wrapper">
@@ -62,11 +62,10 @@
             <d-card *ngFor="let item of basicDataSource" class="card-item">
               <d-card-header>
                 <d-avatar dCardAvatar [name]="'item.idPlanta.nombre'"></d-avatar>
-                <d-card-title>{{ item.placa.placa }} - {{ item.codUbigeo.distrito }} </d-card-title>
-                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{ item.placa.idProveedor.razonSocial }}</span></d-card-subtitle>
+
               </d-card-header>
               <d-card-content>
-                El servicio de flete  tiene un costo de {{ item.monto }} en {{ item.idMoneda.nombre}} por CAJA enviada.
+
               </d-card-content>
               <d-card-actions [align]="'start'">
                 <div class="card-block"><i class="icon-edit card-icon" (click)='editRow(item)' ></i><span (click)='editRow(item)'>Editar</span></div>

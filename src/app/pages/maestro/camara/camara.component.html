@@ -46,19 +46,28 @@
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="marca" header="Marca" [width]="'200px'">
+              <d-column field="marca" header="Marca" [width]="'100px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="modelo" header="Modelo" [width]="'200px'">
+              <d-column field="modelo" header="Modelo" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="eje" header="Ejes" [width]="'150px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem }}
                     </span>
                   </ng-template>
@@ -67,7 +76,7 @@
               <d-column field="idProveedor" header="Proveedor" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem.razonSocial" class="over-flow-ellipsis" [style.width]="'200px'">
                       {{ cellItem.razonSocial }}
                     </span>
                   </ng-template>
@@ -76,7 +85,7 @@
               <d-column field="estado" header="Estado" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'200px'">
+                    <span [title]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" class="over-flow-ellipsis" [style.width]="'200px'">
                       <d-tag [tag]="cellItem.toString()=='true'?'ACTIVO':'INACTIVO'" [labelStyle]="cellItem.toString()=='true'?'blue-w98':'red-w98'"></d-tag>
                     </span>
                   </ng-template>

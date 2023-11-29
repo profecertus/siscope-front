@@ -71,13 +71,6 @@ export class EmbarcacionComponent {
         placeholder: 'Tonelaje',
       },
       {
-        label: 'Ejes',
-        prop: 'numEje',
-        type: 'number',
-        deep: 1,
-        placeholder: 'Numero Ejes',
-      },
-      {
         label: 'Estado',
         prop: 'estado',
         type: 'switch',

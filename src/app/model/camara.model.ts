@@ -4,6 +4,7 @@ export class Camara{
   placa:string = '';
   marca:string = '';
   modelo:string = '';
+  eje: number = 0;
   idProveedor:ProveedorModel = new ProveedorModel();
   estado:boolean = true;
   estadoReg:boolean = true;

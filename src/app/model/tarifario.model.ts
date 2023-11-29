@@ -105,35 +105,32 @@ export interface TarifarioPlantaModel {
   estadoReg: Boolean;
 }
 
-export interface TarifarioCamaraIdModel{
-  codUbigeo: String;
-  placa: string;
-  idDia: Number;
+export interface TarifarioFleteIdModel{
+  codUbigeo: string;
+  codUbigeoDestino: string;
+  idDia: number;
 }
 
-export class TarifarioCamara implements TarifarioCamaraModel{
-  estado: Boolean = true;
-  estadoReg: Boolean = true;
-  id: TarifarioCamaraIdModel = new class implements TarifarioCamaraIdModel {
-    idDia: Number = 0;
+export class TarifarioFlete implements TarifarioFleteModel{
+  estado: boolean = true;
+  estadoReg: boolean = true;
+  id: TarifarioFleteIdModel = new class implements TarifarioFleteIdModel {
     codUbigeo: string = '';
-    placa: string = '';
+    codUbigeoDestino: string = '';
+    idDia: number = 0;
   };
-  idDia: DiaSemana = new DiaSemana();
-  idMoneda: Moneda = new Moneda();
-  monto: Number = 0;
-  placa: Camara = new Camara();
-  codUbigeo: CodUbigeo = new CodUbigeo();
+  idDia: DiaSemana = new  DiaSemana();
+  idMoneda: number = 0;
+  monto: number = 0;
+
 }
-export interface TarifarioCamaraModel {
-  id: TarifarioCamaraIdModel;
-  codUbigeo: CodUbigeo;
-  placa: Camara;
+export interface TarifarioFleteModel {
+  id: TarifarioFleteIdModel;
   idDia: DiaSemana;
-  idMoneda: Moneda;
-  monto: Number;
-  estado: Boolean;
-  estadoReg: Boolean;
+  idMoneda: number;
+  monto: number;
+  estado: boolean;
+  estadoReg:boolean;
 }
 /*
 export interface TarifarioCamaraModel {

@@ -44,6 +44,14 @@ export class CamaraComponent {
         placeholder: 'Marca',
       },
       {
+        label: 'Eje',
+        prop: 'eje',
+        type: 'input',
+        deep: 1,
+        maxi:50,
+        placeholder: 'Número de Ejes',
+      },
+      {
         label: 'Modelo',
         prop: 'modelo',
         type: 'input',
