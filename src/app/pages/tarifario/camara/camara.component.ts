@@ -32,7 +32,7 @@ export class CamaraComponent {
     items: [
       {
         label: 'Destino',
-        prop: 'codUbigeo',
+        prop: 'codUbigeoDestino',
         type: 'select',
         deep: 1,
         filterKey: 'distrito',
@@ -76,11 +76,9 @@ export class CamaraComponent {
   formData = {};
   editForm: any = null;
   ubigeos : CodUbigeo[] =[];
-  camaras: Camara[] = [];
   monedas : Moneda[] =[];
   DiaActual:DiaSemana = new DiaSemana();
   fechaSeleccionada: any;
-  today = new Date();
 
 
   pager = {
@@ -98,14 +96,12 @@ export class CamaraComponent {
               private tarifarioService: TarifarioService,
               private semanaService: SemanaService,
               private ubigeoService: UbigeoService,
-              private camaraService: CamaraService,
               private monedaService: MonedaService,
   ) {}
 
   ngOnInit() {
     this.getList();
     this.getUbigeo();
-    this.getCamara();
     this.getMonedas();
   }
 
@@ -117,13 +113,6 @@ export class CamaraComponent {
     );
   }
 
-  getCamara(){
-    this.busy = this.camaraService.getAllCamara().subscribe(
-      (elemento: Camara[]) =>{
-        this.camaras = elemento;
-      }
-    );
-  }
 
   getMonedas(){
     this.busy = this.monedaService.obtenerMonedas().subscribe(
@@ -138,12 +127,12 @@ export class CamaraComponent {
     subscribe((elemento) => {
         this.DiaActual = elemento;
         this.fechaSeleccionada = parse(this.DiaActual.idDia.toString(), 'yyyyMMdd', new Date());
-            if (elemento.length <= 0){
-              //this.cargarProductos();
-            }else{
-              this.basicDataSource = elemento;
-              this.basicDataSourceBkp = elemento;
-            }
+        this.tarifarioService.obtenerTarifarioFlete(this.DiaActual.idDia).subscribe(
+          (datos) => {
+              this.basicDataSource = datos;
+              this.basicDataSourceBkp = datos;
+          }
+        );
         }
     );
   }
@@ -172,11 +161,13 @@ export class CamaraComponent {
   editRow(row: any) {
     this.formData = row;
     this.formConfig.items[0].soloLectura = true;
+    this.formConfig.items[0].options = this.ubigeos;
+    this.formConfig.items[1].options = this.monedas;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '600px',
       maxHeight: '600px',
-      title: 'Precio Tarifario - Edición',
+      title: 'Precio Flete - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -196,7 +187,7 @@ export class CamaraComponent {
       id: 'edit-dialog',
       width: '600px',
       maxHeight: '600px',
-      title: 'Precio Tarifario - Edición',
+      title: 'Precio Flete - Edición',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -242,12 +233,38 @@ export class CamaraComponent {
   onSubmitted(e: TarifarioFleteModel) {
     e.idDia = this.DiaActual;
     e.id.idDia = e.idDia.idDia;
-    console.log(e)
-    this.tarifarioService.grabarTarifarioFlete(e).subscribe(
-      (value) =>{
-        console.log(value);
-      }
-    )
+    e.id.codUbigeoDestino = e.codUbigeoDestino.codUbigeo;
+    e.id.codUbigeoOrigen = 'A021801';
+
+    const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
+      objeto.id.codUbigeoDestino == e.id.codUbigeoDestino && objeto.id.codUbigeoOrigen == e.id.codUbigeoOrigen);
+
+    if (objetoAModificar) {
+      Swal.showLoading( );
+      let mensaje:string="Se actualizo correctamente la Tarifa";
+      this.tarifarioService.grabarTarifarioFlete(e).forEach(() => {}).then(()  => {
+        this.basicDataSourceBkp = this.basicDataSource;
+        Swal.fire('Exito',mensaje,'success');
+        objetoAModificar.monto = e.monto;
+        objetoAModificar.idMoneda = e.idMoneda;
+        this.editForm!.modalInstance.hide();
+      }).catch( (error: any) =>{
+        console.error(error);
+        Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
+      });
+    } else {
+      Swal.showLoading( );
+      let mensaje:string="Se creo  la Tarifa";
+      this.tarifarioService.grabarTarifarioFlete(e).forEach(() => {}).then(()  => {
+        this.basicDataSource.push(e);
+        this.basicDataSourceBkp = this.basicDataSource;
+        Swal.fire('Exito',mensaje,'success');
+        this.editForm!.modalInstance.hide();
+      }).catch( (error: any) =>{
+        console.error(error);
+        Swal.fire('Error',"Hubo Problemas al grabar la tarifa." + error,'error');
+      });
+    }
   }
 
   onCanceled() {

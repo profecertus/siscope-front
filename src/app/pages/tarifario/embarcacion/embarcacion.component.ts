@@ -221,7 +221,6 @@ export class EmbarcacionComponent {
   }
 
   onSubmitted(e: TarifarioEmbarcacionModel) {
-    console.log(e.id)
     const objetoAModificar =this.basicDataSource.find(objeto => objeto.id.idDia == e.id.idDia &&
       objeto.id.idEmbarcacion == e.id.idEmbarcacion && objeto.id.idTipoServicio == e.id.idTipoServicio && objeto.id.idProveedor == e.id.idProveedor);
     if (objetoAModificar) {

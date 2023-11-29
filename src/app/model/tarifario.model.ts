@@ -73,9 +73,9 @@ export interface TarifarioEmbarcacionModel {
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;
   idMoneda: Moneda;
-  monto: Number;
-  estado: Boolean;
-  estadoReg: Boolean;
+  monto: number;
+  estado: boolean;
+  estadoReg: boolean;
 }
 
 export interface  Id{
@@ -100,13 +100,13 @@ export interface TarifarioPlantaModel {
   idTipoServicio: TipoServicio;
   idDia: DiaSemana;
   idMoneda: Moneda;
-  monto: Number;
-  estado: Boolean;
-  estadoReg: Boolean;
+  monto: number;
+  estado: boolean;
+  estadoReg: boolean;
 }
 
 export interface TarifarioFleteIdModel{
-  codUbigeo: string;
+  codUbigeoOrigen: string;
   codUbigeoDestino: string;
   idDia: number;
 }
@@ -115,19 +115,21 @@ export class TarifarioFlete implements TarifarioFleteModel{
   estado: boolean = true;
   estadoReg: boolean = true;
   id: TarifarioFleteIdModel = new class implements TarifarioFleteIdModel {
-    codUbigeo: string = '';
+    codUbigeoOrigen: string = '';
     codUbigeoDestino: string = '';
     idDia: number = 0;
   };
   idDia: DiaSemana = new  DiaSemana();
-  idMoneda: number = 0;
+  idMoneda: Moneda = new Moneda();
   monto: number = 0;
+  codUbigeoDestino: CodUbigeo = new CodUbigeo();
 
 }
 export interface TarifarioFleteModel {
   id: TarifarioFleteIdModel;
   idDia: DiaSemana;
-  idMoneda: number;
+  idMoneda: Moneda;
+  codUbigeoDestino: CodUbigeo;
   monto: number;
   estado: boolean;
   estadoReg:boolean;

@@ -25,14 +25,14 @@ export class Ruc {
 }
 
 export class CodUbigeo {
-  codUbigeo: String = '';
-  departamento: String = '';
-  provincia: String = '';
-  distrito: String = '';
-  estadoReg: Boolean = true;
-  nombreCompleto: String = '';
+  codUbigeo: string = '';
+  departamento: string = '';
+  provincia: string = '';
+  distrito: string = '';
+  estadoReg: boolean = true;
+  nombreCompleto: string = '';
   [key: string]: any; // Agregar la firma de índice
-  getNombre(): String{
+  getNombre(): string{
     return this.codUbigeo + ' - ' + this.departamento + '/' + this.provincia + '/' + this.distrito;
   }
 }

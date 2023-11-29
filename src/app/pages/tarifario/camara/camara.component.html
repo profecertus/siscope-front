@@ -61,12 +61,14 @@
           <div class="da-list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'">
             <d-card *ngFor="let item of basicDataSource" class="card-item">
               <d-card-header>
-                <d-avatar dCardAvatar [name]="'item.idPlanta.nombre'"></d-avatar>
-
+                <d-avatar dCardAvatar  [name]="item.codUbigeoDestino.distrito"></d-avatar>
+                <d-card-title>DESTINO - {{ item.codUbigeoDestino.distrito }}</d-card-title>
+                <d-card-subtitle><i class="icon-company-member card-icon"></i><span>{{item.codUbigeoDestino.departamento }} - {{ item.codUbigeoDestino.provincia}}</span></d-card-subtitle>
               </d-card-header>
               <d-card-content>
-
+                  El costo por CAJA para el destino es de {{ item.idMoneda.abreviatura }} {{ item.monto }}
               </d-card-content>
+              <br>
               <d-card-actions [align]="'start'">
                 <div class="card-block"><i class="icon-edit card-icon" (click)='editRow(item)' ></i><span (click)='editRow(item)'>Editar</span></div>
               </d-card-actions>
