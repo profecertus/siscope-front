@@ -124,6 +124,7 @@ export class CamaraComponent {
     //Obtengo los proveedores y filtro por FLETE (06)
     return this.busy = this.proveedorService.obtenerProveedoresCamara().
     pipe().subscribe((elemento) => {
+      console.log(elemento);
       this.proveedores = elemento.filter(item =>
           item.relProvTiposervDto.filter((valor) => valor['idTipoServicio'].id == 6).length > 0
       );
@@ -135,7 +136,7 @@ export class CamaraComponent {
     this.editRowIndex = index;
     this.accion = 0;
     this.formData = row;
-    this.formConfig.items[3].options = this.proveedores;
+    this.formConfig.items[4].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',
@@ -157,7 +158,7 @@ export class CamaraComponent {
     this.editRowIndex = -1;
     this.accion = 1;
     this.formData = row;
-    this.formConfig.items[3].options = this.proveedores;
+    this.formConfig.items[4].options = this.proveedores;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '700px',

@@ -115,7 +115,6 @@ export class ProveedorComponent {
         options: [], //Se cargan luego
         filterKey: 'nombreBanco',
         multipleselect: [],
-        required: true,
         rule:{validators: [{ required: true }]},
       },
       {
