@@ -64,7 +64,7 @@ export class ProveedorComponent {
       {
         label: 'Num. Doc.',
         prop: 'numeroDocumento',
-        type: 'number',
+        type: 'input',
         deep: 2,
         cabecera: 'proveedor',
         maxi:20,
