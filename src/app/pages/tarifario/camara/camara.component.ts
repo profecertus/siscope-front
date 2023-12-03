@@ -178,8 +178,7 @@ export class CamaraComponent {
 
   newRow() {
     //this.editRowIndex = index;
-    this.formData = new TarifarioFlete
-    ();
+    this.formData = new TarifarioFlete();
     this.formConfig.items[0].soloLectura = false;
     this.formConfig.items[0].options = this.ubigeos;
     this.formConfig.items[1].options = this.monedas;
