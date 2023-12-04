@@ -142,7 +142,7 @@ export class CamaraComponent {
     if (value.selectedDate == null) return;
     let fecha : Date = value.selectedDate;
 
-    this.tarifarioService.obtenerTarifarioPlanta(Number( format(fecha, 'yyyyMMdd') )).subscribe(
+    this.tarifarioService.obtenerTarifarioFlete(Number( format(fecha, 'yyyyMMdd') )).subscribe(
       (elemento:TarifarioFleteModel[]) =>{
         if (elemento.length <= 0){
           Swal.fire({
