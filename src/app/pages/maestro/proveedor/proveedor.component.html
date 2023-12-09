@@ -51,8 +51,8 @@
               <d-column field="proveedor" header="Tipo Doc." [width]="'50px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.idTipodoc.abreviatura" class="over-flow-ellipsis" [style.width]="'50px'">
-                      {{ cellItem.idTipodoc.abreviatura }}
+                    <span [title]="cellItem.idTipodoc == null?'':cellItem.idTipodoc.abreviatura" class="over-flow-ellipsis" [style.width]="'50px'">
+                      {{ cellItem.idTipodoc == null?"":cellItem.idTipodoc.abreviatura }}
                     </span>
                   </ng-template>
                 </d-cell>
@@ -60,8 +60,8 @@
               <d-column field="proveedor" header="Num. Doc." [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.numeroDocumento" class="over-flow-ellipsis" [style.width]="'80px'">
-                      {{ cellItem.numeroDocumento }}
+                    <span [title]="cellItem.numeroDocumento == null?'':cellItem.numeroDocumento" class="over-flow-ellipsis" [style.width]="'80px'">
+                      {{ cellItem.numeroDocumento == null?"":cellItem.numeroDocumento }}
                     </span>
                   </ng-template>
                 </d-cell>
