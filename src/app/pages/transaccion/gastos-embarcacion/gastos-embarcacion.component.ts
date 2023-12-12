@@ -25,6 +25,7 @@ export class GastosEmbarcacionComponent implements OnInit{
   embarcacion: Embarcacion = new Embarcacion();
   editableTip = EditableTip.btn;
   proveedorHielo:ProveedorxTipo[] = [];
+  proveedorPetroleo:ProveedorxTipo[] = [];
   visible:boolean = false;
   hielo:GastosModel[] = [];
   petroleo:GastosModel[] = [];
@@ -35,15 +36,22 @@ export class GastosEmbarcacionComponent implements OnInit{
     this.getSemanaActual();
     this.getAllSemanas();
     this.getAllEmbarcaciones();
-    this.getAllProveedorxTipo();
+    this.getAllProveedorHielo();
+    this.getAllProveedorPetroleo();
   }
 
   constructor(private dialogService: DialogService, private semanaService: SemanaService,
               private proveedorService: ProveedorService, private embarcacionService: EmbarcacionService) {}
 
-  getAllProveedorxTipo():void{
+  getAllProveedorHielo():void{
     this.proveedorService.obtenerProveedorxTipo(3).subscribe(value => {
       this.proveedorHielo = value;
+    })
+  }
+
+  getAllProveedorPetroleo():void{
+    this.proveedorService.obtenerProveedorxTipo(2).subscribe(value => {
+      this.proveedorPetroleo = value;
     })
   }
 
@@ -132,7 +140,7 @@ export class GastosEmbarcacionComponent implements OnInit{
     }).then(value => {
       //Obtengo lo guardado en petroleo
       this.petroleo.forEach(objeto=>{
-        objeto.cantidad = 5.0;
+        //objeto.cantidad = 5.0;
       });
     });
   }
@@ -165,7 +173,6 @@ export class GastosEmbarcacionComponent implements OnInit{
   };
 
   beforeEditEnd = (rowItem: any, field: any) => {
-    console.log(rowItem[field]);
     if (rowItem || rowItem[field] > 0) {
       return false;
     } else {
@@ -182,10 +189,13 @@ export class GastosEmbarcacionComponent implements OnInit{
     });
   }
 
-  onKeyDown(event: KeyboardEvent, rowItem: any, rowIndex:any) {
+  onKeyUp(event: KeyboardEvent, rowItem: any, rowIndex: any) {
     if (event.key === 'Enter') {
       // Realizar acciones cuando se presiona Enter
-      console.log(rowItem);
+      //console.log(rowItem);
+      rowItem.total = Number.parseFloat( rowItem.cantidad ) * rowItem.precio;
+      rowItem['priorityEdit'] = false;
+      rowItem['idEdit'] = false;
     }
   }
 }

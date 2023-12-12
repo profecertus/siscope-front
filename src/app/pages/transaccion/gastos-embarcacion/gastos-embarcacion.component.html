@@ -73,7 +73,7 @@
               <th dHeadCell>Dia</th>
               <th dHeadCell>Fecha</th>
               <th dHeadCell>Proveedor</th>
-              <th dHeadCell>Precio</th>
+              <th dHeadCell>Precio x Und</th>
               <th dHeadCell>Cantidad</th>
               <th dHeadCell>Total</th>
             </tr>
@@ -172,6 +172,7 @@
                         [(ngModel)]="rowItem.cantidad"
                         [attr.maxlength]="100"
                         [attr.minlength]="3"
+                        (keyup)='onKeyUp($event, rowItem, rowIndex)'
                       />
                     </div>
                   </td>
@@ -208,7 +209,7 @@
     <da-col-item [daSpan]="24" [daXs]="24" *ngIf='visible'>
       <div class="da-content-card da-form-card">
         <div class="da-content-title da-form-card-title">
-          <h4>Petroleo</h4>
+          <h4>Hielo</h4>
         </div>
         <div class="list-content" dLoading [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
           <d-data-table
@@ -220,7 +221,7 @@
               <th dHeadCell>Dia</th>
               <th dHeadCell>Fecha</th>
               <th dHeadCell>Proveedor</th>
-              <th dHeadCell>Precio</th>
+              <th dHeadCell>Precio x Und</th>
               <th dHeadCell>Cantidad</th>
               <th dHeadCell>Total</th>
             </tr>
@@ -254,7 +255,7 @@
                   <div *ngIf="false" class="edit-padding-fix">
                     <input
                       class="devui-form-control"
-                      name="id"
+                      name="idDiaString"
                       [(ngModel)]="rowItem.idDiaString"
                       [attr.maxlength]="100"
                       [attr.minlength]="3"
@@ -266,44 +267,39 @@
                   dTableCell
                   [editable]="true"
                   [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
+                  [(editing)]="rowItem['priorityEdit']"
                   [rowItem]="rowItem"
                   [field]="'idProveedor'"
                   [beforeEditStart]="beforeEditStart"
                   [beforeEditEnd]="beforeEditEnd"
                 >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.idProveedor }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
+                      <span *ngIf="!rowItem['priorityEdit']"
+                      ><d-tag
+                        [tag]="rowItem?.idProveedor.razonSocial"
+                      ></d-tag
+                      ></span>
+                  <div
+                    *ngIf="rowItem['priorityEdit']"
+                    class="edit-padding-fix"
+                  >
+                    <d-select
                       name="idProveedor"
                       [(ngModel)]="rowItem.idProveedor"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
+                      [options]="proveedorPetroleo"
+                      [filterKey]="'razonSocial'"
+                      (selectionchange)='cambiaProvHielo(rowItem, rowIndex)'
+                    ></d-select>
                   </div>
                 </td>
 
                 <td
                   dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
                   [rowItem]="rowItem"
-                  [field]="'precio'"
+                  [field]="'precioCadena'"
                   [beforeEditStart]="beforeEditStart"
                   [beforeEditEnd]="beforeEditEnd"
                 >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.precio }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="precio"
-                      [(ngModel)]="rowItem.precio"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
+                  <span >{{ rowItem?.precioCadena }}</span>
                 </td>
 
                 <td
@@ -324,6 +320,7 @@
                       [(ngModel)]="rowItem.cantidad"
                       [attr.maxlength]="100"
                       [attr.minlength]="3"
+                      (keyup)='onKeyUp($event, rowItem, rowIndex)'
                     />
                   </div>
                 </td>
@@ -342,14 +339,13 @@
                   <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
                     <input
                       class="devui-form-control"
-                      name="total"
+                      name="idDiaString"
                       [(ngModel)]="rowItem.total"
                       [attr.maxlength]="100"
                       [attr.minlength]="3"
                     />
                   </div>
                 </td>
-
               </tr>
             </ng-template>
             </tbody>
