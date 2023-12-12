@@ -13,15 +13,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GastosEmbarcacionComponent } from './gastos-embarcacion/gastos-embarcacion.component';
 import { FormsModule } from '@angular/forms';
 import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/components/admin-form';
-import { DaGridModule } from '../../@shared/layouts/da-grid';
-
-
+import { DaGridModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/layouts/da-grid';
+import { HorizontalFormComponent } from './gastos-embarcacion/horizontal-form/horizontal-form.component';
 
 @NgModule({
   declarations: [
     TransaccionComponent,
     DescargaComponent,
     PlanillaComponent,
+    HorizontalFormComponent,
     OperativosComponent,
     AdministrativosComponent,
     IngresoComponent,
@@ -37,7 +37,6 @@ import { DaGridModule } from '../../@shared/layouts/da-grid';
     DevUIModule,
     FormsModule,
     AdminFormModule,
-    DaGridModule,
     DaGridModule,
   ],
 })

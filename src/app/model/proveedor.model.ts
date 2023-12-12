@@ -9,6 +9,14 @@ export class RespuestaProveedor{
   [key: string]: any; // Agregar la firma de índice
 }
 
+export class ProveedorxTipo{
+  idProveedor:number = 0;
+  idTipoServicio:number = 0;
+  razonSocial:string = '';
+  [key: string]: any;
+
+}
+
 export class ProveedorModel {
   id: number = 0;
   razonSocial: string = "";

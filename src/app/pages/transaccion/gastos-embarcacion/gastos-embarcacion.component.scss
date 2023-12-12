@@ -1,24 +1,77 @@
 @import "ng-devui/styles-var/devui-var.scss";
+@import "ng-devui/styles-var/devui-var.scss";
 @import "src/app/@shared/styles/common.scss";
 
-.status {
-  position: relative;
-  top: -1px;
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  vertical-align: middle;
-  border-radius: 50%;
+.da-list-header {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+}
 
-  &.success {
-    background-color: $devui-success !important;
+.da-list-content {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  min-height: 200px;
+
+  .card-item {
+    margin-right: 16px;
+    margin-bottom: 16px;
+    width: calc(25% - 16px);
+    background-color: $devui-base-bg;
+    cursor: pointer;
+
+    .card-icon {
+      cursor: pointer;
+      font-size: $devui-font-size-icon;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .card-icon + span {
+      vertical-align: middle;
+    }
+
+    .card-block {
+      margin-right: 16px;
+    }
+
+    &:hover {
+      box-shadow: $devui-shadow-length-hover $devui-light-shadow;
+    }
   }
+}
 
-  &.error {
-    background-color: $devui-contrast !important;
+.da-list-container {
+  .da-list-footer {
+    margin-top: 0 !important;
   }
+}
 
-  &.pending {
-    background-color: $devui-warning-line !important;
+@media only screen and (max-width: 1023px) {
+  .da-list-content {
+    .card-item {
+      width: calc(50% - 16px);
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .da-list-content {
+    .card-item {
+      width: calc(100% - 16px);
+    }
+  }
+}
+
+
+.da-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .da-header-right {
+    margin-bottom: 12px;
   }
 }

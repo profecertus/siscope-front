@@ -192,7 +192,7 @@ export class EditableListComponent implements OnInit {
   }
 
   subRowCancel(index: number) {
-    (this.listData[index] as Item).$expandConfig.expand = false;
+   // (this.listData[index] as Item).$expandConfig.expand = false;
   }
 
   toggleExpand(rowItem: any) {

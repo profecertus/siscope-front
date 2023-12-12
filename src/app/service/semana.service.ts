@@ -27,4 +27,8 @@ export class SemanaService {
   semanaActual():Observable<any>{
     return this.http.get(`${this.apiUrlTarifario}${this.semana}/semanaActual`)
   }
+
+  getDiasxSemana(semana:number):Observable<any>{
+    return this.http.get(`${this.apiUrlTarifario}${this.semana}/getDiasxSemana/${semana}`);
+  }
 }

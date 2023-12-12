@@ -1,9 +1,10 @@
 export class SemanaModel{
-  idSemana:number = 0;
+  id:number = 0;
   fechaInicio:number = 0;
   fechaFin:number = 0;
   tipoSemana:string = '';
   estado:boolean = true;
+  nombreCompleto:string = '';
   [key:string]:any;
 }
 

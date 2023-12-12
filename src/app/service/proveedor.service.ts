@@ -18,6 +18,14 @@ export class ProveedorService {
     return this.http.get(`${this.apiUrl}${this.proveedor}/getAllPage/${numpage}/${numsize}`);
   }
 
+  obtenerProveedorxTipo(tipoServicio:number): Observable<any>{
+    return this.http.get(`${this.apiUrl}${this.proveedor}/getProveedorPorTipo/${tipoServicio}`);
+  }
+
+  obtenerPrecioxDia(idProveedor:number, idTipo:number, idDia:number): Observable<any>{
+    return this.http.get(`${this.apiUrl}${this.proveedor}/obtenerPrecio/${idProveedor}/${idTipo}/${idDia}`);
+  }
+
   obtenerProveedoresCamara(): Observable<ProveedorModel[]> {
     // @ts-ignore
     return this.http.get(`${this.apiUrl}${this.proveedor}/getAll`);
