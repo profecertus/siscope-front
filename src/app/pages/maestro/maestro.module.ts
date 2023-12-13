@@ -25,6 +25,7 @@ import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app
 import { DaGridModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/layouts/da-grid';
 import { TrabajadorComponent } from './trabajador/trabajador.component';
 import { SemanaComponent } from './semana/semana.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { SemanaComponent } from './semana/semana.component';
     DataTableModule,
     LoadingModule,
     PaginationModule,
+    ReactiveFormsModule,
     SelectModule,
     TagsModule,
     TranslateModule,

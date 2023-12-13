@@ -4,7 +4,6 @@ import { TransaccionComponent } from './transaccion.component';
 import { DescargaComponent } from './descarga/descarga.component';
 import { IngresoComponent } from './ingreso/ingreso.component';
 import { LiquidacionComponent } from './liquidacion/liquidacion.component';
-import { PlanillaComponent } from './planilla/planilla.component';
 import { DevUIModule } from '@devui';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../@shared/shared.module';
@@ -16,7 +15,7 @@ const routes: Routes = [
     component: TransaccionComponent,
     children: [
       { path: 'gastosEmbarcacion', component: GastosEmbarcacionComponent },
-      { path: 'planilla', component: PlanillaComponent },
+      { path: 'descarga', component: DescargaComponent },
       { path: 'ingreso', component: IngresoComponent },
       { path: 'liquidacion', component: LiquidacionComponent },
     ],

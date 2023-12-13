@@ -11,10 +11,11 @@ import { TransaccionRoutingModule } from './transaccion-routing.module';
 import { BreadcrumbModule, DevUIModule } from '@devui';
 import { TranslateModule } from '@ngx-translate/core';
 import { GastosEmbarcacionComponent } from './gastos-embarcacion/gastos-embarcacion.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/components/admin-form';
-import { DaGridModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/layouts/da-grid';
 import { HorizontalFormComponent } from './gastos-embarcacion/horizontal-form/horizontal-form.component';
+import { NuevaDescargaComponent } from './descarga/nueva-descarga/nueva-descarga.component';
+import { DaGridModule } from '../../@shared/layouts/da-grid';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HorizontalFormComponent } from './gastos-embarcacion/horizontal-form/ho
     AdministrativosComponent,
     IngresoComponent,
     LiquidacionComponent,
-    GastosEmbarcacionComponent
+    GastosEmbarcacionComponent,
+    NuevaDescargaComponent
   ],
   imports: [
     TransaccionRoutingModule,
@@ -37,7 +39,7 @@ import { HorizontalFormComponent } from './gastos-embarcacion/horizontal-form/ho
     DevUIModule,
     FormsModule,
     AdminFormModule,
-    DaGridModule,
+    ReactiveFormsModule,
   ],
 })
 export class TransaccionModule { }
