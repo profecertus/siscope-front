@@ -49,26 +49,18 @@
       </div>
 
 
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-2">
+
           <d-form-label [required]="true">Embarcación</d-form-label>
           <d-form-control class="form-control-width">
             <d-select [options]="embarcaciones" name="embarcacion" [filterKey]="'nombre'" formControlName='embarcacion' ></d-select>
           </d-form-control>
-        </d-form-item>
-      </div>
 
+      </div>
+      <div class="u-1-4"></div>
       <div class="u-1-4">
-        <d-form-item>
-          <d-form-label  [hasHelp]="true" [helpTips]="'Algún dato.'">Tag</d-form-label>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="unknow" disabled />
-          </d-form-control>
-        </d-form-item>
-      </div>
 
-      <div class="u-1-4"></div>
-      <div class="u-1-4"></div>
+      </div>
 
       <div class="u-1-4">
         <d-form-item>
@@ -160,32 +152,25 @@
         </d-form-item>
       </div>
 
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-2">
+
           <d-form-label [required]="true">Planta</d-form-label>
           <d-form-control class="form-control-width">
-            <d-select [options]="plantas" name="planta" [filterKey]="'plantaDto'" formControlName='planta' ></d-select>
+            <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' ></d-select>
           </d-form-control>
-        </d-form-item>
+
+      </div>
+      <div class="u-1-4"></div>
+      <div class="u-1-4">
       </div>
 
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label [hasHelp]="true" [helpTips]="'destino'">Destino</d-form-label>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="destino" disabled />
-          </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4"></div>
-      <div class="u-1-4"></div>
 
       <div class='u-1'><strong>FLETE</strong></div>
       <div class="u-1-4">
         <d-form-item>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Cámara'">Cámara</d-form-label>
+          <d-form-label [required]="true">Cámara</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="camara" />
+            <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' ></d-select>
           </d-form-control>
         </d-form-item>
       </div>
@@ -213,6 +198,135 @@
           </d-form-control>
         </d-form-item>
       </div>
+
+      <div class='u-1'><strong>GASTOS VINCULADOS</strong></div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Habilitación</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="habilitación" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Moneda</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="monedaHabilitación" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Muelle</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="muelle" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Moneda</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="monedaMuelle" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Atraque</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="atraque" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Moneda</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="monedaAtraque" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+
+
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Hielo</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="hielo" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Moneda</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="monedaHielo" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+
+
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Renta</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="renta" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Moneda</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="monedaRenta" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+
 
     </div>
     <d-form-operation>

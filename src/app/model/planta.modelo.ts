@@ -4,6 +4,7 @@ export class RespuestaPlanta{
   plantaDto?: PlantaDto = new PlantaDto();
   relPlantaDestinoDto: RelPlantaDestinoDto[] = [];
   relCliente: Cliente[] = [];
+  nombrePlanta:String = '';
   [key: string]: any; // Agregar la firma de índice
 }
 

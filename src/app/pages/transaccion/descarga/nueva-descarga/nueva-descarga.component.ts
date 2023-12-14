@@ -8,7 +8,7 @@ import { MonedaService } from '../../../../service/moneda.service';
 import { Moneda } from '../../../../model/moneda.model';
 import { PlantaService } from '../../../../service/planta.service';
 import { CamaraService } from '../../../../service/camara.service';
-import { PlantaDto } from '../../../../model/planta.modelo';
+import { RespuestaPlanta } from '../../../../model/planta.modelo';
 import { Camara } from '../../../../model/camara.model';
 
 @Component({
@@ -24,7 +24,7 @@ export class NuevaDescargaComponent  implements OnInit {
   fechaNumber = 0;
   embarcaciones:Embarcacion[] = [];
   monedas:Moneda[]=[];
-  plantas:PlantaDto[]=[];
+  plantas:RespuestaPlanta[]=[];
   camaras:Camara[]=[];
 
   formDescarga: FormGroup = this.fb.group({
@@ -60,6 +60,7 @@ export class NuevaDescargaComponent  implements OnInit {
     this.getEmbarcaciones();
     this.getMonedas();
     this.getPlantas();
+    this.getCamaras();
   }
 
   getSemana(){
@@ -80,7 +81,10 @@ export class NuevaDescargaComponent  implements OnInit {
   getPlantas(){
     this.plantaService.obtenerPlantas(0,100).subscribe(value => {
       this.plantas = value.content;
-      console.log(this.plantas);
+      this.plantas.forEach(valor => {
+        // @ts-ignore
+        valor.nombrePlanta = valor.plantaDto.nombrePlanta + ' (' + valor.plantaDto.codUbigeo.distrito + ')';
+      });
     })
   }
 
@@ -90,6 +94,11 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
 
+  getCamaras(){
+    this.camaraService.getAllCamara().subscribe(value => {
+      this.camaras = value;
+    });
+  }
   grabar(){
     console.log(this.formDescarga.value);
   }
