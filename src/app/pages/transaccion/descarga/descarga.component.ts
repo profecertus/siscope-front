@@ -1,5 +1,5 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { DialogService, FormLayout } from '@devui';
+import { DialogService, FormLayout, ToastService } from '@devui';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Trabajador } from '../../../model/trabajador.model';
@@ -12,6 +12,8 @@ import { FormaPagoService } from '../../../service/formaPago.service';
 import { Moneda } from '../../../model/moneda.model';
 import { Banco } from '../../../model/banco.model';
 import { FormaPago } from '../../../model/formaPago.model';
+import { PescaService } from '../../../service/pesca.service';
+import { format, parse } from 'date-fns';
 
 
 @Component({
@@ -48,7 +50,7 @@ export class DescargaComponent {
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
 
-  constructor(private dialogService: DialogService,
+  constructor(private dialogService: DialogService, private pescaService: PescaService, private toastService: ToastService,
               private trabajadorService: TrabajadorService, private tipodocumentoService: TipodocumentoService,
               private monedaService: MonedaService, private bancoService: BancoService, private formaPagoService: FormaPagoService
   ) {}
@@ -62,11 +64,10 @@ export class DescargaComponent {
   }
 
   getList() {
-    return this.busy = this.trabajadorService.obtenerTrabajadores((this.pager.pageIndex - 1), this.pager.pageSize).
+    return this.busy = this.pescaService.obtenerPesca().
     pipe().subscribe((elemento) => {
-      let res : Trabajador[]  = elemento.content;
-      this.basicDataSource = res;
-      this.basicDataSourceBkp = res;
+      this.basicDataSource = elemento;
+      this.basicDataSourceBkp = elemento;
       this.pager.total = elemento.totalElements;
     });
   }
@@ -148,7 +149,7 @@ export class DescargaComponent {
           this.basicDataSource.splice(index, 1);
           Swal.fire('Exito', 'Trabajador Eliminado!', 'success').then(()=>{});
         }).catch( error =>{
-          console.log(error);
+          console.error(error);
           Swal.fire('Error', "Hubo Problemas al Eliminar el Trabajador, intentelo más tarde", 'error').then(()=>{});
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
@@ -204,13 +205,29 @@ export class DescargaComponent {
       Swal.fire('Exito', mensaje, 'success').then(()=>{});
       this.editForm!.modalInstance.hide();
     }).catch( error =>{
-      console.log(error);
+      console.error(error);
       Swal.fire('Error', "Hubo Problemas al grabar al Trabajador.", 'error').then(()  =>{});
     });
+  }
+
+  getFecha(idDia: number):string {
+    const fechaString: string = idDia.toString();
+    const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
+
+    // Formatea la fecha como un string con el formato deseado
+    const fechaFormateada: string = format(fechaObjeto, 'dd/MM/yyyy');
+    return fechaFormateada;
   }
 
   onCanceled() {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
+  }
+
+  onSubmit() {
+    this.editForm!.modalInstance.hide();
+    const results = this.toastService.open({
+      value: [{ severity: 'info', summary: 'TICKET: 2023-0001', content: 'Se grabo correctamente' }],
+    });
   }
 }

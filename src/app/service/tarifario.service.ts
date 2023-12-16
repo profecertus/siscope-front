@@ -30,6 +30,10 @@ export class TarifarioService {
     return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioFlete/${diaSemana}`);
   }
 
+  obtenerTarifarioFletexDestino(destino:string, diaSemana:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getTarifaFlete/${destino}/${diaSemana}`);
+  }
+
   grabarTarifario(tarifario:TarifarioModel): Observable<any> {
     return this.http.post(`${this.apiUrl}${this.tarifario}/saveTarifa`, tarifario);
   }

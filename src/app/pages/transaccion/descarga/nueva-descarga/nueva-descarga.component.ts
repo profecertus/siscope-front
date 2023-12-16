@@ -1,6 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
 import { FormLayout } from '@devui';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SemanaService } from '../../../../service/semana.service';
 import { EmbarcacionService } from '../../../../service/embarcacion.service';
 import { Embarcacion } from '../../../../model/embarcacion.model';
@@ -10,6 +10,8 @@ import { PlantaService } from '../../../../service/planta.service';
 import { CamaraService } from '../../../../service/camara.service';
 import { RespuestaPlanta } from '../../../../model/planta.modelo';
 import { Camara } from '../../../../model/camara.model';
+import { PescaService } from '../../../../service/pesca.service';
+import { TarifarioService } from '../../../../service/tarifario.service';
 
 @Component({
   selector: 'da-nueva-descarga',
@@ -27,9 +29,14 @@ export class NuevaDescargaComponent  implements OnInit {
   plantas:RespuestaPlanta[]=[];
   camaras:Camara[]=[];
 
+  @Output() canceled = new EventEmitter();
+
+  @Output() submit = new EventEmitter();
+
   formDescarga: FormGroup = this.fb.group({
-    semana:0,
+    semana: new FormControl({ value: 0, disabled: true }),
     fecha:this.today,
+    fechaObj:{},
     embarcacion:{},
     cajaReal:[0, [Validators.pattern('[0-9]*')]],
     cajaGuia:0,
@@ -41,17 +48,18 @@ export class NuevaDescargaComponent  implements OnInit {
     precioVenta:0,
     monedaVenta: {  },
     planta:{},
+    camara:{},
+    tarifaFlete: new FormControl({ value: 0, disabled: true }),
+    toneladasCompra: new FormControl({ value: 0, disabled: true }),
+    toneladasVenta: new FormControl({ value: 0, disabled: true }),
+    totalFlete: new FormControl({ value: 0, disabled: true }),
+    proveedorFlete: new FormControl({ value: '', disabled: true }),
   });
 
 
-  getValue(value: any) {
-    let fecha:Date = new Date(value.selectedDate);
-    this.fechaNumber = fecha.getFullYear() * 10000 + (fecha.getMonth() + 1) * 100 + fecha.getDate();
-    this.getSemana();
-  }
 
-  constructor(private fb: FormBuilder, private semanaService:SemanaService,
-              private embarcacionService:EmbarcacionService, private monedaService:MonedaService,
+  constructor(private fb: FormBuilder, private semanaService:SemanaService, private pescaService:PescaService,
+              private embarcacionService:EmbarcacionService, private monedaService:MonedaService, private tarifarioService: TarifarioService,
               private plantaService:PlantaService, private camaraService:CamaraService) {
   }
 
@@ -72,6 +80,14 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
 
+  getDiaSemana():void{
+    this.semanaService.getDiaSemana(this.fechaNumber).subscribe(value => {
+      this.formDescarga.patchValue({
+        fechaObj:value
+      })
+    });
+  }
+
   getMonedas(){
     this.monedaService.obtenerMonedas().subscribe(value => {
       this.monedas = value;
@@ -82,8 +98,7 @@ export class NuevaDescargaComponent  implements OnInit {
     this.plantaService.obtenerPlantas(0,100).subscribe(value => {
       this.plantas = value.content;
       this.plantas.forEach(valor => {
-        // @ts-ignore
-        valor.nombrePlanta = valor.plantaDto.nombrePlanta + ' (' + valor.plantaDto.codUbigeo.distrito + ')';
+        valor.nombrePlanta = valor.plantaDto?.nombrePlanta + ' (' + valor.plantaDto?.codUbigeo.distrito + ')';
       });
     })
   }
@@ -99,7 +114,62 @@ export class NuevaDescargaComponent  implements OnInit {
       this.camaras = value;
     });
   }
-  grabar(){
-    console.log(this.formDescarga.value);
+
+  getValue(value: any):void {
+    if(value.selectedDate == null) return;
+    let fecha:Date = new Date(value.selectedDate);
+    this.fechaNumber = fecha.getFullYear() * 10000 + (fecha.getMonth() + 1) * 100 + fecha.getDate();
+    this.getSemana();
+    this.getDiaSemana();
   }
+
+  selectCamara():void{
+    this.formDescarga.patchValue({
+      proveedorFlete:this.formDescarga.value.camara.idProveedor.nombreComercial,
+    });
+
+  }
+
+  selectPlanta():void{
+    this.tarifarioService.obtenerTarifarioFletexDestino(this.formDescarga.value.planta.plantaDto.codUbigeo.codUbigeo,
+      this.formDescarga.value.fechaNumero).subscribe(value => {
+      this.formDescarga.patchValue({
+        tarifaFlete: value.monto,
+        totalFlete: (value.monto * this.formDescarga.value.cajaReal)
+      });
+    });
+  }
+
+  modifiedCajaReal(event:number):void{
+    this.formDescarga.patchValue({
+      totalFlete: this.formDescarga.get('tarifaFlete')?.value * event,
+      toneladasCompra: this.formDescarga.value.kgCajaCompra * event / 1000,
+      toneladasVenta: this.formDescarga.value.kgCajaVenta * event / 1000,
+    });
+  }
+  grabar(){
+    this.pescaService.guardarPesca(this.formDescarga.value).subscribe(value => {
+      this.submit.emit();
+    });
+
+    this.submit.emit();
+  }
+
+  salir():void{
+    this.canceled.emit();
+  }
+
+  modifiedkgCompra(valor: number) {
+    this.formDescarga.patchValue({
+      toneladasCompra: this.formDescarga.value.cajaReal * valor / 1000,
+    });
+  }
+
+
+  modifiedkgVenta(valor: number) {
+    this.formDescarga.patchValue({
+      toneladasVenta: this.formDescarga.value.cajaReal * valor / 1000,
+    });
+  }
+
 }

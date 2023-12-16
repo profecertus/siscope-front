@@ -1,4 +1,4 @@
-<section style="margin-left: 20px">
+<section style="margin-left: 20px" >
   <form dForm [layout]="layoutDirection" [formGroup]="formDescarga"  >
     <div class="grid">
       <div class="u-1-4">
@@ -11,7 +11,7 @@
       </div>
       <div class="u-1-4">
         <d-form-item>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Semana.'">Fecha</d-form-label>
+          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha de Descarga.'">Fecha</d-form-label>
           <d-form-control class="form-control-width">
             <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
               <input
@@ -21,6 +21,7 @@
                 name="dp"
                 [(ngModel)]="today"
                 [maxDate]="max"
+                [dateFormat]="'dd/MM/y'"
                 autocomplete="off"
                 dDatepicker
                 #datePicker1="datepicker"
@@ -39,9 +40,9 @@
       </div>
       <div class="u-1-4">
         <d-form-item>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha de Descarga.'">Semana</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Semana de Descarga.'">Semana</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="semana" formControlName='semana' />
+            <input dTextInput name="semana"  formControlName='semana' />
           </d-form-control>
         </d-form-item>
       </div>
@@ -66,7 +67,7 @@
         <d-form-item>
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Real'">Caja Real</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number name="cajaReal" formControlName="cajaReal"/>
+            <d-input-number name="cajaReal" formControlName="cajaReal"  (afterValueChanged)='modifiedCajaReal($event)' />
           </d-form-control>
         </d-form-item>
       </div>
@@ -87,7 +88,7 @@
         <d-form-item>
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Total de Kg/Caja'">Kg/Caja</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number name="kgCajaCompra" formControlName='kgCajaCompra' />
+            <d-input-number name="kgCajaCompra" formControlName='kgCajaCompra' (afterValueChanged)='modifiedkgCompra($event)' />
           </d-form-control>
         </d-form-item>
       </div>
@@ -95,7 +96,7 @@
         <d-form-item>
           <d-form-label  [hasHelp]="true" [helpTips]="'Toneladas'">Toneladas</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="toneladasCompra" disabled />
+            <input dTextInput name="toneladasCompra" formControlName='toneladasCompra' class='text-right' />
           </d-form-control>
         </d-form-item>
       </div>
@@ -123,7 +124,7 @@
         <d-form-item>
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Total de Kg/Caja'">Kg/Caja</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number name="kgCajaVenta" formControlName='kgCajaVenta' />
+            <d-input-number name="kgCajaVenta" formControlName='kgCajaVenta' (afterValueChanged)='modifiedkgVenta($event)' />
           </d-form-control>
         </d-form-item>
       </div>
@@ -131,7 +132,7 @@
         <d-form-item>
           <d-form-label  [hasHelp]="true" [helpTips]="'Toneladas'">Toneladas</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="toneladasVenta" disabled />
+            <input dTextInput name="toneladasVenta" formControlName='toneladasVenta' class='text-right' />
           </d-form-control>
         </d-form-item>
       </div>
@@ -156,7 +157,7 @@
 
           <d-form-label [required]="true">Planta</d-form-label>
           <d-form-control class="form-control-width">
-            <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' ></d-select>
+            <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' (selectionchange)='selectPlanta()' ></d-select>
           </d-form-control>
 
       </div>
@@ -170,31 +171,56 @@
         <d-form-item>
           <d-form-label [required]="true">Cámara</d-form-label>
           <d-form-control class="form-control-width">
-            <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' ></d-select>
+            <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' (selectionchange)='selectCamara()'  ></d-select>
           </d-form-control>
         </d-form-item>
       </div>
       <div class="u-1-4">
         <d-form-item>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Tarifa'">Tarifa</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Tarifa'">Tarifa</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="tarifa"/>
+            <input dTextInput name="tarifa" formControlName='tarifaFlete' class='text-right' />
           </d-form-control>
         </d-form-item>
       </div>
       <div class="u-1-4">
         <d-form-item>
-          <d-form-label [hasHelp]="true" [helpTips]="'Total'">Total</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Total Flete'">Total</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="total" disabled />
+            <input dTextInput name="total" formControlName='totalFlete' class='text-right' />
           </d-form-control>
         </d-form-item>
       </div>
       <div class="u-1-4">
         <d-form-item>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Proveedor'">Proveedor</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Proveedor'">Proveedor</d-form-label>
           <d-form-control class="form-control-width">
-            <input dTextInput name="proveedor" />
+            <input dTextInput name="proveedor" formControlName='proveedorFlete' />
+          </d-form-control>
+        </d-form-item>
+      </div>
+
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Muelle</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="muelle" />
+          </d-form-control>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-label >Moneda</d-form-label>
+        </d-form-item>
+      </div>
+      <div class="u-1-4">
+        <d-form-item>
+          <d-form-control class="form-control-width">
+            <input dTextInput name="monedaMuelle" />
           </d-form-control>
         </d-form-item>
       </div>
@@ -225,30 +251,6 @@
         </d-form-item>
       </div>
 
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Muelle</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="muelle" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Moneda</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="monedaMuelle" />
-          </d-form-control>
-        </d-form-item>
-      </div>
 
       <div class="u-1-4">
         <d-form-item>
@@ -331,7 +333,7 @@
     </div>
     <d-form-operation>
       <d-button bsStyle="primary" class="mr-element-spacing" circled="true" style="margin-right: 4px !important" (click)='grabar()'>Grabar</d-button>
-      <d-button bsStyle="common" circled="true">Cancelar</d-button>
+      <d-button bsStyle="common" circled="true" (click)='salir()'>Cancelar</d-button>
     </d-form-operation>
   </form>
 </section>

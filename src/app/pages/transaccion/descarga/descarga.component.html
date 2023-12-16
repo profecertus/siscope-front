@@ -39,69 +39,88 @@
               [resizeable]='true'
               [tableLayout]="'auto'"
             >
-              <d-column field="idTipodoc" header="Dia" [width]="'80px'">
+              <d-column field="fechaObj" header="Dia" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    {{ cellItem.abreviatura }}
+                    {{ cellItem.nombreDia }}
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="id" header="Fecha" [width]="'100px'">
+              <d-column field="fechaObj" header="Fecha" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.numeroDocumento" class="over-flow-ellipsis" [style.width]="'100px'">
-                      {{ cellItem.numeroDocumento }}
+                    <span [title]="cellItem.idDia" class="over-flow-ellipsis" [style.width]="'80px'">
+                      {{ getFecha(cellItem.idDia) }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="nombres" header="Planta" [width]="'150px'">
+              <d-column field="planta" header="Planta" [width]="'200px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem }}
+                    <span [title]="cellItem.plantaDto.nombrePlanta" class="over-flow-ellipsis" [style.width]="'200px'">
+                      {{ cellItem.plantaDto.nombrePlanta }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="apellidoPat" header="Destino" [width]="'150px'">
+              <d-column field="planta" header="Destino" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem }}
+                    <span [title]="cellItem.plantaDto.codUbigeo.distrito" class="over-flow-ellipsis" [style.width]="'150px'">
+                      {{ cellItem.plantaDto.codUbigeo.distrito }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
-              <d-column field="apellidoMat" header="E/P" [width]="'150px'">
+              <d-column field="embarcacion" header="E/P" [width]="'150px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="idBanco" header="Placa" [width]="'150px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.nombreBanco" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem.nombreBanco }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="idMoneda" header="Muelle" [width]="'70px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.nombre" class="over-flow-ellipsis" [style.width]="'70px'">
+                    <span [title]="cellItem.nombre" class="over-flow-ellipsis" [style.width]="'150px'">
                       {{ cellItem.nombre }}
                     </span>
                   </ng-template>
                 </d-cell>
               </d-column>
+              <d-column field="camara" header="Placa" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem.placa" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem.placa }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="camara" header="Dueño" [width]="'150px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem.idProveedor.razonSocial" class="over-flow-ellipsis" [style.width]="'150px'">
+                      {{ cellItem.idProveedor.nombreComercial }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
 
-              <d-column field="estado" header="Estado" [width]="'80px'">
+              <d-column field="cajaReal" header="Num. Cajas" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+              <d-column field="kgCajaCompra" header="Kg\nCaja" [width]="'100px'">
+                <d-cell>
+                  <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                      {{ cellItem }}
+                    </span>
+                  </ng-template>
+                </d-cell>
+              </d-column>
+
+              <!--d-column field="estado" header="Estado" [width]="'80px'">
                 <d-cell>
                   <ng-template let-cellItem="cellItem">
                     <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'">
@@ -123,7 +142,7 @@
                     </d-icon>
                   </ng-template>
                 </d-cell>
-              </d-column>
+              </d-column-->
             </d-data-table>
           </div>
           <div class="da-list-footer">
@@ -148,7 +167,7 @@
 </div>
 
 <ng-template #EditorTemplate>
-  <da-nueva-descarga>
+  <da-nueva-descarga (canceled)="onCanceled()" (submit)="onSubmit()">
   </da-nueva-descarga>
 </ng-template>
 
@@ -156,3 +175,5 @@
   <da-admin-form [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()">
   </da-admin-form>
 </ng-template>
+
+<d-toast></d-toast>

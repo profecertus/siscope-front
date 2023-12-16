@@ -35,4 +35,9 @@ export class SemanaService {
   semanaxFecha(dia:number):Observable<any>{
     return this.http.get(`${this.apiUrlTarifario}${this.semana}/semanaPorFecha/${dia}`)
   }
+
+  getDiaSemana(dia:number):Observable<any>{
+    return  this.http.get(`${this.apiUrlTarifario}${this.semana}/getDiaSemana/${dia}`)
+  }
+
 }
