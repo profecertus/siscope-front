@@ -41,6 +41,7 @@ export class NuevaDescargaComponent  implements OnInit {
     embarcacion:{},
     cajaReal:[0, [Validators.pattern('[0-9]*')]],
     cajaGuia:0,
+    monedaHielo:{},
     fechaNumero:0,
     kgCajaCompra:0,
     precioCompra:0,
@@ -66,6 +67,13 @@ export class NuevaDescargaComponent  implements OnInit {
   });
   destinos: any[] = [];
   muelles:any[]=[];
+
+  l_muelle:string = 'Precio';
+  l_habilitacion:string = 'Habilitación';
+  l_atraque:string = 'Atraque';
+  l_certificado:string = 'Certificado';
+  l_hielo:string = 'Hielo';
+  l_renta:string = 'Renta (S/)';
 
   constructor(private fb: FormBuilder, private semanaService:SemanaService, private pescaService:PescaService,
               private proveedorService:ProveedorService,
@@ -185,24 +193,28 @@ export class NuevaDescargaComponent  implements OnInit {
 
   selectMuelle(muelle:any):void{
     this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, muelle.idTipoServicio, this.fechaNumber).subscribe(value => {
+      this.l_muelle = 'Precio (' + value.abreviatura.trim() + ')';
       this.formDescarga.patchValue({
         precioMuelle:value.precio,
       });
     });
 
     this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, 14, this.fechaNumber).subscribe(value => {
+      this.l_habilitacion = 'Habilitación (' + value.abreviatura.trim() + ')';
       this.formDescarga.patchValue({
         precioHabilitacion:value.precio,
       });
     });
 
     this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, 15, this.fechaNumber).subscribe(value => {
+      this.l_atraque = 'Atraque (' + value.abreviatura.trim() + ')';
       this.formDescarga.patchValue({
         precioAtraque:value.precio,
       });
     });
 
     this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, 16, this.fechaNumber).subscribe(value => {
+      this.l_certificado = 'Certificado (' + value.abreviatura.trim() + ')';
       this.formDescarga.patchValue({
         precioCertificado:value.precio,
       });

@@ -68,7 +68,7 @@
       </div>
 
       <div class="u-1-4 box">
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Guía'">Caja Guía</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Caja Guía'">Caja Guía</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number d name="cajaGuia" formControlName="cajaGuia"/>
           </d-form-control>
@@ -86,7 +86,7 @@
       </div>
       <div class="u-1-4 box">
 
-          <d-form-label  [hasHelp]="true" [helpTips]="'Toneladas'">Toneladas</d-form-label>
+          <d-form-label  [hasHelp]="true" [helpTips]="'# Cajas x Kg/Caja Compra'">Toneladas Compra</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="toneladasCompra" formControlName='toneladasCompra' class='text-right' />
           </d-form-control>
@@ -94,7 +94,7 @@
       </div>
       <div class="u-1-4 box">
 
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
+          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio x Caja'">Precio</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number name="precioCompra" formControlName='precioCompra' />
           </d-form-control>
@@ -118,14 +118,14 @@
       </div>
       <div class="u-1-4 box">
 
-          <d-form-label  [hasHelp]="true" [helpTips]="'Toneladas'">Toneladas</d-form-label>
+          <d-form-label  [hasHelp]="true" [helpTips]="'# Cajas x Kg/Caja Venta'">Toneladas Venta</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="toneladasVenta" formControlName='toneladasVenta' class='text-right' />
           </d-form-control>
 
       </div>
       <div class="u-1-4 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio x Caja'">Precio</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioVenta" formControlName='precioVenta' />
         </d-form-control>
@@ -143,25 +143,25 @@
 
       <div class='u-1 box-title'><strong>FLETE</strong></div>
       <div class="u-1-4 box">
-        <d-form-label [required]="true">Cámara</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Placa de la Cámara'">Cámara</d-form-label>
         <d-form-control class="form-control-width">
           <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara'></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
-          <d-form-label [hasHelp]="true" [helpTips]="'Tarifa'">Tarifa</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Debe estar seleccionado la Planta'">Tarifa Flete</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="tarifa" formControlName='tarifaFlete' class='text-right' />
           </d-form-control>
       </div>
       <div class="u-1-4 box">
-          <d-form-label [hasHelp]="true" [helpTips]="'Total Flete'">Total</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'# Cajas x Tarifa'">Total Flete</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="total" formControlName='totalFlete' class='text-right' />
           </d-form-control>
       </div>
       <div class="u-1-4 box">
-          <d-form-label [hasHelp]="true" [helpTips]="'Proveedor'">Proveedor</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Dueño de la Cámara'">Proveedor</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="proveedor" formControlName='proveedorFlete' />
           </d-form-control>
@@ -174,42 +174,47 @@
         </d-form-control>
       </div>
       <div class="u-1-4 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio del Tarifario x Eje'">{{ l_muelle }}</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioMuelle" formControlName='precioMuelle' />
         </d-form-control>
       </div>
-      <div class="u-1-4 box"></div>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Renta'">{{  l_renta }}</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioRenta" formControlName='precioRenta' />
+        </d-form-control>
+      </div>
 
       <div class='u-1 box-title'><strong>GASTOS VINCULADOS</strong></div>
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Habilitación</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio Habilitación'">{{ l_habilitacion }}</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioHabilitacion" formControlName='precioHabilitacion' />
         </d-form-control>
       </div>
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Atraque</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio Atraque'">{{  l_atraque }}</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioAtraque" formControlName='precioAtraque' />
         </d-form-control>
       </div>
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Certificado</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio Certificado'">{{  l_certificado }}</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioCertificado" formControlName='precioCertificado' />
         </d-form-control>
       </div>
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Hielo'">Hielo</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Hielo Precio'">{{  l_hielo }}</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioHielo" formControlName='precioHielo' />
         </d-form-control>
       </div>
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Renta'">Renta</d-form-label>
+        <d-form-label [required]="true">Moneda Hielo</d-form-label>
         <d-form-control class="form-control-width">
-          <d-input-number name="precioRenta" formControlName='precioRenta' />
+          <d-select [options]="monedas" name="monedaHielo" [filterKey]="'nombre'" formControlName='monedaHielo' ></d-select>
         </d-form-control>
       </div>
     </div>
