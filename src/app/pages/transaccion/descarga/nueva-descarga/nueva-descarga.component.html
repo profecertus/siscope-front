@@ -49,7 +49,7 @@
       <div class="u-1-2 box">
         <d-form-label [required]="true">Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' (selectionchange)='selectPlanta()' ></d-select>
+          <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' (selectstart)='selectPlanta()' ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
@@ -145,7 +145,7 @@
       <div class="u-1-4 box">
         <d-form-label [required]="true">Cámara</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' (selectionchange)='selectCamara()'  ></d-select>
+          <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' (selectstart)='selectCamara()'  ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
@@ -170,7 +170,7 @@
       <div class="u-1-2 box-title">
         <d-form-label [required]="true">Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="muelles" name="muelle" [filterKey]="'razonSocial'" formControlName='muelle' (selectionchange)='selectMuelle()'  ></d-select>
+          <d-select [options]="muelles" name="muelle" [filterKey]="'razonSocial'" formControlName='muelle' (selectstart)='selectMuelle()'  ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">

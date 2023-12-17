@@ -148,6 +148,8 @@ export class NuevaDescargaComponent  implements OnInit {
   }
 
   selectPlanta():void{
+    console.log("ENTRO");
+    console.log(this.formDescarga.value.planta);
     this.destinos = this.formDescarga.value.planta.relPlantaDestinoDto;
     this.tarifarioService.obtenerTarifarioFletexDestino(this.formDescarga.value.planta.plantaDto.codUbigeo.codUbigeo,
       this.formDescarga.value.fechaNumero).subscribe(value => {
