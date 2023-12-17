@@ -80,6 +80,30 @@ export class NuevaDescargaComponent  implements OnInit {
     this.getPlantas();
     this.getCamaras();
     this.getMuelles();
+
+    this.formDescarga.get("planta")?.valueChanges.subscribe((nuevoValor) =>{
+      this.selectPlanta(nuevoValor)
+    });
+
+    this.formDescarga.get("cajaReal")?.valueChanges.subscribe((nuevoValor:number) =>{
+      this.modifiedCajaReal(nuevoValor);
+    });
+
+    this.formDescarga.get("kgCajaCompra")?.valueChanges.subscribe((nuevoValor:number):void =>{
+      this.modifiedkgCompra(nuevoValor);
+    });
+
+    this.formDescarga.get("kgCajaVenta")?.valueChanges.subscribe((nuevoValor:number):void =>{
+      this.modifiedkgVenta(nuevoValor);
+    });
+
+    this.formDescarga.get("camara")?.valueChanges.subscribe((nuevoValor:number):void =>{
+      this.selectCamara(nuevoValor);
+    });
+
+    this.formDescarga.get("muelle")?.valueChanges.subscribe((nuevoValor:number):void =>{
+      this.selectMuelle(nuevoValor);
+    });
   }
 
   getMuelles():void{
@@ -126,6 +150,18 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
 
+  selectPlanta(planta:any):void{
+    this.destinos = planta.relPlantaDestinoDto;
+    this.tarifarioService.obtenerTarifarioFletexDestino(planta.plantaDto.codUbigeo.codUbigeo,
+      this.formDescarga.value.fechaNumero).subscribe(value => {
+      console.log(value);
+      this.formDescarga.patchValue({
+        tarifaFlete: value.monto,
+        totalFlete: (value.monto * this.formDescarga.value.cajaReal)
+      });
+    });
+  }
+
   getCamaras(){
     this.camaraService.getAllCamara().subscribe(value => {
       this.camaras = value;
@@ -140,28 +176,14 @@ export class NuevaDescargaComponent  implements OnInit {
     this.getDiaSemana();
   }
 
-  selectCamara():void{
+  selectCamara(camara:any):void{
     this.formDescarga.patchValue({
-      proveedorFlete:this.formDescarga.value.camara.idProveedor.nombreComercial,
+      proveedorFlete:camara.idProveedor.nombreComercial,
     });
 
   }
 
-  selectPlanta():void{
-    console.log("ENTRO");
-    console.log(this.formDescarga.value.planta);
-    this.destinos = this.formDescarga.value.planta.relPlantaDestinoDto;
-    this.tarifarioService.obtenerTarifarioFletexDestino(this.formDescarga.value.planta.plantaDto.codUbigeo.codUbigeo,
-      this.formDescarga.value.fechaNumero).subscribe(value => {
-      this.formDescarga.patchValue({
-        tarifaFlete: value.monto,
-        totalFlete: (value.monto * this.formDescarga.value.cajaReal)
-      });
-    });
-  }
-
-  selectMuelle():void{
-    let muelle:any = this.formDescarga.value.muelle;
+  selectMuelle(muelle:any):void{
     this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, muelle.idTipoServicio, this.fechaNumber).subscribe(value => {
       this.formDescarga.patchValue({
         precioMuelle:value.precio,
@@ -192,11 +214,11 @@ export class NuevaDescargaComponent  implements OnInit {
   }
 
 
-  modifiedCajaReal(event:number):void{
+  modifiedCajaReal(valor:number):void{
     this.formDescarga.patchValue({
-      totalFlete: this.formDescarga.get('tarifaFlete')?.value * event,
-      toneladasCompra: this.formDescarga.value.kgCajaCompra * event / 1000,
-      toneladasVenta: this.formDescarga.value.kgCajaVenta * event / 1000,
+      totalFlete: this.formDescarga.get('tarifaFlete')?.value * valor,
+      toneladasCompra: this.formDescarga.value.kgCajaCompra * valor / 1000,
+      toneladasVenta: this.formDescarga.value.kgCajaVenta * valor / 1000,
     });
   }
   grabar(){

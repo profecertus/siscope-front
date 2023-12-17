@@ -49,7 +49,7 @@
       <div class="u-1-2 box">
         <d-form-label [required]="true">Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' (selectstart)='selectPlanta()' ></d-select>
+          <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
@@ -63,7 +63,7 @@
       <div class="u-1-4 box">
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Real'">Caja Real</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number name="cajaReal" formControlName="cajaReal"  (afterValueChanged)='modifiedCajaReal($event)' />
+            <d-input-number name="cajaReal" formControlName="cajaReal" />
           </d-form-control>
       </div>
 
@@ -80,7 +80,7 @@
 
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Total de Kg/Caja'">Kg/Caja</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number name="kgCajaCompra" formControlName='kgCajaCompra' (afterValueChanged)='modifiedkgCompra($event)' />
+            <d-input-number name="kgCajaCompra" formControlName='kgCajaCompra' />
           </d-form-control>
 
       </div>
@@ -112,7 +112,7 @@
 
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Total de Kg/Caja'">Kg/Caja</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number name="kgCajaVenta" formControlName='kgCajaVenta' (afterValueChanged)='modifiedkgVenta($event)' />
+            <d-input-number name="kgCajaVenta" formControlName='kgCajaVenta'/>
           </d-form-control>
 
       </div>
@@ -145,7 +145,7 @@
       <div class="u-1-4 box">
         <d-form-label [required]="true">Cámara</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' (selectstart)='selectCamara()'  ></d-select>
+          <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara'></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
@@ -170,7 +170,7 @@
       <div class="u-1-2 box-title">
         <d-form-label [required]="true">Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="muelles" name="muelle" [filterKey]="'razonSocial'" formControlName='muelle' (selectstart)='selectMuelle()'  ></d-select>
+          <d-select [options]="muelles" name="muelle" [filterKey]="'razonSocial'" formControlName='muelle'></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
