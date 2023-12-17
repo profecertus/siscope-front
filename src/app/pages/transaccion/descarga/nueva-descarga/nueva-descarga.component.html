@@ -1,16 +1,8 @@
 <section style="margin-left: 20px" >
   <form dForm [layout]="layoutDirection" [formGroup]="formDescarga"  >
     <div class="grid">
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label [hasHelp]="true" [helpTips]="'Nro. Ticket'">Ticket</d-form-label>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="ticket" disabled/>
-          </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
+
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha de Descarga.'">Fecha</d-form-label>
           <d-form-control class="form-control-width">
             <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
@@ -36,304 +28,190 @@
               </div>
             </div>
           </d-form-control>
-        </d-form-item>
+
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
           <d-form-label [hasHelp]="true" [helpTips]="'Semana de Descarga.'">Semana</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="semana"  formControlName='semana' />
           </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
       </div>
 
 
-      <div class="u-1-2">
-
+      <div class="u-1-2 box">
           <d-form-label [required]="true">Embarcación</d-form-label>
           <d-form-control class="form-control-width">
             <d-select [options]="embarcaciones" name="embarcacion" [filterKey]="'nombre'" formControlName='embarcacion' ></d-select>
           </d-form-control>
-
-      </div>
-      <div class="u-1-4"></div>
-      <div class="u-1-4">
-
       </div>
 
-      <div class="u-1-4">
-        <d-form-item>
+
+      <div class="u-1-2 box">
+        <d-form-label [required]="true">Planta</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' (selectionchange)='selectPlanta()' ></d-select>
+        </d-form-control>
+      </div>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true">Destino</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select [options]="destinos" name="destino" [filterKey]="'nombre'" formControlName='destino' ></d-select>
+        </d-form-control>
+      </div>
+      <div class="u-1-4 box"></div>
+
+      <div class="u-1-4 box">
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Real'">Caja Real</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number name="cajaReal" formControlName="cajaReal"  (afterValueChanged)='modifiedCajaReal($event)' />
           </d-form-control>
-        </d-form-item>
       </div>
 
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Guía'">Caja Guía</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number d name="cajaGuia" formControlName="cajaGuia"/>
           </d-form-control>
-        </d-form-item>
       </div>
-      <div class="u-1-4"></div>
-      <div class="u-1-4"></div>
+      <div class="u-1-2 box"></div>
 
-      <div class='u-1'><strong>COMPRA</strong></div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class='u-1 box-title'><strong>COMPRA</strong></div>
+      <div class="u-1-4 box">
+
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Total de Kg/Caja'">Kg/Caja</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number name="kgCajaCompra" formControlName='kgCajaCompra' (afterValueChanged)='modifiedkgCompra($event)' />
           </d-form-control>
-        </d-form-item>
+
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
+
           <d-form-label  [hasHelp]="true" [helpTips]="'Toneladas'">Toneladas</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="toneladasCompra" formControlName='toneladasCompra' class='text-right' />
           </d-form-control>
-        </d-form-item>
+
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
+
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number name="precioCompra" formControlName='precioCompra' />
           </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-
-        <d-form-item>
-          <d-form-label [required]="true">Moneda</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-select [options]="monedas" name="monedaCompra" [filterKey]="'nombre'" formControlName='monedaCompra' ></d-select>
-          </d-form-control>
-        </d-form-item>
 
       </div>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true">Moneda</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select [options]="monedas" name="monedaCompra" [filterKey]="'nombre'" formControlName='monedaCompra' ></d-select>
+        </d-form-control>
+      </div>
 
-      <div class='u-1'><strong>VENTA</strong></div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class='u-1 box-title'><strong>VENTA</strong></div>
+      <div class="u-1-4 box">
+
           <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Total de Kg/Caja'">Kg/Caja</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number name="kgCajaVenta" formControlName='kgCajaVenta' (afterValueChanged)='modifiedkgVenta($event)' />
           </d-form-control>
-        </d-form-item>
+
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
+
           <d-form-label  [hasHelp]="true" [helpTips]="'Toneladas'">Toneladas</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="toneladasVenta" formControlName='toneladasVenta' class='text-right' />
           </d-form-control>
-        </d-form-item>
+
       </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-input-number name="precioVenta" formControlName='precioVenta' />
-          </d-form-control>
-        </d-form-item>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioVenta" formControlName='precioVenta' />
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
+
           <d-form-label [required]="true">Moneda</d-form-label>
           <d-form-control class="form-control-width">
             <d-select [options]="monedas" name="monedaVenta" [filterKey]="'nombre'" formControlName='monedaVenta' ></d-select>
           </d-form-control>
-        </d-form-item>
-      </div>
-
-      <div class="u-1-2">
-
-          <d-form-label [required]="true">Planta</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' (selectionchange)='selectPlanta()' ></d-select>
-          </d-form-control>
 
       </div>
-      <div class="u-1-4"></div>
-      <div class="u-1-4">
-      </div>
 
 
-      <div class='u-1'><strong>FLETE</strong></div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label [required]="true">Cámara</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' (selectionchange)='selectCamara()'  ></d-select>
-          </d-form-control>
-        </d-form-item>
+
+      <div class='u-1 box-title'><strong>FLETE</strong></div>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true">Cámara</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara' (selectionchange)='selectCamara()'  ></d-select>
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
           <d-form-label [hasHelp]="true" [helpTips]="'Tarifa'">Tarifa</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="tarifa" formControlName='tarifaFlete' class='text-right' />
           </d-form-control>
-        </d-form-item>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
           <d-form-label [hasHelp]="true" [helpTips]="'Total Flete'">Total</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="total" formControlName='totalFlete' class='text-right' />
           </d-form-control>
-        </d-form-item>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
+      <div class="u-1-4 box">
           <d-form-label [hasHelp]="true" [helpTips]="'Proveedor'">Proveedor</d-form-label>
           <d-form-control class="form-control-width">
             <input dTextInput name="proveedor" formControlName='proveedorFlete' />
           </d-form-control>
-        </d-form-item>
       </div>
 
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Muelle</d-form-label>
-        </d-form-item>
+      <div class="u-1-2 box-title">
+        <d-form-label [required]="true">Muelle</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select [options]="muelles" name="muelle" [filterKey]="'nombre'" formControlName='muelle' (selectionchange)='selectMuelle()'  ></d-select>
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="muelle" />
-          </d-form-control>
-        </d-form-item>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Precio</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioMuelle" formControlName='precioMuelle' />
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Moneda</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="monedaMuelle" />
-          </d-form-control>
-        </d-form-item>
-      </div>
+      <div class="u-1-4 box"></div>
 
-      <div class='u-1'><strong>GASTOS VINCULADOS</strong></div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Habilitación</d-form-label>
-        </d-form-item>
+      <div class='u-1 box-title'><strong>GASTOS VINCULADOS</strong></div>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Habilitación</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioHabilitacion" formControlName='precioHabilitacion' />
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="habilitación" />
-          </d-form-control>
-        </d-form-item>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Atraque</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioAtraque" formControlName='precioAtraque' />
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Moneda</d-form-label>
-        </d-form-item>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Hielo</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioHielo" formControlName='precioHielo' />
+        </d-form-control>
       </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="monedaHabilitación" />
-          </d-form-control>
-        </d-form-item>
+      <div class="u-1-4 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Certificado</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioCertificado" formControlName='precioCertificado' />
+        </d-form-control>
       </div>
-
-
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Atraque</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="atraque" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Moneda</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="monedaAtraque" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-
-
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Hielo</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="hielo" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Moneda</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="monedaHielo" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-
-
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Renta</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="renta" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-label >Moneda</d-form-label>
-        </d-form-item>
-      </div>
-      <div class="u-1-4">
-        <d-form-item>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="monedaRenta" />
-          </d-form-control>
-        </d-form-item>
-      </div>
-
-
     </div>
+
     <d-form-operation>
-      <d-button bsStyle="primary" class="mr-element-spacing" circled="true" style="margin-right: 4px !important" (click)='grabar()'>Grabar</d-button>
-      <d-button bsStyle="common" circled="true" (click)='salir()'>Cancelar</d-button>
+        <d-button bsStyle="primary" class='button-form'  circled="true"  (click)='grabar()'>Grabar</d-button>
+        <d-button bsStyle="common" class='button-form-cancel' circled="true" (click)='salir()'>Cancelar</d-button>
     </d-form-operation>
   </form>
 </section>
+

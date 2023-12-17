@@ -15,3 +15,33 @@
 .text-right {
   text-align: right;
 }
+
+.box {
+  //border: 5px solid darkblue;
+  height: 5em;
+  padding: 2%;
+}
+
+.box-title {
+  //border: 5px solid darkblue;
+  height: 1em;
+  padding: 2%;
+}
+
+.box-button {
+  border: 5px solid darkblue;
+
+}
+
+.button-form{
+  bottom: 1em;
+  right: 14em;
+  position: fixed;
+}
+
+.button-form-cancel{
+  bottom: 1em;
+  right: 3em;
+  position: fixed;
+}
+

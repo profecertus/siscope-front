@@ -12,6 +12,7 @@ import { RespuestaPlanta } from '../../../../model/planta.modelo';
 import { Camara } from '../../../../model/camara.model';
 import { PescaService } from '../../../../service/pesca.service';
 import { TarifarioService } from '../../../../service/tarifario.service';
+import { ProveedorService } from '../../../../service/proveedor.service';
 
 @Component({
   selector: 'da-nueva-descarga',
@@ -46,6 +47,13 @@ export class NuevaDescargaComponent  implements OnInit {
     monedaCompra: { },
     kgCajaVenta:0,
     precioVenta:0,
+    destino:{},
+    muelle:{},
+    precioMuelle:0,
+    precioHabilitacion:0,
+    precioAtraque:0,
+    precioHielo:0,
+    precioCertificado:0,
     monedaVenta: {  },
     planta:{},
     camara:{},
@@ -55,10 +63,11 @@ export class NuevaDescargaComponent  implements OnInit {
     totalFlete: new FormControl({ value: 0, disabled: true }),
     proveedorFlete: new FormControl({ value: '', disabled: true }),
   });
-
-
+  destinos: any[] = [];
+  muelles:any[]=[];
 
   constructor(private fb: FormBuilder, private semanaService:SemanaService, private pescaService:PescaService,
+              private proveedorService:ProveedorService,
               private embarcacionService:EmbarcacionService, private monedaService:MonedaService, private tarifarioService: TarifarioService,
               private plantaService:PlantaService, private camaraService:CamaraService) {
   }
@@ -69,6 +78,13 @@ export class NuevaDescargaComponent  implements OnInit {
     this.getMonedas();
     this.getPlantas();
     this.getCamaras();
+    this.getMuelles();
+  }
+
+  getMuelles():void{
+    this.proveedorService.obtenerProveedorxTipo(13).subscribe(value => {
+      this.muelles = value;
+    });
   }
 
   getSemana(){
@@ -131,6 +147,7 @@ export class NuevaDescargaComponent  implements OnInit {
   }
 
   selectPlanta():void{
+    this.destinos = this.formDescarga.value.planta.relPlantaDestinoDto;
     this.tarifarioService.obtenerTarifarioFletexDestino(this.formDescarga.value.planta.plantaDto.codUbigeo.codUbigeo,
       this.formDescarga.value.fechaNumero).subscribe(value => {
       this.formDescarga.patchValue({
@@ -139,6 +156,11 @@ export class NuevaDescargaComponent  implements OnInit {
       });
     });
   }
+
+  selectMuelle():void{
+
+  }
+
 
   modifiedCajaReal(event:number):void{
     this.formDescarga.patchValue({

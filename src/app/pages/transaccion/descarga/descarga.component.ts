@@ -124,7 +124,7 @@ export class DescargaComponent {
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '800px',
-      maxHeight: '1000px',
+      maxHeight: '670px',
       title: 'Nueva Descarga de Pesca',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
