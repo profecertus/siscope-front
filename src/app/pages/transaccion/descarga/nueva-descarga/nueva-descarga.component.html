@@ -170,7 +170,7 @@
       <div class="u-1-2 box-title">
         <d-form-label [required]="true">Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="muelles" name="muelle" [filterKey]="'nombre'" formControlName='muelle' (selectionchange)='selectMuelle()'  ></d-select>
+          <d-select [options]="muelles" name="muelle" [filterKey]="'razonSocial'" formControlName='muelle' (selectionchange)='selectMuelle()'  ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-4 box">
@@ -182,28 +182,34 @@
       <div class="u-1-4 box"></div>
 
       <div class='u-1 box-title'><strong>GASTOS VINCULADOS</strong></div>
-      <div class="u-1-4 box">
+      <div class="u-1-5 box">
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Habilitación</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioHabilitacion" formControlName='precioHabilitacion' />
         </d-form-control>
       </div>
-      <div class="u-1-4 box">
+      <div class="u-1-5 box">
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Atraque</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioAtraque" formControlName='precioAtraque' />
         </d-form-control>
       </div>
-      <div class="u-1-4 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Hielo</d-form-label>
+      <div class="u-1-5 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Certificado</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-input-number name="precioCertificado" formControlName='precioCertificado' />
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Hielo'">Hielo</d-form-label>
         <d-form-control class="form-control-width">
           <d-input-number name="precioHielo" formControlName='precioHielo' />
         </d-form-control>
       </div>
-      <div class="u-1-4 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio'">Certificado</d-form-label>
+      <div class="u-1-5 box">
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Renta'">Renta</d-form-label>
         <d-form-control class="form-control-width">
-          <d-input-number name="precioCertificado" formControlName='precioCertificado' />
+          <d-input-number name="precioRenta" formControlName='precioRenta' />
         </d-form-control>
       </div>
     </div>

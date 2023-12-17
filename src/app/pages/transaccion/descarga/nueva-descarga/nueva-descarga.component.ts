@@ -55,6 +55,7 @@ export class NuevaDescargaComponent  implements OnInit {
     precioHielo:0,
     precioCertificado:0,
     monedaVenta: {  },
+    precioRenta:0,
     planta:{},
     camara:{},
     tarifaFlete: new FormControl({ value: 0, disabled: true }),
@@ -158,7 +159,34 @@ export class NuevaDescargaComponent  implements OnInit {
   }
 
   selectMuelle():void{
+    let muelle:any = this.formDescarga.value.muelle;
+    this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, muelle.idTipoServicio, this.fechaNumber).subscribe(value => {
+      this.formDescarga.patchValue({
+        precioMuelle:value.precio,
+      });
+    });
 
+    this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, 14, this.fechaNumber).subscribe(value => {
+      this.formDescarga.patchValue({
+        precioHabilitacion:value.precio,
+      });
+    });
+
+    this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, 15, this.fechaNumber).subscribe(value => {
+      this.formDescarga.patchValue({
+        precioAtraque:value.precio,
+      });
+    });
+
+    this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, 16, this.fechaNumber).subscribe(value => {
+      this.formDescarga.patchValue({
+        precioCertificado:value.precio,
+      });
+    });
+
+    this.formDescarga.patchValue({
+      precioRenta:this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.015,
+    });
   }
 
 
