@@ -19,4 +19,8 @@ export class PescaService {
   guardarPesca(pesca:any):Observable<any>{
     return  this.http.post(`${this.apiUrlPesca}${this.pesca}/saveDescarga`, pesca);
   }
+
+  getCorrelativo(anio:number):Observable<any>{
+    return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getCorrelativo/${anio}`);
+  }
 }

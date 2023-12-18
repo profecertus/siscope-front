@@ -66,6 +66,7 @@ export class DescargaComponent {
   getList() {
     return this.busy = this.pescaService.obtenerPesca().
     pipe().subscribe((elemento) => {
+      elemento.reverse();
       this.basicDataSource = elemento;
       this.basicDataSourceBkp = elemento;
       this.pager.total = elemento.totalElements;
@@ -102,9 +103,9 @@ export class DescargaComponent {
     this.formData = row;
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
-      width: '400px',
-      maxHeight: '600px',
-      title: 'Trabajadores - Edición',
+      width: '800px',
+      maxHeight: '670px',
+      title: 'Edicion Descarga de Pesca',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -137,7 +138,7 @@ export class DescargaComponent {
   deleteRow(e: Trabajador, index: number) {
     e.estadoReg = false;
     Swal.fire({
-      title: '¿Seguro de eliminar al Tabajador?',
+      title: '¿Seguro de eliminar la Descarga de Pesca?',
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
@@ -147,10 +148,10 @@ export class DescargaComponent {
           //e.plantaDto.idPlanta = value;
         }).then(() => {
           this.basicDataSource.splice(index, 1);
-          Swal.fire('Exito', 'Trabajador Eliminado!', 'success').then(()=>{});
+          Swal.fire('Exito', 'Descarga de Pesca Eliminado!', 'success').then(()=>{});
         }).catch( error =>{
           console.error(error);
-          Swal.fire('Error', "Hubo Problemas al Eliminar el Trabajador, intentelo más tarde", 'error').then(()=>{});
+          Swal.fire('Error', "Hubo Problemas al Eliminar la Descarga de Pesca, intentelo más tarde", 'error').then(()=>{});
         }).finally(()=>{
           this.editForm!.modalInstance.hide();
         });
@@ -186,29 +187,6 @@ export class DescargaComponent {
     this.getList();
   }
 
-  onSubmitted(e: Trabajador) {
-    let mensaje:string="Se actualizo correctamente al Trabajador";
-    Swal.showLoading( );
-    if (this.accion == 1){
-      mensaje = "Se grabó correctamente al Trabajador";
-    }
-    e.id.idTipodoc = e.idTipodoc.id;
-    this.trabajadorService.guardarTrabajador(e).forEach(() => {
-      //Sin accion
-    }).then(() => {
-      if(this.accion == 0)
-        this.basicDataSource.splice(this.editRowIndex, 1, e);
-      else
-        this.basicDataSource.push(e);
-      this.basicDataSourceBkp = this.basicDataSource;
-      //Ahora debo de actualizar la relación proveedor con servicio.
-      Swal.fire('Exito', mensaje, 'success').then(()=>{});
-      this.editForm!.modalInstance.hide();
-    }).catch( error =>{
-      console.error(error);
-      Swal.fire('Error', "Hubo Problemas al grabar al Trabajador.", 'error').then(()  =>{});
-    });
-  }
 
   getFecha(idDia: number):string {
     const fechaString: string = idDia.toString();
@@ -219,15 +197,21 @@ export class DescargaComponent {
     return fechaFormateada;
   }
 
-  onCanceled() {
+  onCanceled():void {
     this.editForm!.modalInstance.hide();
     this.editRowIndex = -1;
   }
 
-  onSubmit() {
+  onSubmit(resultado:string):void {
+    Swal.fire(`TICKET ${resultado}`, "Se grabo correctamente la descarga de Pesca", "success");
     this.editForm!.modalInstance.hide();
     const results = this.toastService.open({
-      value: [{ severity: 'info', summary: 'TICKET: 2023-0001', content: 'Se grabo correctamente' }],
+      value: [{ severity: 'success', summary: `TICKET: ${resultado}`, content: 'Se grabo correctamente' }],
     });
+    this.refresh();
+  }
+
+  detalle(rowItem: any, rowIndex: any) {
+
   }
 }

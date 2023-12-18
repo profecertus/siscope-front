@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormLayout } from '@devui';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SemanaService } from '../../../../service/semana.service';
@@ -13,6 +13,7 @@ import { Camara } from '../../../../model/camara.model';
 import { PescaService } from '../../../../service/pesca.service';
 import { TarifarioService } from '../../../../service/tarifario.service';
 import { ProveedorService } from '../../../../service/proveedor.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'da-nueva-descarga',
@@ -30,17 +31,25 @@ export class NuevaDescargaComponent  implements OnInit {
   plantas:RespuestaPlanta[]=[];
   camaras:Camara[]=[];
 
+
+
+  @Input() set formData(val: any) {
+    this.formDescarga = this.fb.group(val);
+  }
+
   @Output() canceled = new EventEmitter();
 
   @Output() submit = new EventEmitter();
 
   formDescarga: FormGroup = this.fb.group({
+    _id:{},
     semana: new FormControl({ value: 0, disabled: true }),
     fecha:this.today,
     fechaObj:{},
     embarcacion:{},
     cajaReal:[0, [Validators.pattern('[0-9]*')]],
     cajaGuia:0,
+    numTicket:'',
     monedaHielo:{},
     fechaNumero:0,
     kgCajaCompra:0,
@@ -59,12 +68,13 @@ export class NuevaDescargaComponent  implements OnInit {
     precioRenta:0,
     planta:{},
     camara:{},
-    tarifaFlete: new FormControl({ value: 0, disabled: true }),
+    tarifaFlete: new FormControl({ value: 0, disabled: false }),
     toneladasCompra: new FormControl({ value: 0, disabled: true }),
     toneladasVenta: new FormControl({ value: 0, disabled: true }),
     totalFlete: new FormControl({ value: 0, disabled: true }),
     proveedorFlete: new FormControl({ value: '', disabled: true }),
   });
+
   destinos: any[] = [];
   muelles:any[]=[];
 
@@ -162,7 +172,6 @@ export class NuevaDescargaComponent  implements OnInit {
     this.destinos = planta.relPlantaDestinoDto;
     this.tarifarioService.obtenerTarifarioFletexDestino(planta.plantaDto.codUbigeo.codUbigeo,
       this.formDescarga.value.fechaNumero).subscribe(value => {
-      console.log(value);
       this.formDescarga.patchValue({
         tarifaFlete: value.monto,
         totalFlete: (value.monto * this.formDescarga.value.cajaReal)
@@ -234,11 +243,22 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
   grabar(){
-    this.pescaService.guardarPesca(this.formDescarga.value).subscribe(value => {
-      this.submit.emit();
-    });
+    this.pescaService.getCorrelativo( Number.parseInt( this.fechaNumber.toString().substring(0,4)) ).subscribe(valor =>{
+      let resultado:string = `${valor.anio}-${valor.corre.toString().padStart(4, '0')}`;
+      this.formDescarga.patchValue({
+        numTicket:resultado,
+      });
 
-    this.submit.emit();
+      this.pescaService.guardarPesca(this.formDescarga.value).forEach(value => {
+        this.submit.emit(resultado);
+      }).catch((rason) =>{
+        if(rason.status == 200 && rason.statusText == "OK"){
+          this.submit.emit(resultado);
+        }else{
+          Swal.fire("Error", "Hubo un error al momento de grabar la descarga", 'error')
+        }
+      });
+    });
   }
 
   salir():void{
