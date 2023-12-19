@@ -227,8 +227,9 @@ export class GastosEmbarcacionComponent implements OnInit {
 
   grabarGastos() {
     this.pescaService.guardarGastos(this.hielos.value).subscribe(valor =>{
-
+      Swal.fire("Exito!!", "Se grabo correctamente los Gastos", "success");
     });
+    Swal.fire("Exito!!", "Se grabo correctamente los Gastos", "success");
   }
 
   onProveedorChange(valor: any, rowIndex: any, rowItem: any) {
@@ -248,7 +249,7 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.hielos.value.datos[rowIndex].cantidad = 0;
     this.hielos.value.datos[rowIndex].total = 0;
     this.hielos.value.datos[rowIndex].idProveedor = new ProveedorxTipo();
-    rowItem['idProveedorEdit'] = !rowItem['idProveedorEdit'];
+    rowItem.value.idProveedorItem = !rowItem.value.idProveedorItem;
   }
 
   onEmbarcacionChange(event: any) {

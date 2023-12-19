@@ -105,20 +105,20 @@
                         dTableCell
                         [editable]="true"
                         [editableTip]="editableTip"
-                        [(editing)]="rowItem['idProveedorEdit']"
+                        [(editing)]="rowItem.value.idProveedorItem"
                         [rowItem]="rowItem"
                         [field]="'idProveedor'"
                         [beforeEditStart]="beforeEditStart"
                         [beforeEditEnd]="beforeEditEnd"
                       >
-                      <span *ngIf="!rowItem['idProveedorEdit']"
+                      <span *ngIf="!rowItem.value.idProveedorItem"
                       ><d-tag
                         [tag]="rowItem.value.idProveedor.razonSocial"
                         [labelStyle]="rowItem.value.idProveedor.razonSocial"
                       ></d-tag
                       ></span>
                         <div
-                          *ngIf="rowItem['idProveedorEdit']"
+                          *ngIf="rowItem.value.idProveedorItem"
                           class="edit-padding-fix"
                         >
                           <d-select
@@ -134,13 +134,13 @@
                         dTableCell
                         [editable]="true"
                         [editableTip]="editableTip"
-                        [(editing)]="rowItem['idProveedorEdit']"
+                        [(editing)]="rowItem.value.idProveedorItem"
                         [rowItem]="rowItem"
                         [field]="'precio'"
                         [beforeEditStart]="beforeEditStart"
                         [beforeEditEnd]="beforeEditEnd"
                       >
-                      <span *ngIf="!rowItem['idProveedorEdit']"
+                      <span *ngIf="!rowItem.value.idProveedorItem"
                       ><d-tag
                         [tag]="rowItem.value.precio"
                         [labelStyle]="rowItem.value.precio"
@@ -148,7 +148,7 @@
                       ></span>
 
                         <div
-                          *ngIf="rowItem['idProveedorEdit']"
+                          *ngIf="rowItem.value.idProveedorItem"
                           class="edit-padding-fix"
                         >
                           {{  rowItem.value.monedaString }}
@@ -163,20 +163,20 @@
                         dTableCell
                         [editable]="true"
                         [editableTip]="editableTip"
-                        [(editing)]="rowItem['idProveedorEdit']"
+                        [(editing)]="rowItem.value.idProveedorItem"
                         [rowItem]="rowItem"
                         [field]="'precio'"
                         [beforeEditStart]="beforeEditStart"
                         [beforeEditEnd]="beforeEditEnd"
                       >
-                      <span *ngIf="!rowItem['idProveedorEdit']"
+                      <span *ngIf="!rowItem.value.idProveedorItem"
                       ><d-tag
                         [tag]="rowItem.value.cantidad"
                         [labelStyle]="rowItem.value.cantidad"
                       ></d-tag
                       ></span>
                         <div
-                          *ngIf="rowItem['idProveedorEdit']"
+                          *ngIf="rowItem.value.idProveedorItem"
                           class="edit-padding-fix"
                         >
                           <d-input-number size="sm"
@@ -199,8 +199,8 @@
                       >
                         <d-icon
                           class="pipeline-watch"
-                          [color]="rowItem['idProveedorEdit'] ? 'var(--devui-warning)' : ''"
-                          [icon]="rowItem['idProveedorEdit'] ? 'icon-star' : 'icon-star-o'"
+                          [color]="rowItem.value.idProveedorItem ? 'var(--devui-warning)' : ''"
+                          [icon]="rowItem.value.idProveedorItem ? 'icon-star' : 'icon-star-o'"
                           [operable]="true"
                         >
                         </d-icon>
