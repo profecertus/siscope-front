@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { DialogService, EditableTip } from '@devui';
+import { EditableTip } from '@devui';
 import { SemanaService } from '../../../service/semana.service';
-import { MonedaService } from '../../../service/moneda.service';
 import { DiaSemana, SemanaModel } from '../../../model/semana.model';
 import { format, parse } from 'date-fns';
 import { EmbarcacionService } from '../../../service/embarcacion.service';
@@ -10,13 +9,16 @@ import { Embarcacion } from '../../../model/embarcacion.model';
 import { GastosModel } from '../../../model/gastos.model';
 import { ProveedorxTipo } from '../../../model/proveedor.model';
 import { ProveedorService } from '../../../service/proveedor.service';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { TarifarioService } from '../../../service/tarifario.service';
+import { PescaService } from '../../../service/pesca.service';
 
 @Component({
   selector: 'app-gastos-embarcacion',
   templateUrl: './gastos-embarcacion.component.html',
   styleUrls: ['./gastos-embarcacion.component.scss']
 })
-export class GastosEmbarcacionComponent implements OnInit{
+export class GastosEmbarcacionComponent implements OnInit {
   diaSemana: DiaSemana = new DiaSemana();
   semanas: SemanaModel[] = [];
   embarcaciones: Embarcacion[] = [];
@@ -24,13 +26,19 @@ export class GastosEmbarcacionComponent implements OnInit{
   semana: SemanaModel = new SemanaModel();
   embarcacion: Embarcacion = new Embarcacion();
   editableTip = EditableTip.btn;
-  proveedorHielo:ProveedorxTipo[] = [];
-  proveedorPetroleo:ProveedorxTipo[] = [];
-  visible:boolean = false;
-  hielo:GastosModel[] = [];
-  petroleo:GastosModel[] = [];
-  viveres:GastosModel[] = [];
-  otros:GastosModel[] = [];
+  proveedorHielo: ProveedorxTipo[] = [];
+  proveedorPetroleo: ProveedorxTipo[] = [];
+  buscado: boolean = false;
+  idEmbarcacion: number = 0;
+  idSemana: number = 0;
+  embarcacionSeleccionada: Embarcacion = new Embarcacion();
+  semanaSeleccionada: SemanaModel = new SemanaModel();
+
+  petroleo: GastosModel[] = [];
+  viveres: GastosModel[] = [];
+  otros: GastosModel[] = [];
+  hielos: FormGroup;
+
 
   ngOnInit(): void {
     this.getSemanaActual();
@@ -40,29 +48,42 @@ export class GastosEmbarcacionComponent implements OnInit{
     this.getAllProveedorPetroleo();
   }
 
-  constructor(private dialogService: DialogService, private semanaService: SemanaService,
-              private proveedorService: ProveedorService, private embarcacionService: EmbarcacionService) {}
+  constructor(private semanaService: SemanaService, private fb: FormBuilder, private tarifarioService: TarifarioService,
+              private proveedorService: ProveedorService, private embarcacionService: EmbarcacionService,
+              private pescaService:PescaService) {
+    this.hielos = this.fb.group({
+      idEmbarcacion: 0,
+      idSemana: 0,
+      idTipoServicio: 3,
+      datos: this.fb.array([]),
+    });
+    //(this.hielos.get('datos')?.value as FormArray).push(this.fb.group({ "nombre":"Edwin" }));
+  }
 
-  getAllProveedorHielo():void{
+  get valores(): FormArray {
+    return (this.hielos.get('datos') as FormArray)
+  }
+
+  getAllProveedorHielo(): void {
     this.proveedorService.obtenerProveedorxTipo(3).subscribe(value => {
       this.proveedorHielo = value;
     })
   }
 
-  getAllProveedorPetroleo():void{
+  getAllProveedorPetroleo(): void {
     this.proveedorService.obtenerProveedorxTipo(2).subscribe(value => {
       this.proveedorPetroleo = value;
     })
   }
 
-  getAllEmbarcaciones():void{
-    this.embarcacionService.obtenerEmbarcaciones(0,100).subscribe(value => {
+  getAllEmbarcaciones(): void {
+    this.embarcacionService.obtenerEmbarcaciones(0, 100).subscribe(value => {
       this.embarcaciones = value.content;
     })
   }
 
-  getAllSemanas():void{
-    this.semanaService.obtenerSemanas(0,52).subscribe(value => {
+  getAllSemanas(): void {
+    this.semanaService.obtenerSemanas(0, 52).subscribe(value => {
       this.semanas = value.content;
       this.semanas.forEach(valor => {
         valor.nombreCompleto = valor.id.toString() + " (" + this.getFecha(valor.fechaInicio) + " - " + this.getFecha(valor.fechaFin) + ")";
@@ -70,13 +91,13 @@ export class GastosEmbarcacionComponent implements OnInit{
     });
   }
 
-  getSemanaActual(){
+  getSemanaActual() {
     this.semanaService.semanaActual().subscribe(value => {
-        this.diaSemana = value;
+      this.diaSemana = value;
     })
   }
 
-  getFecha(idDia: number):string {
+  getFecha(idDia: number): string {
     const fechaString: string = idDia.toString();
     const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
 
@@ -85,10 +106,11 @@ export class GastosEmbarcacionComponent implements OnInit{
     return fechaFormateada;
   }
 
-  getDiasxSemana(){
+  getDiasPorSemana() {
     this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
       this.diasxSemana = value;
-      this.diasxSemana.forEach(valor=>{
+
+      this.diasxSemana.forEach(valor => {
         //Empiezo a crear el arreglo de hielo
         let hielo = new GastosModel();
         hielo.nombreDia = valor.nombreDia;
@@ -99,7 +121,7 @@ export class GastosEmbarcacionComponent implements OnInit{
         hielo.cantidad = 0
         hielo.idEmbarcacion = 0;
         hielo.total = 0;
-        this.hielo.push(hielo);
+        this.valores.push(this.fb.group(hielo));
 
         //Empiezo a crear el arreglo de Petroleo
         let gastoPetroleo = new GastosModel();
@@ -136,31 +158,45 @@ export class GastosEmbarcacionComponent implements OnInit{
         otro.idEmbarcacion = 0;
         otro.total = 0;
         this.otros.push(otro);
-      })
-    }).then(value => {
-      //Obtengo lo guardado en petroleo
-      this.petroleo.forEach(objeto=>{
-        //objeto.cantidad = 5.0;
       });
+    }).then(value => {
+
+    }).finally(() => {
+
     });
   }
 
-
   buscarGastos() {
-    if (this.embarcacion.idEmbarcacion == 0 || this.semana.id == 0){
-      Swal.fire('Error',"Debe seleccionar una embarcacion y una semana",'error');
+    if (this.embarcacion.idEmbarcacion == 0 || this.semana.id == 0) {
+      Swal.fire('Error', "Debe seleccionar una embarcacion y una semana", 'error');
       return;
     }
-    this.visible = false;
-    this.hielo = [];
+    this.buscado = true;
+      //Reinicio los hielos
+      this.hielos = this.fb.group({
+        idEmbarcacion: this.idEmbarcacion,
+        idSemana: this.idSemana,
+        idTipoServicio: 3,
+        datos: this.fb.array([]),
+      });
+    //Verifico si existe gastos para esa semana embarcacion
+    this.pescaService.getGastoEmb(this.idEmbarcacion, this.idSemana, 3).subscribe(valor=>{
+      if(valor.length > 0){
+        this.hielos = this.fb.group({
+          idEmbarcacion: valor[0].idEmbarcacion,
+          idSemana: valor[0].idSemana,
+          idTipoServicio: 3,
+          datos: this.fb.array(valor[0].datos),
+        });
+      }
+    });
     this.petroleo = [];
     this.viveres = [];
     this.otros = [];
 
-    //Si todo esta OK procedo a buscar los dias de la semana
-    this.getDiasxSemana();
 
-    this.visible = true;
+    //Si todo esta OK procedo a buscar los dias de la semana
+    this.getDiasPorSemana();
   }
 
   limpiarGastos() {
@@ -168,34 +204,102 @@ export class GastosEmbarcacionComponent implements OnInit{
     this.semana = new SemanaModel();
   }
 
+  onPrecioChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+    this.hielos.value.datos[rowIndex].total = nuevoPrecio * this.hielos.value.datos[rowIndex].cantidad;
+  }
+
+  onCantidadChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+    this.hielos.value.datos[rowIndex].total = nuevoPrecio * this.hielos.value.datos[rowIndex].precio;
+  }
+
   beforeEditStart = (rowItem: any, field: any) => {
     return true;
   };
 
   beforeEditEnd = (rowItem: any, field: any) => {
-    if (rowItem || rowItem[field] > 0) {
+    if (rowItem) {
       return false;
     } else {
       return true;
     }
   };
 
-  cambiaProvHielo(rowItem: any, rowIndex: any) {
-    //Obtengo el precio del dia
-    this.proveedorService.obtenerPrecioxDia(rowItem.idProveedor.idProveedor, rowItem.idProveedor.idTipoServicio, rowItem.idDia).subscribe(value => {
-      rowItem.precioCadena = value.precioCadena;
-      rowItem.precio = value.precio;
-      rowItem.moneda = value.idMoneda;
+
+  grabarGastos() {
+    this.pescaService.guardarGastos(this.hielos.value).subscribe(valor =>{
+
     });
   }
 
-  onKeyUp(event: KeyboardEvent, rowItem: any, rowIndex: any) {
-    if (event.key === 'Enter') {
-      // Realizar acciones cuando se presiona Enter
-      //console.log(rowItem);
-      rowItem.total = Number.parseFloat( rowItem.cantidad ) * rowItem.precio;
-      rowItem['priorityEdit'] = false;
-      rowItem['idEdit'] = false;
+  onProveedorChange(valor: any, rowIndex: any, rowItem: any) {
+    this.proveedorService.obtenerPrecioxDia(this.hielos.value.datos[rowIndex].idProveedor.idProveedor,
+      this.hielos.value.datos[rowIndex].idProveedor.idTipoServicio,
+      this.hielos.value.datos[rowIndex].idDia).subscribe(value => {
+      this.hielos.value.datos[rowIndex].monedaString = value.abreviatura;
+      this.hielos.value.datos[rowIndex].precio = value.precio;
+      this.hielos.value.datos[rowIndex].idMoneda = value.idMoneda;
+    });
+  }
+
+  deleteRow(rowItem: any, rowIndex: any) {
+    this.hielos.value.datos[rowIndex].monedaString = '';
+    this.hielos.value.datos[rowIndex].precio = 0;
+    this.hielos.value.datos[rowIndex].idMoneda = 0;
+    this.hielos.value.datos[rowIndex].cantidad = 0;
+    this.hielos.value.datos[rowIndex].total = 0;
+    this.hielos.value.datos[rowIndex].idProveedor = new ProveedorxTipo();
+    rowItem['idProveedorEdit'] = !rowItem['idProveedorEdit'];
+  }
+
+  onEmbarcacionChange(event: any) {
+    if (this.buscado) {
+      Swal.fire({
+        title: 'Advertencia',
+        text:'¿Seguro de cambiar de embarcación? Se perderán los cambios no grabados.',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //Blanqueo los Proveedores sin grabar
+          this.hielos = this.fb.group({
+            datos: this.fb.array([]),
+          });
+          this.idEmbarcacion = event.idEmbarcacion;
+          this.embarcacionSeleccionada = event;
+        } else {
+          this.embarcacion = this.embarcacionSeleccionada;
+        }
+      });
+      return;
     }
+    this.idEmbarcacion = event.idEmbarcacion;
+    this.embarcacionSeleccionada = event;
+  }
+
+  onSemanaChange(event: any) {
+    if (this.buscado) {
+      Swal.fire({
+        title: 'Advertencia',
+        text:'¿Seguro de cambiar de embarcación? Se perderán los cambios no grabados.',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //Blanqueo los Proveedores sin grabar
+          this.hielos = this.fb.group({
+            datos: this.fb.array([]),
+          });
+          this.idSemana = event.id;
+          this.semanaSeleccionada = event;
+        } else {
+          this.semana = this.semanaSeleccionada;
+        }
+      });
+      return;
+    }
+    this.idSemana = event.id;
+    this.semanaSeleccionada = event;
   }
 }

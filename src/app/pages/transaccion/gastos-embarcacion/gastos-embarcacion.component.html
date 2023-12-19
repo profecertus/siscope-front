@@ -30,6 +30,7 @@
               [isSearch]="true"
               [readonly]="true"
               [(ngModel)]='embarcacion'
+              (ngModelChange)="onEmbarcacionChange($event)"
               style='width: 20em'
             ></d-select>
 
@@ -45,6 +46,7 @@
               [isSearch]="true"
               [readonly]="true"
               [(ngModel)]='semana'
+              (ngModelChange)="onSemanaChange($event)"
               style='width: 20em'
             ></d-select>
           <div style='width: 20%'></div>
@@ -52,460 +54,174 @@
           <div class="header-right">
             <d-button icon="icon-edit" (click)='buscarGastos()'>Buscar</d-button>&nbsp;
             <d-button icon="icon-edit" (click)='limpiarGastos()'>Limpiar</d-button>&nbsp;
+            <d-button icon="icon-edit" (click)='grabarGastos()'>Grabar</d-button>&nbsp;
           </div>
 
         </div>
       </div>
     </da-col-item>
+
     <!--Hielo-->
-    <da-col-item [daSpan]="24" [daXs]="24" *ngIf='visible'>
-      <div class="da-content-card da-form-card">
-        <div class="da-content-title da-form-card-title">
-          <h4>Hielo</h4>
-        </div>
-        <div class="list-content" dLoading [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
-          <d-data-table
-            [dataSource]="hielo"
-            [scrollable]="true"
-          >
-            <thead dTableHead>
-            <tr dTableRow>
-              <th dHeadCell>Dia</th>
-              <th dHeadCell>Fecha</th>
-              <th dHeadCell>Proveedor</th>
-              <th dHeadCell>Precio x Und</th>
-              <th dHeadCell>Cantidad</th>
-              <th dHeadCell>Total</th>
-            </tr>
-            </thead>
-            <tbody dTableBody>
-              <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+    <div class="da-content-wrapper">
+      <da-layout-row [daGutter]="[24, 24]">
+        <da-col-item [daSpan]="24" [daXs]="24">
+          <div class="da-list-container" dLoading >
+            <h2>&nbsp;&nbsp;&nbsp;Hielo</h2>
+            <div class="da-list-content">
+              <d-data-table
+                #dataTable
+                [dataSource]="valores.controls"
+                [scrollable]="true"
+              >
+                <thead dTableHead>
                 <tr dTableRow>
-                  <td
-                    dTableCell
-                    [rowItem]="rowItem"
-                    [field]="'nombreDia'"
-                  >
-                    <span *ngIf="true">{{ rowItem?.nombreDia }}</span>
-                    <div *ngIf="false" class="edit-padding-fix">
-                      <input
-                        class="devui-form-control"
-                        name="id"
-                        [(ngModel)]="rowItem.nombreDia"
-                        [attr.maxlength]="100"
-                        [attr.minlength]="3"
-                      />
-                    </div>
-                  </td>
-
-                  <td
-                    dTableCell
-                    [rowItem]="rowItem"
-                    [field]="'idDiaString'"
-                  >
-                    <span *ngIf="true">{{ rowItem?.idDiaString }}</span>
-                    <div *ngIf="false" class="edit-padding-fix">
-                      <input
-                        class="devui-form-control"
-                        name="idDiaString"
-                        [(ngModel)]="rowItem.idDiaString"
-                        [attr.maxlength]="100"
-                        [attr.minlength]="3"
-                      />
-                    </div>
-                  </td>
-
-                  <td
-                    dTableCell
-                    [editable]="true"
-                    [editableTip]="editableTip"
-                    [(editing)]="rowItem['priorityEdit']"
-                    [rowItem]="rowItem"
-                    [field]="'idProveedor'"
-                    [beforeEditStart]="beforeEditStart"
-                    [beforeEditEnd]="beforeEditEnd"
-                  >
-                      <span *ngIf="!rowItem['priorityEdit']"
-                      ><d-tag
-                        [tag]="rowItem?.idProveedor.razonSocial"
-                      ></d-tag
-                      ></span>
-                    <div
-                      *ngIf="rowItem['priorityEdit']"
-                      class="edit-padding-fix"
-                    >
-                      <d-select
-                        name="idProveedor"
-                        [(ngModel)]="rowItem.idProveedor"
-                        [options]="proveedorHielo"
-                        [filterKey]="'razonSocial'"
-                        (selectionchange)='cambiaProvHielo(rowItem, rowIndex)'
-                      ></d-select>
-                    </div>
-                  </td>
-
-                  <td
-                    dTableCell
-                    [rowItem]="rowItem"
-                    [field]="'precioCadena'"
-                    [beforeEditStart]="beforeEditStart"
-                    [beforeEditEnd]="beforeEditEnd"
-                  >
-                    <span >{{ rowItem?.precioCadena }}</span>
-                  </td>
-
-                  <td
-                    dTableCell
-                    [editable]="true"
-                    [editableTip]="editableTip"
-                    [(editing)]="rowItem['idEdit']"
-                    [rowItem]="rowItem"
-                    [field]="'cantidad'"
-                    [beforeEditStart]="beforeEditStart"
-                    [beforeEditEnd]="beforeEditEnd"
-                  >
-                    <span *ngIf="!rowItem['idEdit']">{{ rowItem?.cantidad }}</span>
-                    <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                      <input
-                        class="devui-form-control"
-                        name="cantidad"
-                        [(ngModel)]="rowItem.cantidad"
-                        [attr.maxlength]="100"
-                        [attr.minlength]="3"
-                        (keyup)='onKeyUp($event, rowItem, rowIndex)'
-                      />
-                    </div>
-                  </td>
-
-                  <td
-                    dTableCell
-                    [editable]="true"
-                    [editableTip]="editableTip"
-                    [(editing)]="rowItem['idEdit']"
-                    [rowItem]="rowItem"
-                    [field]="'total'"
-                    [beforeEditStart]="beforeEditStart"
-                    [beforeEditEnd]="beforeEditEnd"
-                  >
-                    <span *ngIf="!rowItem['idEdit']">{{ rowItem?.total }}</span>
-                    <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                      <input
-                        class="devui-form-control"
-                        name="idDiaString"
-                        [(ngModel)]="rowItem.total"
-                        [attr.maxlength]="100"
-                        [attr.minlength]="3"
-                      />
-                    </div>
-                  </td>
+                  <th dHeadCell>Dia</th>
+                  <th dHeadCell>Fecha</th>
+                  <th dHeadCell>Proveedor</th>
+                  <th dHeadCell>Precio x Und</th>
+                  <th dHeadCell>Cantidad</th>
+                  <th dHeadCell>Total</th>
+                  <th dHeadCell>Validar</th>
                 </tr>
-              </ng-template>
-            </tbody>
-          </d-data-table>
-        </div>
-      </div>
-    </da-col-item>
-    <!--Petroleo-->
-    <da-col-item [daSpan]="24" [daXs]="24" *ngIf='visible'>
-      <div class="da-content-card da-form-card">
-        <div class="da-content-title da-form-card-title">
-          <h4>Petroleo</h4>
-        </div>
-        <div class="list-content" dLoading [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
-          <d-data-table
-            [dataSource]="petroleo"
-            [scrollable]="true"
-          >
-            <thead dTableHead>
-            <tr dTableRow>
-              <th dHeadCell>Dia</th>
-              <th dHeadCell>Fecha</th>
-              <th dHeadCell>Proveedor</th>
-              <th dHeadCell>Precio x Und</th>
-              <th dHeadCell>Cantidad</th>
-              <th dHeadCell>Total</th>
-            </tr>
-            </thead>
-            <tbody dTableBody>
-            <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-              <tr dTableRow>
-                <td
-                  dTableCell
-                  [rowItem]="rowItem"
-                  [field]="'nombreDia'"
-                >
-                  <span *ngIf="true">{{ rowItem?.nombreDia }}</span>
-                  <div *ngIf="false" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="id"
-                      [(ngModel)]="rowItem.nombreDia"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [rowItem]="rowItem"
-                  [field]="'idDiaString'"
-                >
-                  <span *ngIf="true">{{ rowItem?.idDiaString }}</span>
-                  <div *ngIf="false" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="idDiaString"
-                      [(ngModel)]="rowItem.idDiaString"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['priorityEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'idProveedor'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                      <span *ngIf="!rowItem['priorityEdit']"
+                </thead>
+                <tbody dTableBody>
+                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                    <tr dTableRow>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                        [field]="'nombreDia'"
+                      >
+                        <span>{{ rowItem.value.nombreDia }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                        [field]="'idDiaString'"
+                      >
+                        <span>{{ rowItem.value.idDiaString }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem['idProveedorEdit']"
+                        [rowItem]="rowItem"
+                        [field]="'idProveedor'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem['idProveedorEdit']"
                       ><d-tag
-                        [tag]="rowItem?.idProveedor.razonSocial"
+                        [tag]="rowItem.value.idProveedor.razonSocial"
+                        [labelStyle]="rowItem.value.idProveedor.razonSocial"
                       ></d-tag
                       ></span>
-                  <div
-                    *ngIf="rowItem['priorityEdit']"
-                    class="edit-padding-fix"
-                  >
-                    <d-select
-                      name="idProveedor"
-                      [(ngModel)]="rowItem.idProveedor"
-                      [options]="proveedorPetroleo"
-                      [filterKey]="'razonSocial'"
-                      (selectionchange)='cambiaProvHielo(rowItem, rowIndex)'
-                    ></d-select>
-                  </div>
-                </td>
+                        <div
+                          *ngIf="rowItem['idProveedorEdit']"
+                          class="edit-padding-fix"
+                        >
+                          <d-select
+                            name="idProveedor"
+                            [(ngModel)]="rowItem.value.idProveedor"
+                            [options]="proveedorHielo"
+                            [filterKey]="'razonSocial'"
+                            (ngModelChange)="onProveedorChange($event, rowIndex, rowItem)"
+                          ></d-select>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem['idProveedorEdit']"
+                        [rowItem]="rowItem"
+                        [field]="'precio'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem['idProveedorEdit']"
+                      ><d-tag
+                        [tag]="rowItem.value.precio"
+                        [labelStyle]="rowItem.value.precio"
+                      ></d-tag
+                      ></span>
 
-                <td
-                  dTableCell
-                  [rowItem]="rowItem"
-                  [field]="'precioCadena'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span >{{ rowItem?.precioCadena }}</span>
-                </td>
+                        <div
+                          *ngIf="rowItem['idProveedorEdit']"
+                          class="edit-padding-fix"
+                        >
+                          {{  rowItem.value.monedaString }}
+                          <d-input-number size="sm"
+                                          [(ngModel)]="rowItem.value.precio"
+                                          (ngModelChange)="onPrecioChange($event, rowIndex, rowItem)"
+                                          class="input-number">
+                          </d-input-number>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem['idProveedorEdit']"
+                        [rowItem]="rowItem"
+                        [field]="'precio'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem['idProveedorEdit']"
+                      ><d-tag
+                        [tag]="rowItem.value.cantidad"
+                        [labelStyle]="rowItem.value.cantidad"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem['idProveedorEdit']"
+                          class="edit-padding-fix"
+                        >
+                          <d-input-number size="sm"
+                                          [(ngModel)]="rowItem.value.cantidad"
+                                          (ngModelChange)="onCantidadChange($event, rowIndex, rowItem)"
+                                          class="input-number">
+                          </d-input-number>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                        [field]="'total'"
+                      >
+                        <span>{{  rowItem.value.monedaString }} {{ rowItem.value.total }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                      >
+                        <d-icon
+                          class="pipeline-watch"
+                          [color]="rowItem['idProveedorEdit'] ? 'var(--devui-warning)' : ''"
+                          [icon]="rowItem['idProveedorEdit'] ? 'icon-star' : 'icon-star-o'"
+                          [operable]="true"
+                        >
+                        </d-icon>
+                        <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)"
+                                 dIconLink>
+                          <a iconSuffix class="devui-link" href=""></a>
+                        </d-icon>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </d-data-table>
+            </div>
+          </div>
+        </da-col-item>
+      </da-layout-row>
+    </div>
+    <!--
+        {{this.hielos.value | json}}
+        -->
 
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'cantidad'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.cantidad }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="cantidad"
-                      [(ngModel)]="rowItem.cantidad"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                      (keyup)='onKeyUp($event, rowItem, rowIndex)'
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'total'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.total }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="idDiaString"
-                      [(ngModel)]="rowItem.total"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
-            </tbody>
-          </d-data-table>
-        </div>
-      </div>
-    </da-col-item>
-    <!--Viveres-->
-    <da-col-item [daSpan]="24" [daXs]="24" *ngIf='visible'>
-      <div class="da-content-card da-form-card">
-        <div class="da-content-title da-form-card-title">
-          <h4>Viveres</h4>
-        </div>
-        <div class="list-content" dLoading [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
-          <d-data-table
-            [dataSource]="viveres"
-            [scrollable]="true"
-          >
-            <thead dTableHead>
-            <tr dTableRow>
-              <th dHeadCell>Dia</th>
-              <th dHeadCell>Fecha</th>
-              <th dHeadCell>Proveedor</th>
-              <th dHeadCell>Precio</th>
-              <th dHeadCell>Cantidad</th>
-              <th dHeadCell>Total</th>
-            </tr>
-            </thead>
-            <tbody dTableBody>
-            <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-              <tr dTableRow>
-                <td
-                  dTableCell
-                  [rowItem]="rowItem"
-                  [field]="'nombreDia'"
-                >
-                  <span *ngIf="true">{{ rowItem?.nombreDia }}</span>
-                  <div *ngIf="false" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="id"
-                      [(ngModel)]="rowItem.nombreDia"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [rowItem]="rowItem"
-                  [field]="'idDiaString'"
-                >
-                  <span *ngIf="true">{{ rowItem?.idDiaString }}</span>
-                  <div *ngIf="false" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="id"
-                      [(ngModel)]="rowItem.idDiaString"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'idProveedor'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.idProveedor }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="idProveedor"
-                      [(ngModel)]="rowItem.idProveedor"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'precio'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.precio }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="precio"
-                      [(ngModel)]="rowItem.precio"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'cantidad'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.cantidad }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="cantidad"
-                      [(ngModel)]="rowItem.cantidad"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-                <td
-                  dTableCell
-                  [editable]="true"
-                  [editableTip]="editableTip"
-                  [(editing)]="rowItem['idEdit']"
-                  [rowItem]="rowItem"
-                  [field]="'total'"
-                  [beforeEditStart]="beforeEditStart"
-                  [beforeEditEnd]="beforeEditEnd"
-                >
-                  <span *ngIf="!rowItem['idEdit']">{{ rowItem?.total }}</span>
-                  <div *ngIf="rowItem['idEdit']" class="edit-padding-fix">
-                    <input
-                      class="devui-form-control"
-                      name="total"
-                      [(ngModel)]="rowItem.total"
-                      [attr.maxlength]="100"
-                      [attr.minlength]="3"
-                    />
-                  </div>
-                </td>
-
-              </tr>
-            </ng-template>
-            </tbody>
-          </d-data-table>
-        </div>
-      </div>
-    </da-col-item>
   </da-layout-row>
 
 </div>
