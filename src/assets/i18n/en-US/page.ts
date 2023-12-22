@@ -15,6 +15,7 @@ export default {
       'camara': 'Camara',
       'planta': 'Planta',
       'semana': 'Semana',
+      'tipoCambio':'Tipo de Cambio',
     },
     'tarifario':{
       'title':'Tarifario',

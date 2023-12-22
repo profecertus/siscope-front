@@ -24,6 +24,7 @@ export const environment = {
 
   urlServiceTarifario: 'http://161.132.47.74:8081',
   sufijoTarifario: '/tarifario/v1',
+  sufijoTipoCambio: '/tipocambio/v1',
 
   urlServicePesca: 'http://161.132.47.74:8082',
   sufijoPesca: '/descarga/v1',

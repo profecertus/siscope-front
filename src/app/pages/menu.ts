@@ -38,6 +38,10 @@ export default function (values: any) {
           title: values['maestro']['semana'],
           link: '/pages/maestro/semana',
         },
+        {
+          title: values['maestro']['tipoCambio'],
+          link: '/pages/maestro/tipoCambio',
+        },
       ],
       link: '/pages/maestro',
       menuIcon: 'icon icon-modify',

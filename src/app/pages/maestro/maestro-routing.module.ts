@@ -7,6 +7,7 @@ import { PlantaComponent } from './planta/planta.component';
 import { ProveedorComponent } from './proveedor/proveedor.component';
 import { TrabajadorComponent } from './trabajador/trabajador.component';
 import { SemanaComponent } from './semana/semana.component';
+import { TipoCambioComponent } from './tipo-cambio/tipo-cambio.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'planta', component: PlantaComponent },
       { path: 'trabajador', component:TrabajadorComponent },
       { path: 'semana', component:SemanaComponent },
+      { path: 'tipoCambio', component:TipoCambioComponent },
     ],
   },
 ];

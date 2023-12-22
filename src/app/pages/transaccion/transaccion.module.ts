@@ -40,6 +40,7 @@ import { DaGridModule } from '../../@shared/layouts/da-grid';
     FormsModule,
     AdminFormModule,
     ReactiveFormsModule,
+    DaGridModule,
   ],
 })
 export class TransaccionModule { }

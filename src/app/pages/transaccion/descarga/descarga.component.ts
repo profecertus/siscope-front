@@ -49,6 +49,7 @@ export class DescargaComponent {
 
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
+  nuevoDetalle: boolean = false;
 
   constructor(private dialogService: DialogService, private pescaService: PescaService, private toastService: ToastService,
               private trabajadorService: TrabajadorService, private tipodocumentoService: TipodocumentoService,
@@ -118,7 +119,8 @@ export class DescargaComponent {
     this.getList();
   }
   newRow():void {
-    this.accion = 1;
+    this.nuevoDetalle = !this.nuevoDetalle
+    /*this.accion = 1;
     let row = new Trabajador();
     this.editRowIndex = -1;
     this.formData = row;
@@ -132,7 +134,7 @@ export class DescargaComponent {
       backdropCloseable: true,
       onClose: () => {},
       buttons: [],
-    });
+    });*/
   }
 
   deleteRow(e: Trabajador, index: number) {

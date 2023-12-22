@@ -16,6 +16,7 @@ export default {
       'planta': 'Planta',
       //'operativo': 'Conceptos Operativos',
       'semana': 'Semana',
+      'tipoCambio':'TipoCambio',
     },
     'tarifario':{
       'title':'Tarifario',

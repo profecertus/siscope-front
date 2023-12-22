@@ -26,6 +26,7 @@ import { DaGridModule } from '../../../../schematics/src/ng-add/files/src/app/@s
 import { TrabajadorComponent } from './trabajador/trabajador.component';
 import { SemanaComponent } from './semana/semana.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TipoCambioComponent } from './tipo-cambio/tipo-cambio.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProveedorComponent,
     TrabajadorComponent,
     SemanaComponent,
+    TipoCambioComponent,
   ],
   imports: [
     MaestroRoutingModule,

@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/@core/services/auth.service';
 import { LANGUAGES } from 'src/config/language-config';
 import { User } from '../../../models/user';
 import { I18nService } from 'ng-devui/i18n';
+import { TipoCambioService } from '../../../../service/tipoCambio.service';
 
 @Component({
   selector: 'da-header-operation',
@@ -14,13 +15,21 @@ import { I18nService } from 'ng-devui/i18n';
 export class HeaderOperationComponent implements OnInit {
   user: User;
   languages = LANGUAGES;
-  language: string;
+  language: string = 'en-us';
   haveLoggedIn = false;
-  noticeCount: number;
+  noticeCount: number = 0;
+  tipoCambioHoy:number = 0;
 
-  constructor(private route: Router, private authService: AuthService, private translate: TranslateService, private i18n: I18nService) {}
+  constructor(private route: Router,
+              private authService: AuthService,
+              private translate: TranslateService,
+              private i18n: I18nService,
+              private tipoCambioService:TipoCambioService) {}
 
   ngOnInit(): void {
+    localStorage.setItem('lang', this.language);
+    this.i18n.toggleLang(this.language);
+    this.translate.use(this.language);
     if (localStorage.getItem('userinfo')) {
       this.user = JSON.parse(localStorage.getItem('userinfo')!);
       this.haveLoggedIn = true;
@@ -32,8 +41,14 @@ export class HeaderOperationComponent implements OnInit {
       });
     }
     this.language = this.translate.currentLang;
+    this.getTipoCambioHoy();
   }
 
+  getTipoCambioHoy(){
+    this.tipoCambioService.getTipoCambioHoy().subscribe(value => {
+      this.tipoCambioHoy = value;
+    });
+  }
   onSearch(event: any) {
     console.log(event);
   }

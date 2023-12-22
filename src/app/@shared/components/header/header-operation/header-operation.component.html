@@ -1,4 +1,8 @@
 <div class="da-operations">
+  <div class="da-operations-cambio" dDropDown [trigger]="'click'" dDropDownToggle appendToBody [closeScope]="'blank'">
+    <p>Tipo de Cambio ($): <a href=''>{{ tipoCambioHoy }}</a></p>
+  </div>
+  &nbsp;&nbsp;
   <div class="da-operations-notice" dDropDown [trigger]="'click'" dDropDownToggle appendToBody [closeScope]="'blank'">
     <d-badge [count]="noticeCount">
       <i class="icon icon-notice"></i>
@@ -29,7 +33,7 @@
       </ng-container>
     </ul>
   </div>
-  <div class="da-language-wrapper" dDropDown [trigger]="'hover'" appendToBody dDropDownToggle>
+  <!--div class="da-language-wrapper" dDropDown [trigger]="'hover'" appendToBody dDropDownToggle>
     <span class="da-progress-icon-position icon-letter-a"></span>
     <ul dDropDownMenu class="devui-dropdown-menu devui-scrollbar" role="menu" style="min-width: 120px">
       <li
@@ -44,7 +48,7 @@
         </a>
       </li>
     </ul>
-  </div>
+  </div-->
 </div>
 
 <ng-template #login>

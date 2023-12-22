@@ -28,7 +28,12 @@ export class PescaService {
   }
 
   getGastoEmb(embarcacion:number, semana:number, servicio:number):Observable<any>{
+    console.log(`${this.apiUrlPesca}${this.pesca}/getGastosEmb/${embarcacion}/${semana}/${servicio}`);
     return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getGastosEmb/${embarcacion}/${semana}/${servicio}`);
+  }
+
+  getAllGastoEmb():Observable<any>{
+    return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getAllGastosEmb`);
   }
 
 }

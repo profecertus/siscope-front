@@ -12,6 +12,7 @@ import { ProveedorService } from '../../../service/proveedor.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { TarifarioService } from '../../../service/tarifario.service';
 import { PescaService } from '../../../service/pesca.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-gastos-embarcacion',
@@ -23,21 +24,34 @@ export class GastosEmbarcacionComponent implements OnInit {
   semanas: SemanaModel[] = [];
   embarcaciones: Embarcacion[] = [];
   diasxSemana: DiaSemana[] = [];
+  basicDataSource: any[] = [];
+  productos  = [{
+    "idProducto":3,
+    "nombreProducto":"HIELO"
+  },{
+    "idProducto": 2,
+    "nombreProducto":"PETROLEO",
+  }, {
+    "idProducto": 17,
+    "nombreProducto":"VIVERES",
+  }];
+  producto:any[] = [];
+  nuevoDetalle: boolean = false;
   semana: SemanaModel = new SemanaModel();
   embarcacion: Embarcacion = new Embarcacion();
   editableTip = EditableTip.btn;
   proveedorHielo: ProveedorxTipo[] = [];
+  proveedorViveres: ProveedorxTipo[] = [];
   proveedorPetroleo: ProveedorxTipo[] = [];
   buscado: boolean = false;
   idEmbarcacion: number = 0;
   idSemana: number = 0;
-  embarcacionSeleccionada: Embarcacion = new Embarcacion();
-  semanaSeleccionada: SemanaModel = new SemanaModel();
 
-  petroleo: GastosModel[] = [];
-  viveres: GastosModel[] = [];
-  otros: GastosModel[] = [];
+  busy: Subscription = new Subscription() ;
+
   hielos: FormGroup;
+  petroleos: FormGroup;
+  viveres: FormGroup;
 
 
   ngOnInit(): void {
@@ -46,15 +60,31 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.getAllEmbarcaciones();
     this.getAllProveedorHielo();
     this.getAllProveedorPetroleo();
+    this.getAllProveedorViveres();
+    this.getAllGastosEmb();
   }
 
   constructor(private semanaService: SemanaService, private fb: FormBuilder, private tarifarioService: TarifarioService,
               private proveedorService: ProveedorService, private embarcacionService: EmbarcacionService,
               private pescaService:PescaService) {
     this.hielos = this.fb.group({
-      idEmbarcacion: 0,
-      idSemana: 0,
+      embarcacion: new Embarcacion(),
+      semana: new SemanaModel(),
       idTipoServicio: 3,
+      datos: this.fb.array([]),
+    });
+
+    this.petroleos = this.fb.group({
+      embarcacion: new Embarcacion(),
+      semana: new SemanaModel(),
+      idTipoServicio: 2,
+      datos: this.fb.array([]),
+    });
+
+    this.viveres = this.fb.group({
+      embarcacion: new Embarcacion(),
+      semana: new SemanaModel(),
+      idTipoServicio: 17,
       datos: this.fb.array([]),
     });
     //(this.hielos.get('datos')?.value as FormArray).push(this.fb.group({ "nombre":"Edwin" }));
@@ -62,6 +92,20 @@ export class GastosEmbarcacionComponent implements OnInit {
 
   get valores(): FormArray {
     return (this.hielos.get('datos') as FormArray)
+  }
+
+  get valPetroleo(): FormArray {
+    return (this.petroleos.get('datos') as FormArray)
+  }
+
+  get valViveres(): FormArray {
+    return (this.viveres.get('datos') as FormArray)
+  }
+
+  getAllGastosEmb(){
+    return this.busy = this.pescaService.getAllGastoEmb().subscribe(value => {
+      this.basicDataSource = value;
+    });
   }
 
   getAllProveedorHielo(): void {
@@ -73,6 +117,12 @@ export class GastosEmbarcacionComponent implements OnInit {
   getAllProveedorPetroleo(): void {
     this.proveedorService.obtenerProveedorxTipo(2).subscribe(value => {
       this.proveedorPetroleo = value;
+    })
+  }
+
+  getAllProveedorViveres(): void {
+    this.proveedorService.obtenerProveedorxTipo(17).subscribe(value => {
+      this.proveedorViveres = value;
     })
   }
 
@@ -107,109 +157,143 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   getDiasPorSemana() {
-    this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
-      this.diasxSemana = value;
 
-      this.diasxSemana.forEach(valor => {
-        //Empiezo a crear el arreglo de hielo
-        let hielo = new GastosModel();
-        hielo.nombreDia = valor.nombreDia;
-        hielo.idSemana = valor.idSemana.id;
-        hielo.idDia = valor.idDia;
-        hielo.idDiaString = this.getFecha(valor.idDia);
-        hielo.precio = 0;
-        hielo.cantidad = 0
-        hielo.idEmbarcacion = 0;
-        hielo.total = 0;
-        this.valores.push(this.fb.group(hielo));
-
-        //Empiezo a crear el arreglo de Petroleo
-        let gastoPetroleo = new GastosModel();
-        gastoPetroleo.nombreDia = valor.nombreDia;
-        gastoPetroleo.idSemana = valor.idSemana.id;
-        gastoPetroleo.idDia = valor.idDia;
-        gastoPetroleo.idDiaString = this.getFecha(valor.idDia);
-        gastoPetroleo.precio = 0;
-        gastoPetroleo.cantidad = 0
-        gastoPetroleo.idEmbarcacion = 0;
-        gastoPetroleo.total = 0;
-        this.petroleo.push(gastoPetroleo);
-
-        //Empiezo a crear el arreglo de viveres
-        let viveres = new GastosModel();
-        viveres.nombreDia = valor.nombreDia;
-        viveres.idSemana = valor.idSemana.id;
-        viveres.idDia = valor.idDia;
-        viveres.idDiaString = this.getFecha(valor.idDia);
-        viveres.precio = 0;
-        viveres.cantidad = 0
-        viveres.idEmbarcacion = 0;
-        viveres.total = 0;
-        this.viveres.push(viveres);
-
-        //Empiezo a crear el arreglo de viveres
-        let otro = new GastosModel();
-        otro.nombreDia = valor.nombreDia;
-        otro.idSemana = valor.idSemana.id;
-        otro.idDia = valor.idDia;
-        otro.idDiaString = this.getFecha(valor.idDia);
-        otro.precio = 0;
-        otro.cantidad = 0
-        otro.idEmbarcacion = 0;
-        otro.total = 0;
-        this.otros.push(otro);
-      });
-    }).then(value => {
-
-    }).finally(() => {
-
-    });
   }
 
   buscarGastos() {
-    if (this.embarcacion.idEmbarcacion == 0 || this.semana.id == 0) {
-      Swal.fire('Error', "Debe seleccionar una embarcacion y una semana", 'error');
+    if (this.embarcacion.idEmbarcacion == 0 || this.semana.id == 0 || this.producto.length == 0) {
+      Swal.fire('Error', "Debe seleccionar una embarcacion, una semana y al menos un producto", 'error');
       return;
     }
     this.buscado = true;
-      //Reinicio los hielos
-      this.hielos = this.fb.group({
-        idEmbarcacion: this.idEmbarcacion,
-        idSemana: this.idSemana,
-        idTipoServicio: 3,
-        datos: this.fb.array([]),
-      });
+    this.nuevoDetalle = true;
     //Verifico si existe gastos para esa semana embarcacion
-    this.pescaService.getGastoEmb(this.idEmbarcacion, this.idSemana, 3).subscribe(valor=>{
+    this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 3).subscribe(valor=>{
       if(valor.length > 0){
         this.hielos = this.fb.group({
-          idEmbarcacion: valor[0].idEmbarcacion,
-          idSemana: valor[0].idSemana,
+          embarcacion: valor[0].embarcacion,
+          semana: valor[0].semana,
           idTipoServicio: 3,
           datos: this.fb.array(valor[0].datos),
         });
+      }else{
+        this.valores.clear();
+        this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
+          this.diasxSemana = value;
+          this.diasxSemana.forEach(valor => {
+            //Empiezo a crear el arreglo de hielo
+            let hielo = new GastosModel();
+            hielo.nombreDia = valor.nombreDia;
+            hielo.idDia = valor.idDia;
+            hielo.idDiaString = this.getFecha(valor.idDia);
+            hielo.precio = 0;
+            hielo.cantidad = 0
+            hielo.total = 0;
+            this.valores.push(this.fb.group(hielo));
+          });
+        });
       }
     });
-    this.petroleo = [];
-    this.viveres = [];
-    this.otros = [];
 
+    //Verifico si existe gastos para esa semana en Petroleo
+    this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 2).subscribe(valor=>{
+      if(valor.length > 0){
+        this.petroleos = this.fb.group({
+          embarcacion: valor[0].embarcacion,
+          semana: valor[0].semana,
+          idTipoServicio: 2,
+          datos: this.fb.array(valor[0].datos),
+        });
+      }else{
+        this.valPetroleo.clear();
+        this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
+          this.diasxSemana = value;
+          this.diasxSemana.forEach(valor => {
+            //Empiezo a crear el arreglo de hielo
+            let gastoPetroleo = new GastosModel();
+            gastoPetroleo.nombreDia = valor.nombreDia;
+            gastoPetroleo.idDia = valor.idDia;
+            gastoPetroleo.idDiaString = this.getFecha(valor.idDia);
+            gastoPetroleo.precio = 0;
+            gastoPetroleo.cantidad = 0
+            gastoPetroleo.total = 0;
+            this.valPetroleo.push(this.fb.group(gastoPetroleo));
+          });
+        });
+      }
+    });
 
+    //Verifica si existe gastos para esa semana en Viveres
+    this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 17).subscribe(valor=>{
+      if(valor.length > 0){
+        this.viveres = this.fb.group({
+          embarcacion: valor[0].embarcacion,
+          semana: valor[0].semana,
+          idTipoServicio: 17,
+          datos: this.fb.array(valor[0].datos),
+        });
+      }else{
+        this.valViveres.clear();
+        this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
+          this.diasxSemana = value;
+          this.diasxSemana.forEach(valor => {
+            //Empiezo a crear el arreglo de viveres
+            let viveres = new GastosModel();
+            viveres.nombreDia = valor.nombreDia;
+            viveres.idDia = valor.idDia;
+            viveres.idDiaString = this.getFecha(valor.idDia);
+            viveres.precio = 0;
+            viveres.cantidad = 0
+            viveres.total = 0;
+            this.valViveres.push(this.fb.group(viveres));
+          });
+        });
+      }
+    });
     //Si todo esta OK procedo a buscar los dias de la semana
     this.getDiasPorSemana();
   }
 
   limpiarGastos() {
-    this.embarcacion = new Embarcacion();
-    this.semana = new SemanaModel();
+    Swal.fire({
+      title:"Volver a la Lista sin grabar",
+      html:"¿Seguro de volver a la lista de Gastos por Embarcación?",
+      icon:"question",
+      showCancelButton: true,
+      confirmButtonText: 'Si, Volver',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.nuevoDetalle = false;
+        this.embarcacion = new Embarcacion();
+        this.semana = new SemanaModel();
+        this.producto = [];
+      }
+    });
   }
 
-  onPrecioChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+  onPrecioHieloChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
     this.hielos.value.datos[rowIndex].total = nuevoPrecio * this.hielos.value.datos[rowIndex].cantidad;
   }
 
-  onCantidadChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+  onPrecioPetroleoChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+    this.petroleos.value.datos[rowIndex].total = nuevoPrecio * this.petroleos.value.datos[rowIndex].cantidad;
+  }
+
+  onPrecioViveresChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+    this.viveres.value.datos[rowIndex].total = nuevoPrecio * this.viveres.value.datos[rowIndex].cantidad;
+  }
+
+  onCantidadHieloChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
     this.hielos.value.datos[rowIndex].total = nuevoPrecio * this.hielos.value.datos[rowIndex].precio;
+  }
+
+  onCantidadPetroleoChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+    this.petroleos.value.datos[rowIndex].total = nuevoPrecio * this.petroleos.value.datos[rowIndex].precio;
+  }
+
+  onCantidadViveresChange(nuevoPrecio: number, rowIndex: any, rowItem: any) {
+    this.viveres.value.datos[rowIndex].total = nuevoPrecio * this.viveres.value.datos[rowIndex].precio;
   }
 
   beforeEditStart = (rowItem: any, field: any) => {
@@ -224,15 +308,122 @@ export class GastosEmbarcacionComponent implements OnInit {
     }
   };
 
-
+  buscarProductoSeleccionado(idProducto:number):boolean{
+    let productoSeleccionado : boolean =  false;
+    this.producto.forEach(value =>{
+      if (value.idProducto == idProducto){
+        productoSeleccionado = true;
+      }
+    } );
+    return productoSeleccionado;
+  }
   grabarGastos() {
-    this.pescaService.guardarGastos(this.hielos.value).subscribe(valor =>{
-      Swal.fire("Exito!!", "Se grabo correctamente los Gastos", "success");
+    this.producto.forEach(value => {
+      if(value.idProducto == 2){
+        this.pescaService.guardarGastos(this.petroleos.value).forEach(valor =>{
+          Swal.fire({
+            title: "Exito!!",
+            html: "Se grabo correctamente los Gastos",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: 'Seguir Editando',
+            cancelButtonText: 'Volver a la Lista',
+          }).then((result) => {
+            if (result.isDismissed) {
+              this.nuevoDetalle = false;
+            }
+          });
+        }).catch((falta)=>{
+          if(falta.status==200){
+            Swal.fire({
+              title: "Exito!!",
+              html: "Se grabo correctamente los Gastos",
+              icon: "success",
+              showCancelButton: true,
+              confirmButtonText: 'Seguir Editando',
+              cancelButtonText: 'Volver a la Lista',
+            }).then((result) => {
+              if (result.isDismissed) {
+                this.nuevoDetalle = false;
+              }
+            });
+          }else{
+            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error")
+          }
+        });
+      }
+
+      if(value.idProducto == 3){
+        this.pescaService.guardarGastos(this.hielos.value).forEach(valor =>{
+          Swal.fire({
+            title: "Exito!!",
+            html: "Se grabo correctamente los Gastos",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: 'Seguir Editando',
+            cancelButtonText: 'Volver a la Lista',
+          }).then((result) => {
+            if (result.isDismissed) {
+              this.nuevoDetalle = false;
+            }
+          });
+        }).catch((falta)=>{
+          if(falta.status==200){
+            Swal.fire({
+              title: "Exito!!",
+              html: "Se grabo correctamente los Gastos",
+              icon: "success",
+              showCancelButton: true,
+              confirmButtonText: 'Seguir Editando',
+              cancelButtonText: 'Volver a la Lista',
+            }).then((result) => {
+              if (result.isDismissed) {
+                this.nuevoDetalle = false;
+              }
+            });
+          }else{
+            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error")
+          }
+        });
+      }
+
+      if(value.idProducto == 17){
+        this.pescaService.guardarGastos(this.viveres.value).forEach(valor =>{
+          Swal.fire({
+            title: "Exito!!",
+            html: "Se grabo correctamente los Gastos",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: 'Seguir Editando',
+            cancelButtonText: 'Volver a la Lista',
+          }).then((result) => {
+            if (result.isDismissed) {
+              this.nuevoDetalle = false;
+            }
+          });
+        }).catch((falta)=>{
+          if(falta.status==200){
+            Swal.fire({
+              title: "Exito!!",
+              html: "Se grabo correctamente los Gastos",
+              icon: "success",
+              showCancelButton: true,
+              confirmButtonText: 'Seguir Editando',
+              cancelButtonText: 'Volver a la Lista',
+            }).then((result) => {
+              if (result.isDismissed) {
+                this.nuevoDetalle = false;
+              }
+            });
+          }else{
+            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error")
+          }
+        });
+      }
     });
-    Swal.fire("Exito!!", "Se grabo correctamente los Gastos", "success");
   }
 
-  onProveedorChange(valor: any, rowIndex: any, rowItem: any) {
+  onProveedorHieloChange(valor: any, rowIndex: any, rowItem: any) {
     this.proveedorService.obtenerPrecioxDia(this.hielos.value.datos[rowIndex].idProveedor.idProveedor,
       this.hielos.value.datos[rowIndex].idProveedor.idTipoServicio,
       this.hielos.value.datos[rowIndex].idDia).subscribe(value => {
@@ -242,65 +433,97 @@ export class GastosEmbarcacionComponent implements OnInit {
     });
   }
 
+  onProveedorViveresChange(valor: any, rowIndex: any, rowItem: any) {
+    this.proveedorService.obtenerPrecioxDia(this.viveres.value.datos[rowIndex].idProveedor.idProveedor,
+      this.viveres.value.datos[rowIndex].idProveedor.idTipoServicio,
+      this.viveres.value.datos[rowIndex].idDia).subscribe(value => {
+      this.viveres.value.datos[rowIndex].monedaString = value.abreviatura;
+      this.viveres.value.datos[rowIndex].precio = value.precio;
+      this.viveres.value.datos[rowIndex].idMoneda = value.idMoneda;
+    });
+  }
+
+  onProveedorPetroleoChange(valor: any, rowIndex: any, rowItem: any) {
+    this.proveedorService.obtenerPrecioxDia(this.petroleos.value.datos[rowIndex].idProveedor.idProveedor,
+      this.petroleos.value.datos[rowIndex].idProveedor.idTipoServicio,
+      this.petroleos.value.datos[rowIndex].idDia).subscribe(value => {
+      this.petroleos.value.datos[rowIndex].monedaString = value.abreviatura;
+      this.petroleos.value.datos[rowIndex].precio = value.precio;
+      this.petroleos.value.datos[rowIndex].idMoneda = value.idMoneda;
+    });
+  }
+
   deleteRow(rowItem: any, rowIndex: any) {
-    this.hielos.value.datos[rowIndex].monedaString = '';
-    this.hielos.value.datos[rowIndex].precio = 0;
-    this.hielos.value.datos[rowIndex].idMoneda = 0;
-    this.hielos.value.datos[rowIndex].cantidad = 0;
-    this.hielos.value.datos[rowIndex].total = 0;
-    this.hielos.value.datos[rowIndex].idProveedor = new ProveedorxTipo();
-    rowItem.value.idProveedorItem = !rowItem.value.idProveedorItem;
+    Swal.fire({
+      title:"Eliminar Gasto Embarcación",
+      html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'} para la embarcación  ${rowItem.embarcacion.nombre} en la semana ${rowItem.semana.id} ?`,
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+      }
+    });
   }
 
   onEmbarcacionChange(event: any) {
-    if (this.buscado) {
-      Swal.fire({
-        title: 'Advertencia',
-        text:'¿Seguro de cambiar de embarcación? Se perderán los cambios no grabados.',
-        showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          //Blanqueo los Proveedores sin grabar
-          this.hielos = this.fb.group({
-            datos: this.fb.array([]),
-          });
-          this.idEmbarcacion = event.idEmbarcacion;
-          this.embarcacionSeleccionada = event;
-        } else {
-          this.embarcacion = this.embarcacionSeleccionada;
-        }
-      });
-      return;
-    }
-    this.idEmbarcacion = event.idEmbarcacion;
-    this.embarcacionSeleccionada = event;
+    this.embarcacion = event;
+    this.hielos.patchValue({
+      embarcacion:event,
+    });
+
+    this.petroleos.patchValue({
+      embarcacion:event,
+    });
+
+    this.viveres.patchValue({
+      embarcacion:event,
+    });
   }
 
   onSemanaChange(event: any) {
-    if (this.buscado) {
-      Swal.fire({
-        title: 'Advertencia',
-        text:'¿Seguro de cambiar de embarcación? Se perderán los cambios no grabados.',
-        showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          //Blanqueo los Proveedores sin grabar
-          this.hielos = this.fb.group({
-            datos: this.fb.array([]),
-          });
-          this.idSemana = event.id;
-          this.semanaSeleccionada = event;
-        } else {
-          this.semana = this.semanaSeleccionada;
-        }
-      });
-      return;
+    this.semana = event;
+    this.hielos.patchValue({
+      semana:event,
+    });
+
+    this.petroleos.patchValue({
+      semana:event,
+    });
+
+    this.viveres.patchValue({
+      semana:event,
+    });
+  }
+
+  onProductoChange(event: any) {
+    this.producto = event;
+  }
+
+  editRow(rowItem: any, rowIndex: number) {
+    this.embarcacion = rowItem.embarcacion;
+    this.semana = rowItem.semana;
+    console.log(rowItem);
+    switch (rowItem.idTipoServicio){
+      case 2:
+        this.producto = [{
+          "idProducto": 2,
+          "nombreProducto":"PETROLEO",
+        }];
+        break;
+      case 3:
+        this.producto = [{
+          "idProducto":3,
+          "nombreProducto":"HIELO"
+        }];
+        break;
+      case 17:
+        this.producto = [{
+          "idProducto": 17,
+          "nombreProducto":"VIVERES",
+        }];
     }
-    this.idSemana = event.id;
-    this.semanaSeleccionada = event;
+    this.buscarGastos();
   }
 }
