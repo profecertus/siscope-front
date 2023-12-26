@@ -32,4 +32,7 @@ export class TipoCambioService {
     return  this.http.post(`${this.apiUrlTarifario}${this.tipoCambio}/grabarTipoCambio`, tipoCambio);
   }
 
+  postActualizaTipoCambio(fi:number, ff:number, monto:number){
+    return this.http.post(`${this.apiUrlTarifario}${this.tipoCambio}/actualizarTipoCambio/${fi}/${ff}/${monto}`, null);
+  }
 }

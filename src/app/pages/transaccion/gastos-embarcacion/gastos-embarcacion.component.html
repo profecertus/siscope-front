@@ -63,8 +63,8 @@
           ></d-select>
 
           <div class="header-right">
-            <d-button icon="icon-edit" (click)='buscarGastos()' *ngIf='!nuevoDetalle'>Editar</d-button>&nbsp;
-            <d-button icon="icon-edit" (click)='getAllGastosEmb()' *ngIf='!nuevoDetalle'>Refrescar</d-button>&nbsp;
+            <d-button icon="icon-add-file" (click)='buscarGastos()' *ngIf='!nuevoDetalle'>Nuevo</d-button>&nbsp;
+            <d-button icon="icon-refresh" (click)='getAllGastosEmb()' *ngIf='!nuevoDetalle'>Refrescar</d-button>&nbsp;
 
             <d-button icon="icon-save" (click)='grabarGastos()'
                       *ngIf='nuevoDetalle'>Grabar</d-button>&nbsp;

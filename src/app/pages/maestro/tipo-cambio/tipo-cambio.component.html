@@ -25,6 +25,7 @@
             </div>
             <div class="header-right">
               <d-button icon="icon-edit" (click)="reset()">Limpiar</d-button>&nbsp;
+              <d-button icon="icon-modify" (click)="modify()">Modificar</d-button>&nbsp;
               <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
             </div>
           </div>
@@ -98,5 +99,92 @@
 <ng-template #EditorTemplate>
   <da-admin-form [formConfig]="formConfig" [formData]="formData" (submitted)="onSubmitted($event)" (canceled)="onCanceled()">
   </da-admin-form>
+</ng-template>
+
+<ng-template #ModifyTemplate>
+  <div>
+    <section style="margin-left: 40px">
+      <form dForm [layout]="layoutDirection">
+        <div class="grid">
+          <div class="u-1"><d-form-item></d-form-item></div>
+          <div class="u-1-2">
+            <d-form-item>
+              <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha de Inicio.'">Fecha Inicio</d-form-label>
+              <d-form-control class="form-control-width">
+                <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
+                  <input
+                    class="devui-input devui-form-control"
+                    placeholder="dd/MM/y"
+                    (click)="datePicker1.toggle()"
+                    name="dp"
+                    [(ngModel)]="fechaInicio"
+                    [maxDate]="max"
+                    [dateFormat]="'dd/MM/y'"
+                    autocomplete="off"
+                    dDatepicker
+                    #datePicker1="datepicker"
+                    (selectedDateChange)="getValue($event)"
+                  />
+                  <div *ngIf="fechaInicio" class="devui-input-group-addon close-icon-wrapper" (click)="datePicker1.clearAll()">
+                    <i class="icon icon-close"></i>
+                  </div>
+                  <div class="devui-input-group-addon" (click)="datePicker1.toggle()">
+                    <i class="icon icon-calendar"></i>
+                  </div>
+                </div>
+              </d-form-control>
+            </d-form-item>
+          </div>
+          <div class="u-1-2">
+            <d-form-item>
+              <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha Fin.'">Fecha Fin</d-form-label>
+              <d-form-control class="form-control-width">
+                <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
+                  <input
+                    class="devui-input devui-form-control"
+                    placeholder="dd/MM/y"
+                    (click)="datePicker2.toggle()"
+                    name="dp2"
+                    [(ngModel)]="fechaFin"
+                    [maxDate]="max"
+                    [dateFormat]="'dd/MM/y'"
+                    autocomplete="off"
+                    dDatepicker
+                    #datePicker2="datepicker"
+                    (selectedDateChange)="getValue($event)"
+                  />
+                  <div *ngIf="fechaFin" class="devui-input-group-addon close-icon-wrapper" (click)="datePicker1.clearAll()">
+                    <i class="icon icon-close"></i>
+                  </div>
+                  <div class="devui-input-group-addon" (click)="datePicker1.toggle()">
+                    <i class="icon icon-calendar"></i>
+                  </div>
+                </div>
+              </d-form-control>
+            </d-form-item>
+          </div>
+          <div class="u-1"><d-form-item></d-form-item></div>
+          <div class="u-1"><d-form-item></d-form-item></div>
+          <div class="u-1"></div>
+          <div class="u-1-2">
+            <d-form-item>
+              <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Valor del tipo de cambio.'">Valor</d-form-label>
+              <d-form-control class="form-control-width">
+                <d-input-number name="valorTC" [(ngModel)]='valorTC'/>
+              </d-form-control>
+            </d-form-item>
+          </div>
+          <div class="u-1-2">
+          </div>
+          <div class="u-1"><d-form-item></d-form-item></div>
+          <div class="u-1"><d-form-item></d-form-item></div>
+        </div>
+        <d-form-operation>
+          <d-button bsStyle="primary" class="mr-element-spacing" circled="true" (click)='grabar()' style="margin-right: 4px !important">Aceptar</d-button>
+          <d-button bsStyle="common" circled="true" (click)='cancelar()'>Cancelar</d-button>
+        </d-form-operation>
+      </form>
+    </section>
+  </div>
 </ng-template>
 

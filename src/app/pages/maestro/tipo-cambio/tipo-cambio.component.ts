@@ -16,7 +16,14 @@ export class TipoCambioComponent implements OnInit{
   @ViewChild('EditorTemplate', { static: true })
   EditorTemplate: TemplateRef<any> | undefined;
 
+  @ViewChild('ModifyTemplate', { static: true })
+  ModifyTemplate: TemplateRef<any> | undefined;
+
   busy: Subscription = new Subscription() ;
+  fechaInicio = new Date();
+  fechaFin = new Date();
+  max = new Date();
+  layoutDirection: FormLayout = FormLayout.Columns;
   basicDataSource:TipoCambioModel[] = [];
   basicDataSourceBkp:TipoCambioModel[] = [];
   DatoABuscar: string = "";
@@ -60,6 +67,7 @@ export class TipoCambioComponent implements OnInit{
     pageIndex: 1,
     pageSize: 10,
   };
+  valorTC: number = 0;
   constructor(private tipoCambioService:TipoCambioService,private dialogService: DialogService,) {
   }
   ngOnInit(): void {
@@ -99,6 +107,43 @@ export class TipoCambioComponent implements OnInit{
     });
   }
 
+  cancelar(){
+    this.editForm!.modalInstance.hide();
+  }
+
+  grabar(){
+    if(this.fechaInicio > this.fechaFin){
+      Swal.fire("Verificar fechas","La fecha Inicio debe ser menor o igual a la Fecha fin","warning");
+      return;
+    }
+
+    if(this.valorTC <= 0){
+      Swal.fire("Valor de Cambio Erroneo", "Debe de ingresar un valor de cambio mayor o igual a cero", "warning");
+      return;
+    }
+
+    let fechaInic = this.fechaInicio.getFullYear() * 10000 + (this.fechaInicio.getMonth() + 1) * 100 + this.fechaInicio.getDate();
+    let fechaFin = this.fechaFin.getFullYear() * 10000 + (this.fechaFin.getMonth() + 1) * 100 + this.fechaFin.getDate();
+    this.tipoCambioService.postActualizaTipoCambio(fechaInic, fechaFin, this.valorTC).subscribe(valor =>{
+      Swal.fire("Exito", `Se actualizaron ${valor} registros.`, "success");
+      this.refresh();
+      this.cancelar();
+    });
+  }
+
+  modify(){
+    this.editForm = this.dialogService.open({
+      id: 'edit-dialog',
+      width: '600px',
+      maxHeight: '600px',
+      title: 'Tipo Cambio - Modificar',
+      showAnimate: false,
+      contentTemplate: this.ModifyTemplate,
+      backdropCloseable: true,
+      onClose: () => {},
+      buttons: [],
+    });
+  }
   reset() {
     this.pager.pageIndex = 1;
     this.DatoABuscar = "";
@@ -139,6 +184,12 @@ export class TipoCambioComponent implements OnInit{
     this.editRowIndex = -1;
   }
 
+  getValue(value: any):void {
+
+    if(value.selectedDate == null) return;
+    let fecha:Date = new Date(value.selectedDate);
+  }
+
   onSubmitted(event: any) {
     this.tipoCambioService.postGrabaTipoCambio(event).subscribe(value => {
       if(value == 1){
@@ -150,4 +201,6 @@ export class TipoCambioComponent implements OnInit{
       this.basicDataSource[this.editRowIndex].valorCambio = event.valorCambio;
     });
   }
+
+
 }
