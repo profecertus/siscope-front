@@ -103,8 +103,22 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   getAllGastosEmb(){
-    return this.busy = this.pescaService.getAllGastoEmb().subscribe(value => {
-      this.basicDataSource = value;
+    this.producto = [];
+    this.semana = new SemanaModel();
+    this.embarcacion = new Embarcacion();
+    return this.busy = this.pescaService.getAllGastoEmb().subscribe(valuex => {
+      valuex.forEach((value: { datos: any[], total?:number; })=>{
+        let totalMonto:number = 0;
+        value.datos.forEach(valor =>{
+          if (valor.idMoneda != 1){
+            totalMonto += valor.total * valor.valorCambio;
+          }else{
+            totalMonto += valor.total;
+          }
+        });
+        value.total = totalMonto;
+      });
+      this.basicDataSource = valuex;
     });
   }
 
@@ -169,7 +183,7 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.nuevoDetalle = true;
     //Verifico si existe gastos para esa semana embarcacion
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 3).subscribe(valor=>{
-      if(valor.length > 0){
+       if(valor.length > 0){
         this.hielos = this.fb.group({
           embarcacion: valor[0].embarcacion,
           semana: valor[0].semana,
@@ -178,17 +192,22 @@ export class GastosEmbarcacionComponent implements OnInit {
         });
       }else{
         this.valores.clear();
-        this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
-          this.diasxSemana = value;
+        this.semanaService.getDiasxSemana(this.semana.id).subscribe(value => {
+          this.diasxSemana = [];
+          value.forEach((valor: string) => {
+            this.diasxSemana.push(JSON.parse(valor))
+          });
+
           this.diasxSemana.forEach(valor => {
             //Empiezo a crear el arreglo de hielo
-            let hielo = new GastosModel();
-            hielo.nombreDia = valor.nombreDia;
-            hielo.idDia = valor.idDia;
-            hielo.idDiaString = this.getFecha(valor.idDia);
+            let hielo:GastosModel = new GastosModel();
+            hielo.nombreDia = valor["nombreDia"];
+            hielo.idDia = valor["idDia"];
+            hielo.idDiaString = this.getFecha(valor["idDia"]);
             hielo.precio = 0;
             hielo.cantidad = 0
             hielo.total = 0;
+            hielo.valorCambio = valor["valorCambio"];
             this.valores.push(this.fb.group(hielo));
           });
         });
@@ -207,16 +226,21 @@ export class GastosEmbarcacionComponent implements OnInit {
       }else{
         this.valPetroleo.clear();
         this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
-          this.diasxSemana = value;
+          this.diasxSemana = [];
+          value.forEach((valor: string) => {
+            this.diasxSemana.push(JSON.parse(valor))
+          });
+
           this.diasxSemana.forEach(valor => {
             //Empiezo a crear el arreglo de hielo
             let gastoPetroleo = new GastosModel();
-            gastoPetroleo.nombreDia = valor.nombreDia;
-            gastoPetroleo.idDia = valor.idDia;
-            gastoPetroleo.idDiaString = this.getFecha(valor.idDia);
+            gastoPetroleo.nombreDia = valor["nombreDia"];
+            gastoPetroleo.idDia = valor["idDia"];
+            gastoPetroleo.idDiaString = this.getFecha(valor["idDia"]);
             gastoPetroleo.precio = 0;
             gastoPetroleo.cantidad = 0
             gastoPetroleo.total = 0;
+            gastoPetroleo.valorCambio = valor["valorCambio"];
             this.valPetroleo.push(this.fb.group(gastoPetroleo));
           });
         });
@@ -235,16 +259,20 @@ export class GastosEmbarcacionComponent implements OnInit {
       }else{
         this.valViveres.clear();
         this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
-          this.diasxSemana = value;
+          this.diasxSemana = [];
+          value.forEach((valor: string) => {
+            this.diasxSemana.push(JSON.parse(valor))
+          });
           this.diasxSemana.forEach(valor => {
             //Empiezo a crear el arreglo de viveres
             let viveres = new GastosModel();
-            viveres.nombreDia = valor.nombreDia;
-            viveres.idDia = valor.idDia;
-            viveres.idDiaString = this.getFecha(valor.idDia);
+            viveres.nombreDia = valor["nombreDia"];
+            viveres.idDia = valor["idDia"];
+            viveres.idDiaString = this.getFecha(valor["idDia"]);
             viveres.precio = 0;
             viveres.cantidad = 0
             viveres.total = 0;
+            viveres.valorCambio = valor["valorCambio"];
             this.valViveres.push(this.fb.group(viveres));
           });
         });
@@ -317,110 +345,93 @@ export class GastosEmbarcacionComponent implements OnInit {
     } );
     return productoSeleccionado;
   }
+
   grabarGastos() {
+    const listaGastosPromises: Promise<any>[] = [];
+    //Primero verifico que todos tienen al menos un proveedor seleccionado en la semana
+    let encontrado:boolean = false;
     this.producto.forEach(value => {
+      let total = 0;
       if(value.idProducto == 2){
-        this.pescaService.guardarGastos(this.petroleos.value).forEach(valor =>{
-          Swal.fire({
-            title: "Exito!!",
-            html: "Se grabo correctamente los Gastos",
-            icon: "success",
-            showCancelButton: true,
-            confirmButtonText: 'Seguir Editando',
-            cancelButtonText: 'Volver a la Lista',
-          }).then((result) => {
-            if (result.isDismissed) {
-              this.nuevoDetalle = false;
-            }
-          });
-        }).catch((falta)=>{
-          if(falta.status==200){
-            Swal.fire({
-              title: "Exito!!",
-              html: "Se grabo correctamente los Gastos",
-              icon: "success",
-              showCancelButton: true,
-              confirmButtonText: 'Seguir Editando',
-              cancelButtonText: 'Volver a la Lista',
-            }).then((result) => {
-              if (result.isDismissed) {
-                this.nuevoDetalle = false;
-              }
-            });
-          }else{
-            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error")
-          }
+        this.petroleos.value.datos.forEach((valor: any) => {
+          total += valor.idProveedor.idProveedor;
         });
+        if(total == 0){
+          encontrado = true;
+        }
       }
 
-      if(value.idProducto == 3){
-        this.pescaService.guardarGastos(this.hielos.value).forEach(valor =>{
-          Swal.fire({
-            title: "Exito!!",
-            html: "Se grabo correctamente los Gastos",
-            icon: "success",
-            showCancelButton: true,
-            confirmButtonText: 'Seguir Editando',
-            cancelButtonText: 'Volver a la Lista',
-          }).then((result) => {
-            if (result.isDismissed) {
-              this.nuevoDetalle = false;
-            }
-          });
-        }).catch((falta)=>{
-          if(falta.status==200){
-            Swal.fire({
-              title: "Exito!!",
-              html: "Se grabo correctamente los Gastos",
-              icon: "success",
-              showCancelButton: true,
-              confirmButtonText: 'Seguir Editando',
-              cancelButtonText: 'Volver a la Lista',
-            }).then((result) => {
-              if (result.isDismissed) {
-                this.nuevoDetalle = false;
-              }
-            });
-          }else{
-            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error")
-          }
+      if(value.idProducto == 3 && !encontrado){
+        this.hielos.value.datos.forEach((valor: any) => {
+          total += valor.idProveedor.idProveedor;
         });
+        if(total == 0){
+          encontrado = true;
+        }
+      }
+
+      if(value.idProducto == 17 && !encontrado){
+        this.viveres.value.datos.forEach((valor: any) => {
+          total += valor.idProveedor.idProveedor;
+        });
+        if(total == 0){
+          encontrado = true;
+        }
+      }
+    });
+
+    if(encontrado){
+      Swal.fire("Información", "Recuerde que debe de seleccionar al menos un proveedor por producto", "warning");
+      return;
+    }
+
+    this.producto.forEach(value => {
+      if(value.idProducto == 2){
+        const promisePetroleo = this.pescaService.guardarGastos(this.petroleos.value)
+          .forEach(() =>{})
+          .catch((falta)=>{
+            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error");
+          });
+        listaGastosPromises.push(promisePetroleo);
+      }
+
+      if(value.idProducto == 3 ){
+        const promiseHielo = this.pescaService.guardarGastos(this.hielos.value)
+          .forEach(() =>{})
+          .catch((falta)=>{
+            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error");1
+        });
+        listaGastosPromises.push(promiseHielo);
       }
 
       if(value.idProducto == 17){
-        this.pescaService.guardarGastos(this.viveres.value).forEach(valor =>{
-          Swal.fire({
-            title: "Exito!!",
-            html: "Se grabo correctamente los Gastos",
-            icon: "success",
-            showCancelButton: true,
-            confirmButtonText: 'Seguir Editando',
-            cancelButtonText: 'Volver a la Lista',
-          }).then((result) => {
-            if (result.isDismissed) {
-              this.nuevoDetalle = false;
-            }
-          });
-        }).catch((falta)=>{
-          if(falta.status==200){
-            Swal.fire({
-              title: "Exito!!",
-              html: "Se grabo correctamente los Gastos",
-              icon: "success",
-              showCancelButton: true,
-              confirmButtonText: 'Seguir Editando',
-              cancelButtonText: 'Volver a la Lista',
-            }).then((result) => {
-              if (result.isDismissed) {
-                this.nuevoDetalle = false;
-              }
-            });
-          }else{
-            Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error")
-          }
+        const promiseViveres = this.pescaService.guardarGastos(this.viveres.value)
+          .forEach(()=>{}).catch((falta)=>{
+          Swal.fire("Error", "Sucedio un error al momento de grabar, intente luego", "error");
         });
+        listaGastosPromises.push(promiseViveres);
       }
     });
+
+    Promise.all(listaGastosPromises)
+      .then(()=>{
+        Swal.fire({
+          title: "Exito!!",
+          html: "Se grabo correctamente los Gastos",
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: 'Seguir Editando',
+          cancelButtonText: 'Volver a la Lista',
+        }).then((result) => {
+          if (result.isDismissed) {
+            this.nuevoDetalle = false;
+            this.getAllGastosEmb();
+          }
+        });
+      })
+      .catch(()=>{
+        Swal.fire("Error","Sucedio un Error al momento de grabar", "error");
+      });
   }
 
   onProveedorHieloChange(valor: any, rowIndex: any, rowItem: any) {
@@ -504,7 +515,7 @@ export class GastosEmbarcacionComponent implements OnInit {
   editRow(rowItem: any, rowIndex: number) {
     this.embarcacion = rowItem.embarcacion;
     this.semana = rowItem.semana;
-    console.log(rowItem);
+    //console.log(rowItem);
     switch (rowItem.idTipoServicio){
       case 2:
         this.producto = [{

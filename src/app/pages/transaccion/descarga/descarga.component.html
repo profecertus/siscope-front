@@ -24,152 +24,169 @@
               </div>
             </div>
             <div class="header-right">
-              <d-button icon="icon-edit" (click)="reset( )">Limpiar</d-button>&nbsp;
-              <d-button icon="icon-add-2" (click)="newRow()">Nuevo</d-button>&nbsp;
-              <d-button icon="icon-refresh" (click)="refresh()">Refrescar</d-button>
+              <d-button icon="icon-edit" *ngIf='!nuevoDetalle' (click)="reset( )">Limpiar</d-button>&nbsp;
+              <d-button icon="icon-add-file" *ngIf='!nuevoDetalle' (click)="newRow()">Nuevo</d-button>&nbsp;
+              <d-button icon="icon-refresh" *ngIf='!nuevoDetalle' (click)="refresh()">Refrescar</d-button>
+              <d-button icon="icon-save" *ngIf='nuevoDetalle'  (click)='onSubmit("")'>Grabar</d-button>&nbsp;
+              <d-button icon="icon-close"  *ngIf='nuevoDetalle' (click)='onCanceled()'>Volver</d-button>
             </div>
-          </div>
-
-          <div class="list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'" >
-            <d-data-table
-              [dataSource]="basicDataSource"
-              [scrollable]="true"
-              [striped]="true"
-              [headerBg]="true"
-              [resizeable]='true'
-              [tableLayout]="'auto'"
-            >
-              <d-column field="numTicket" header="Ticket" [width]="'100px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    {{ cellItem }}
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="fechaObj" header="Dia" [width]="'80px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    {{ cellItem.nombreDia }}
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="fechaObj" header="Fecha" [width]="'80px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.idDia" class="over-flow-ellipsis" [style.width]="'80px'">
-                      {{ getFecha(cellItem.idDia) }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="planta" header="Planta" [width]="'200px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.plantaDto.nombrePlanta" class="over-flow-ellipsis" [style.width]="'200px'">
-                      {{ cellItem.plantaDto.nombrePlanta }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="destino" header="Destino" [width]="'150px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.nombre" class="over-flow-ellipsis" [style.width]="'100px'">
-                      {{ cellItem.nombre }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="embarcacion" header="E/P" [width]="'150px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.nombre" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem.nombre }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="camara" header="Placa" [width]="'100px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.placa" class="over-flow-ellipsis" [style.width]="'100px'">
-                      {{ cellItem.placa }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <!--d-column field="camara" header="Dueño" [width]="'150px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.idProveedor.razonSocial" class="over-flow-ellipsis" [style.width]="'150px'">
-                      {{ cellItem.idProveedor.nombreComercial }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column-->
-
-              <d-column field="cajaReal" header="Num. Cajas" [width]="'100px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
-                      {{ cellItem }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-              <d-column field="kgCajaCompra" header="Kg Caja" [width]="'100px'">
-                <d-cell>
-                  <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
-                      {{ cellItem }}
-                    </span>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-
-              <d-column field="Actions" header="Acciones" [width]="'150px'">
-                <d-cell>
-                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-                    <d-icon icon="icon-edit" (click)="editRow(rowItem, rowIndex)" dIconLink>
-                      <a iconSuffix class="devui-link" href="" ></a>
-                    </d-icon>
-                    &nbsp;
-                    <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)" dIconLink>
-                      <a iconSuffix class="devui-link" href=""></a>
-                    </d-icon>
-                    &nbsp;
-                    <d-icon icon="icon-add" (click)="detalle(rowItem, rowIndex)" dIconLink>
-                      <a iconSuffix class="devui-link" href=""></a>
-                    </d-icon>
-                  </ng-template>
-                </d-cell>
-              </d-column>
-            </d-data-table>
-          </div>
-          <div class="da-list-footer">
-            <d-pagination
-              [size]="'sm'"
-              [total]="pager.total"
-              [(pageSize)]="pager.pageSize"
-              [(pageIndex)]="pager.pageIndex"
-              [canViewTotal]="true"
-              [canChangePageSize]="true"
-              [canJumpPage]="true"
-              [maxItems]="5"
-              (pageIndexChange)="onPageChange($event)"
-              (pageSizeChange)="onSizeChange($event)"
-            >
-            </d-pagination>
           </div>
         </div>
       </da-col-item>
+
+      <div *ngIf='!nuevoDetalle'>
+        <div class="da-content-wrapper">
+            <da-col-item [daSpan]="24" [daXs]="24">
+              <div class="da-list-container">
+                <div class="list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'"  *ngIf='!nuevoDetalle'>
+                  <d-data-table
+                    [dataSource]="basicDataSource"
+                    [scrollable]="true"
+                    [striped]="true"
+                    [headerBg]="true"
+                    [resizeable]='true'
+                    [tableLayout]="'auto'"
+                  >
+                    <d-column field="numTicket" header="Ticket" [width]="'100px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          {{ cellItem }}
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="fechaObj" header="Dia" [width]="'80px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          {{ cellItem.nombreDia }}
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="fechaObj" header="Fecha" [width]="'80px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem.idDia" class="over-flow-ellipsis" [style.width]="'80px'">
+                            {{ getFecha(cellItem.idDia) }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="planta" header="Planta" [width]="'200px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem.plantaDto.nombrePlanta" class="over-flow-ellipsis" [style.width]="'200px'">
+                            {{ cellItem.plantaDto.nombrePlanta }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="destino" header="Destino" [width]="'150px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem.nombre" class="over-flow-ellipsis" [style.width]="'100px'">
+                            {{ cellItem.nombre }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="embarcacion" header="E/P" [width]="'150px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem.nombre" class="over-flow-ellipsis" [style.width]="'150px'">
+                            {{ cellItem.nombre }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="camara" header="Placa" [width]="'100px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem.placa" class="over-flow-ellipsis" [style.width]="'100px'">
+                            {{ cellItem.placa }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <!--d-column field="camara" header="Dueño" [width]="'150px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem.idProveedor.razonSocial" class="over-flow-ellipsis" [style.width]="'150px'">
+                            {{ cellItem.idProveedor.nombreComercial }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column-->
+
+                    <d-column field="cajaReal" header="Num. Cajas" [width]="'100px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                            {{ cellItem }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                    <d-column field="kgCajaCompra" header="Kg Caja" [width]="'100px'">
+                      <d-cell>
+                        <ng-template let-cellItem="cellItem">
+                          <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'100px'">
+                            {{ cellItem }}
+                          </span>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+
+                    <d-column field="Actions" header="Acciones" [width]="'150px'">
+                      <d-cell>
+                        <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                          <d-icon icon="icon-edit" (click)="editRow(rowItem, rowIndex)" dIconLink>
+                            <a iconSuffix class="devui-link" href="" ></a>
+                          </d-icon>
+                          &nbsp;
+                          <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)" dIconLink>
+                            <a iconSuffix class="devui-link" href=""></a>
+                          </d-icon>
+                          &nbsp;
+                          <d-icon icon="icon-add" (click)="detalle(rowItem, rowIndex)" dIconLink>
+                            <a iconSuffix class="devui-link" href=""></a>
+                          </d-icon>
+                        </ng-template>
+                      </d-cell>
+                    </d-column>
+                  </d-data-table>
+                </div>
+                <div class="da-list-footer">
+                  <d-pagination
+                    [size]="'sm'"
+                    [total]="pager.total"
+                    [(pageSize)]="pager.pageSize"
+                    [(pageIndex)]="pager.pageIndex"
+                    [canViewTotal]="true"
+                    [canChangePageSize]="true"
+                    [canJumpPage]="true"
+                    [maxItems]="5"
+                    (pageIndexChange)="onPageChange($event)"
+                    (pageSizeChange)="onSizeChange($event)"
+                  >
+                  </d-pagination>
+                </div>
+              </div>
+            </da-col-item>
+
+        </div>
+      </div>
+
+      <div *ngIf='nuevoDetalle'>
+        <div class="da-content-wrapper">
+          <da-layout-row [daGutter]="[24, 24]">
+            <da-col-item [daSpan]="24" [daXs]="24">
+              <div class="da-list-container">
+                <da-nueva-descarga  [formData]="formData" (canceled)="onCanceled()" (submit)="onSubmit($event)">
+                </da-nueva-descarga>
+              </div>
+            </da-col-item>
+          </da-layout-row>
+        </div>
+      </div>
     </da-layout-row>
   </div>
-</div>
-
-<ng-template #EditorTemplate>
-  <da-nueva-descarga  [formData]="formData" (canceled)="onCanceled()" (submit)="onSubmit($event)">
-  </da-nueva-descarga>
-</ng-template>
-
-<d-toast></d-toast>
+</div><d-toast></d-toast>

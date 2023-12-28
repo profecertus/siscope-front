@@ -112,6 +112,15 @@
                       </ng-template>
                     </d-cell>
                   </d-column>
+                  <d-column field="total" header="Total (S/.)" [width]="'100px'">
+                    <d-cell>
+                      <ng-template let-cellItem="cellItem">
+                            <span [title]="cellItem" class="over-flow-ellipsis" [style.width]="'80px'"  style="text-align: right;">
+                              {{ cellItem.toFixed(2) }}
+                            </span>
+                      </ng-template>
+                    </d-cell>
+                  </d-column>
 
                   <d-column field="Actions" header="Acciones" [width]="'150px'">
                     <d-cell>

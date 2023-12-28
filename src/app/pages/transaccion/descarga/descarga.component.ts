@@ -1,5 +1,5 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { DialogService, FormLayout, ToastService } from '@devui';
+import { Component, ViewChild } from '@angular/core';
+import { DialogService, ToastService } from '@devui';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Trabajador } from '../../../model/trabajador.model';
@@ -14,6 +14,7 @@ import { Banco } from '../../../model/banco.model';
 import { FormaPago } from '../../../model/formaPago.model';
 import { PescaService } from '../../../service/pesca.service';
 import { format, parse } from 'date-fns';
+import { NuevaDescargaComponent } from './nueva-descarga/nueva-descarga.component';
 
 
 @Component({
@@ -30,7 +31,6 @@ export class DescargaComponent {
   monedaSource: Moneda[] = [];
   formaPagoSource: FormaPago[] = [];
   DatoABuscar: string = "";
-  accion:number = 0; //0 = Editar 1=Nuevo
 
   formData = {};
 
@@ -47,8 +47,6 @@ export class DescargaComponent {
 
   busy: Subscription = new Subscription() ;
 
-  @ViewChild('EditorTemplate', { static: true })
-  EditorTemplate: TemplateRef<any> | undefined;
   nuevoDetalle: boolean = false;
 
   constructor(private dialogService: DialogService, private pescaService: PescaService, private toastService: ToastService,
@@ -99,20 +97,9 @@ export class DescargaComponent {
   }
 
   editRow(row: any, index: number) {
-    this.accion = 0;
-    this.editRowIndex = index;
-    this.formData = row;
-    this.editForm = this.dialogService.open({
-      id: 'edit-dialog',
-      width: '800px',
-      maxHeight: '670px',
-      title: 'Edicion Descarga de Pesca',
-      showAnimate: false,
-      contentTemplate: this.EditorTemplate,
-      backdropCloseable: true,
-      onClose: () => {},
-      buttons: [],
-    });
+      this.nuevoDetalle = !this.nuevoDetalle;
+      this.formData = row
+      console.log(this.formData)
   }
 
   refresh():void{
@@ -120,22 +107,8 @@ export class DescargaComponent {
   }
   newRow():void {
     this.nuevoDetalle = !this.nuevoDetalle
-    /*this.accion = 1;
-    let row = new Trabajador();
-    this.editRowIndex = -1;
-    this.formData = row;
-    this.editForm = this.dialogService.open({
-      id: 'edit-dialog',
-      width: '800px',
-      maxHeight: '670px',
-      title: 'Nueva Descarga de Pesca',
-      showAnimate: false,
-      contentTemplate: this.EditorTemplate,
-      backdropCloseable: true,
-      onClose: () => {},
-      buttons: [],
-    });*/
   }
+
 
   deleteRow(e: Trabajador, index: number) {
     e.estadoReg = false;
@@ -200,13 +173,11 @@ export class DescargaComponent {
   }
 
   onCanceled():void {
-    this.editForm!.modalInstance.hide();
-    this.editRowIndex = -1;
+    this.nuevoDetalle = !this.nuevoDetalle;
   }
 
   onSubmit(resultado:string):void {
     Swal.fire(`TICKET ${resultado}`, "Se grabo correctamente la descarga de Pesca", "success");
-    this.editForm!.modalInstance.hide();
     const results = this.toastService.open({
       value: [{ severity: 'success', summary: `TICKET: ${resultado}`, content: 'Se grabo correctamente' }],
     });

@@ -23,8 +23,7 @@ import Swal from 'sweetalert2';
 
 export class NuevaDescargaComponent  implements OnInit {
   layoutDirection: FormLayout = FormLayout.Columns;
-  today = new Date();
-  max = this.today;
+  max = new Date();
   fechaNumber = 0;
   embarcaciones:Embarcacion[] = [];
   monedas:Moneda[]=[];
@@ -34,7 +33,9 @@ export class NuevaDescargaComponent  implements OnInit {
 
 
   @Input() set formData(val: any) {
-    this.formDescarga = this.fb.group(val);
+    if( Object.keys( this.fb.group(val).value).length > 0){
+      this.formDescarga = this.fb.group(val);
+    }
   }
 
   @Output() canceled = new EventEmitter();
@@ -44,7 +45,7 @@ export class NuevaDescargaComponent  implements OnInit {
   formDescarga: FormGroup = this.fb.group({
     _id:{},
     semana: new FormControl({ value: 0, disabled: true }),
-    fecha:this.today,
+    fecha:new Date(),
     fechaObj:{},
     embarcacion:{},
     cajaReal:[0, [Validators.pattern('[0-9]*')]],

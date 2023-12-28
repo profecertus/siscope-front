@@ -12,5 +12,6 @@ export class GastosModel{
   monedaString:string = '';
   precioCadena:string = '';
   total:number = 0;
+  valorCambio:number = 0;
   [key:string]:any;
 }
