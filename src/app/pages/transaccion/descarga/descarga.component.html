@@ -27,7 +27,7 @@
               <d-button icon="icon-edit" *ngIf='!nuevoDetalle' (click)="reset( )">Limpiar</d-button>&nbsp;
               <d-button icon="icon-add-file" *ngIf='!nuevoDetalle' (click)="newRow()">Nuevo</d-button>&nbsp;
               <d-button icon="icon-refresh" *ngIf='!nuevoDetalle' (click)="refresh()">Refrescar</d-button>
-              <d-button icon="icon-save" *ngIf='nuevoDetalle'  (click)='onSubmit("")'>Grabar</d-button>&nbsp;
+              <d-button icon="icon-save" *ngIf='nuevoDetalle'  (click)='grabarNuevaDescarga( )'>Grabar</d-button>&nbsp;
               <d-button icon="icon-close"  *ngIf='nuevoDetalle' (click)='onCanceled()'>Volver</d-button>
             </div>
           </div>
@@ -175,12 +175,12 @@
         </div>
       </div>
 
-      <div *ngIf='nuevoDetalle'>
+      <div  *ngIf='nuevoDetalle'>
         <div class="da-content-wrapper">
           <da-layout-row [daGutter]="[24, 24]">
             <da-col-item [daSpan]="24" [daXs]="24">
               <div class="da-list-container">
-                <da-nueva-descarga  [formData]="formData" (canceled)="onCanceled()" (submit)="onSubmit($event)">
+                <da-nueva-descarga #nuevaDescargaComponent [tipo]='tipoAccion'  [formData]="formData" (canceled)="onCanceled()" (submit)="onSubmit($event)">
                 </da-nueva-descarga>
               </div>
             </da-col-item>

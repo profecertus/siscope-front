@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { DialogService, ToastService } from '@devui';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -16,14 +16,14 @@ import { PescaService } from '../../../service/pesca.service';
 import { format, parse } from 'date-fns';
 import { NuevaDescargaComponent } from './nueva-descarga/nueva-descarga.component';
 
-
 @Component({
   selector: 'app-descarga',
   templateUrl: './descarga.component.html',
   styleUrls: ['./descarga.component.scss']
 })
 
-export class DescargaComponent {
+export class DescargaComponent implements AfterViewInit{
+  @ViewChild('nuevaDescargaComponent', {static:false}) nuevaDescarga: NuevaDescargaComponent | undefined;
   basicDataSource: Trabajador[] = [];
   basicDataSourceBkp: Trabajador[] = [];
   tipoDocSource: TipoDocumento[] = [];
@@ -31,13 +31,12 @@ export class DescargaComponent {
   monedaSource: Moneda[] = [];
   formaPagoSource: FormaPago[] = [];
   DatoABuscar: string = "";
-
+  busy: Subscription = new Subscription() ;
+  nuevoDetalle: boolean = false;
   formData = {};
-
   editForm: any = null;
-
   editRowIndex = -1;
-
+  tipoAccion:string = '';
 
   pager = {
     total: 0,
@@ -45,14 +44,16 @@ export class DescargaComponent {
     pageSize: 10,
   };
 
-  busy: Subscription = new Subscription() ;
-
-  nuevoDetalle: boolean = false;
-
   constructor(private dialogService: DialogService, private pescaService: PescaService, private toastService: ToastService,
               private trabajadorService: TrabajadorService, private tipodocumentoService: TipodocumentoService,
               private monedaService: MonedaService, private bancoService: BancoService, private formaPagoService: FormaPagoService
   ) {}
+
+  ngAfterViewInit(): void {
+        if (this.nuevaDescarga){
+          console.log("Existe Nueva Descarga")
+        }
+  }
 
   ngOnInit() {
     this.getList();
@@ -60,6 +61,7 @@ export class DescargaComponent {
     this.getListMoneda();
     this.getListBanco();
     this.getListFormaPago();
+
   }
 
   getList() {
@@ -97,9 +99,9 @@ export class DescargaComponent {
   }
 
   editRow(row: any, index: number) {
-      this.nuevoDetalle = !this.nuevoDetalle;
-      this.formData = row
-      console.log(this.formData)
+    this.nuevoDetalle = !this.nuevoDetalle;
+    this.formData = row;
+    this.tipoAccion = 'M';
   }
 
   refresh():void{
@@ -107,31 +109,15 @@ export class DescargaComponent {
   }
   newRow():void {
     this.nuevoDetalle = !this.nuevoDetalle
+    this.formData = { };
+    this.tipoAccion = 'N';
   }
 
 
-  deleteRow(e: Trabajador, index: number) {
-    e.estadoReg = false;
-    Swal.fire({
-      title: '¿Seguro de eliminar la Descarga de Pesca?',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.trabajadorService.guardarTrabajador(e).forEach(() => {
-          //e.plantaDto.idPlanta = value;
-        }).then(() => {
-          this.basicDataSource.splice(index, 1);
-          Swal.fire('Exito', 'Descarga de Pesca Eliminado!', 'success').then(()=>{});
-        }).catch( error =>{
-          console.error(error);
-          Swal.fire('Error', "Hubo Problemas al Eliminar la Descarga de Pesca, intentelo más tarde", 'error').then(()=>{});
-        }).finally(()=>{
-          this.editForm!.modalInstance.hide();
-        });
-      }
-    })
+  deleteRow(row: any, index: number) {
+    this.tipoAccion = 'E';
+    this.nuevoDetalle = !this.nuevoDetalle
+    this.formData = row;
   }
 
   onSearch(term: any) {
@@ -176,11 +162,15 @@ export class DescargaComponent {
     this.nuevoDetalle = !this.nuevoDetalle;
   }
 
+  grabarNuevaDescarga(){
+    this.nuevaDescarga?.grabar();
+  }
   onSubmit(resultado:string):void {
-    Swal.fire(`TICKET ${resultado}`, "Se grabo correctamente la descarga de Pesca", "success");
+    console.log(resultado);
     const results = this.toastService.open({
       value: [{ severity: 'success', summary: `TICKET: ${resultado}`, content: 'Se grabo correctamente' }],
     });
+    this.onCanceled();
     this.refresh();
   }
 

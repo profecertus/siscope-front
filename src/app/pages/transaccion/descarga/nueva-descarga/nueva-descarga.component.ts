@@ -29,12 +29,53 @@ export class NuevaDescargaComponent  implements OnInit {
   monedas:Moneda[]=[];
   plantas:RespuestaPlanta[]=[];
   camaras:Camara[]=[];
+  tipoAccion:string='';
 
-
+  @Input() set tipo(val: string) {
+    this.tipoAccion = val;
+  }
 
   @Input() set formData(val: any) {
     if( Object.keys( this.fb.group(val).value).length > 0){
       this.formDescarga = this.fb.group(val);
+      this.formDescarga.get('semana')?.disable();
+      this.formDescarga.get('toneladasCompra')?.disable();
+      this.formDescarga.get('toneladasVenta')?.disable();
+      this.formDescarga.get('totalFlete')?.disable();
+      this.formDescarga.get('proveedorFlete')?.disable();
+    }else{
+     this.formDescarga = this.fb.group({
+        semana: new FormControl({ value: 0, disabled: true }),
+        fecha:new Date(),
+        fechaObj:{},
+        embarcacion:{},
+        cajaReal:[0, [Validators.pattern('[0-9]*')]],
+        cajaGuia:0,
+        numTicket:'',
+        monedaHielo:{},
+        fechaNumero:0,
+        kgCajaCompra:0,
+        precioCompra:0,
+        monedaCompra: { },
+        kgCajaVenta:0,
+        precioVenta:0,
+        destino:{},
+        muelle:{},
+        precioMuelle:0,
+        precioHabilitacion:0,
+        precioAtraque:0,
+        precioHielo:0,
+        precioCertificado:0,
+        monedaVenta: {  },
+        precioRenta:0,
+        planta:{},
+        camara:{},
+        tarifaFlete: new FormControl({ value: 0, disabled: false }),
+        toneladasCompra: new FormControl({ value: 0, disabled: true }),
+        toneladasVenta: new FormControl({ value: 0, disabled: true }),
+        totalFlete: new FormControl({ value: 0, disabled: true }),
+        proveedorFlete: new FormControl({ value: '', disabled: true }),
+      });
     }
   }
 
@@ -43,7 +84,6 @@ export class NuevaDescargaComponent  implements OnInit {
   @Output() submit = new EventEmitter();
 
   formDescarga: FormGroup = this.fb.group({
-    _id:{},
     semana: new FormControl({ value: 0, disabled: true }),
     fecha:new Date(),
     fechaObj:{},
@@ -243,23 +283,71 @@ export class NuevaDescargaComponent  implements OnInit {
       toneladasVenta: this.formDescarga.value.kgCajaVenta * valor / 1000,
     });
   }
-  grabar(){
-    this.pescaService.getCorrelativo( Number.parseInt( this.fechaNumber.toString().substring(0,4)) ).subscribe(valor =>{
-      let resultado:string = `${valor.anio}-${valor.corre.toString().padStart(4, '0')}`;
-      this.formDescarga.patchValue({
-        numTicket:resultado,
-      });
 
-      this.pescaService.guardarPesca(this.formDescarga.value).forEach(value => {
-        this.submit.emit(resultado);
-      }).catch((rason) =>{
-        if(rason.status == 200 && rason.statusText == "OK"){
-          this.submit.emit(resultado);
-        }else{
-          Swal.fire("Error", "Hubo un error al momento de grabar la descarga", 'error')
+  // @ts-ignore
+  submitForm({ valid, directive }) {
+    // do something for submitting
+    if (valid) {
+      console.log(this.formDescarga);
+    }
+  }
+  grabar(){
+    if (this.formDescarga.valid) {
+      Swal.fire({
+        title: '¿Seguro de grabar la Descarga de Pesca?',
+        showCancelButton: true,
+        confirmButtonText: 'Grabar',
+        cancelButtonText: 'Cancelar',
+      }).then((respuesta) => {
+        if (respuesta.isConfirmed) {
+          this.formDescarga.get('semana')?.enable();
+          this.formDescarga.get('toneladasCompra')?.enable();
+          this.formDescarga.get('toneladasVenta')?.enable();
+          this.formDescarga.get('totalFlete')?.enable();
+          this.formDescarga.get('proveedorFlete')?.enable();
+
+          const objetoSinId = { ...this.formDescarga.value };
+          delete objetoSinId._id;
+          console.log(objetoSinId);
+          console.log(this.formDescarga);
+
+          let resultado:string = this.formDescarga.get('numTicket')?.value;
+          if(this.tipoAccion == "N"){
+            this.pescaService.getCorrelativo( Number.parseInt( this.fechaNumber.toString().substring(0,4)) ).
+            subscribe(valor =>{
+              resultado = `${valor.anio}-${valor.corre.toString().padStart(4, '0')}`;
+              this.formDescarga.patchValue({
+                numTicket:resultado,
+              });
+              this.pescaService.guardarPesca(this.formDescarga.value, this.tipoAccion).forEach(value => {
+                this.submit.emit(resultado);
+              }).catch((rason) =>{
+                if(rason.status == 200 && rason.statusText == "OK"){
+                  this.submit.emit(resultado);
+                }else{
+                  Swal.fire("Error", "Hubo un error al momento de grabar la descarga", 'error')
+                }
+              });
+            });
+          }else{
+            this.pescaService.guardarPesca(objetoSinId, this.tipoAccion).forEach(value => {
+              this.submit.emit(resultado);
+            }).catch((rason) =>{
+              if(rason.status == 200 && rason.statusText == "OK"){
+                this.submit.emit(resultado);
+              }else{
+                Swal.fire("Error", "Hubo un error al momento de grabar la descarga", 'error')
+              }
+            });
+          }
         }
       });
-    });
+
+
+    } else {
+      // El formulario no es válido, muestra un mensaje de error o realiza otra acción
+      console.error('El formulario no es válido, verifica los campos requeridos.');
+    }
   }
 
   salir():void{
