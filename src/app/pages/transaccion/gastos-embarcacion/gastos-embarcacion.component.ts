@@ -38,6 +38,7 @@ export class GastosEmbarcacionComponent implements OnInit {
   producto:any[] = [];
   nuevoDetalle: boolean = false;
   semana: SemanaModel = new SemanaModel();
+  semanaRel: SemanaModel = new SemanaModel();
   embarcacion: Embarcacion = new Embarcacion();
   editableTip = EditableTip.btn;
   proveedorHielo: ProveedorxTipo[] = [];
@@ -87,7 +88,6 @@ export class GastosEmbarcacionComponent implements OnInit {
       idTipoServicio: 17,
       datos: this.fb.array([]),
     });
-    //(this.hielos.get('datos')?.value as FormArray).push(this.fb.group({ "nombre":"Edwin" }));
   }
 
   get valores(): FormArray {
@@ -208,6 +208,8 @@ export class GastosEmbarcacionComponent implements OnInit {
             hielo.cantidad = 0
             hielo.total = 0;
             hielo.valorCambio = valor["valorCambio"];
+            //hielo.semanaRel = this.semana;
+            hielo.precioCadena = '';
             this.valores.push(this.fb.group(hielo));
           });
         });
@@ -241,6 +243,8 @@ export class GastosEmbarcacionComponent implements OnInit {
             gastoPetroleo.cantidad = 0
             gastoPetroleo.total = 0;
             gastoPetroleo.valorCambio = valor["valorCambio"];
+            //gastoPetroleo.semanaRel = this.semana;
+            gastoPetroleo.precioCadena = '';
             this.valPetroleo.push(this.fb.group(gastoPetroleo));
           });
         });
@@ -273,6 +277,8 @@ export class GastosEmbarcacionComponent implements OnInit {
             viveres.cantidad = 0
             viveres.total = 0;
             viveres.valorCambio = valor["valorCambio"];
+            //viveres.semanaRel = this.semana;
+            viveres.precioCadena = '';
             this.valViveres.push(this.fb.group(viveres));
           });
         });
@@ -329,6 +335,18 @@ export class GastosEmbarcacionComponent implements OnInit {
   };
 
   beforeEditEnd = (rowItem: any, field: any) => {
+    if (rowItem) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  beforeEditStartSR = (rowItem: any, field: any) => {
+    return true;
+  };
+
+  beforeEditEndSR = (rowItem: any, field: any) => {
     if (rowItem) {
       return false;
     } else {
@@ -441,6 +459,7 @@ export class GastosEmbarcacionComponent implements OnInit {
       this.hielos.value.datos[rowIndex].monedaString = value.abreviatura;
       this.hielos.value.datos[rowIndex].precio = value.precio;
       this.hielos.value.datos[rowIndex].idMoneda = value.idMoneda;
+      this.hielos.value.datos[rowIndex].semanaRel = this.semana;
     });
   }
 
@@ -451,6 +470,7 @@ export class GastosEmbarcacionComponent implements OnInit {
       this.viveres.value.datos[rowIndex].monedaString = value.abreviatura;
       this.viveres.value.datos[rowIndex].precio = value.precio;
       this.viveres.value.datos[rowIndex].idMoneda = value.idMoneda;
+      this.viveres.value.datos[rowIndex].semanaRel = this.semana;
     });
   }
 
@@ -461,6 +481,7 @@ export class GastosEmbarcacionComponent implements OnInit {
       this.petroleos.value.datos[rowIndex].monedaString = value.abreviatura;
       this.petroleos.value.datos[rowIndex].precio = value.precio;
       this.petroleos.value.datos[rowIndex].idMoneda = value.idMoneda;
+      this.petroleos.value.datos[rowIndex].semanaRel = this.semana;
     });
   }
 
@@ -495,6 +516,7 @@ export class GastosEmbarcacionComponent implements OnInit {
 
   onSemanaChange(event: any) {
     this.semana = event;
+    this.semanaRel = event;
     this.hielos.patchValue({
       semana:event,
     });

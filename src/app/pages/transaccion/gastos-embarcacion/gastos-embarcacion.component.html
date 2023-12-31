@@ -172,12 +172,13 @@
               >
                 <thead dTableHead>
                 <tr dTableRow>
-                  <th dHeadCell>Dia</th>
-                  <th dHeadCell>Fecha</th>
-                  <th dHeadCell>Proveedor</th>
-                  <th dHeadCell>Precio x Und</th>
-                  <th dHeadCell>Cantidad</th>
-                  <th dHeadCell>Total</th>
+                  <th dHeadCell [width]="'7.5%'" >Dia</th>
+                  <th dHeadCell [width]="'7.5%'" >Fecha</th>
+                  <th dHeadCell [width]="'22.22%'" >Proveedor</th>
+                  <th dHeadCell [width]="'11.11%'">Precio x Und</th>
+                  <th dHeadCell [width]="'11.11%'">Cantidad</th>
+                  <th dHeadCell [width]="'11.11%'">Total</th>
+                  <th dHeadCell [width]="'20%'">Semana<br>Relacionada</th>
                   <th dHeadCell>Validar</th>
                 </tr>
                 </thead>
@@ -287,8 +288,37 @@
                         dTableCell
                         [rowItem]="rowItem"
                         [field]="'total'"
+                        style="text-align: right;">
+                        <span >{{  rowItem.value.monedaString }} {{ rowItem.value.total.toFixed(2) }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.total"
+                        [rowItem]="rowItem"
+                        [field]="'semanaRel'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
                       >
-                        <span>{{  rowItem.value.monedaString }} {{ rowItem.value.total }}</span>
+                      <span *ngIf="!rowItem.value.total"
+                      ><d-tag *ngIf="rowItem.value.idProveedorItem"
+                              [tag]="rowItem.value.semanaRel.nombreCompleto"
+                              [labelStyle]="'semanaRel'"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem.value.total"
+                          class="edit-padding-fix"
+                        >
+                          <d-select
+                            [options]='semanas'
+                            [filterKey]="'nombreCompleto'"
+                            [isSearch]="true"
+                            [readonly]="true"
+                            [(ngModel)]='rowItem.value.semanaRel'
+                          ></d-select>
+                        </div>
                       </td>
                       <td
                         dTableCell
@@ -315,9 +345,9 @@
         </da-col-item>
       </da-layout-row>
     </div>
-    <!--
+    <
         {{this.hielos.value | json}}
-        -->
+        >
     </div>
 
     <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(2)'>
@@ -335,12 +365,13 @@
                 >
                   <thead dTableHead>
                   <tr dTableRow>
-                    <th dHeadCell>Dia</th>
-                    <th dHeadCell>Fecha</th>
-                    <th dHeadCell>Proveedor</th>
-                    <th dHeadCell>Precio x Und</th>
-                    <th dHeadCell>Cantidad</th>
-                    <th dHeadCell>Total</th>
+                    <th dHeadCell [width]="'7.5%'" >Dia</th>
+                    <th dHeadCell [width]="'7.5%'" >Fecha</th>
+                    <th dHeadCell [width]="'22.22%'" >Proveedor</th>
+                    <th dHeadCell [width]="'11.11%'">Precio x Und</th>
+                    <th dHeadCell [width]="'11.11%'">Cantidad</th>
+                    <th dHeadCell [width]="'11.11%'">Total</th>
+                    <th dHeadCell [width]="'20%'">Semana<br>Relacionada</th>
                     <th dHeadCell>Validar</th>
                   </tr>
                   </thead>
@@ -455,6 +486,35 @@
                       </td>
                       <td
                         dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.semanaRel"
+                        [rowItem]="rowItem"
+                        [field]="'semanaRel'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem.value.semanaRel"
+                      ><d-tag *ngIf="rowItem.value.idProveedorItem"
+                              [tag]="semana.nombreCompleto"
+                              [labelStyle]="'semanaRel'"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem.value.semanaRel"
+                          class="edit-padding-fix"
+                        >
+                          <d-select
+                            [options]='semanas'
+                            [filterKey]="'nombreCompleto'"
+                            [isSearch]="true"
+                            [readonly]="true"
+                            [(ngModel)]='rowItem.value.semanaRel'
+                          ></d-select>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
                         [rowItem]="rowItem"
                       >
                         <d-icon
@@ -498,12 +558,13 @@
                 >
                   <thead dTableHead>
                   <tr dTableRow>
-                    <th dHeadCell>Dia</th>
-                    <th dHeadCell>Fecha</th>
-                    <th dHeadCell>Proveedor</th>
-                    <th dHeadCell>Precio x Und</th>
-                    <th dHeadCell>Cantidad</th>
-                    <th dHeadCell>Total</th>
+                    <th dHeadCell [width]="'7.5%'" >Dia</th>
+                    <th dHeadCell [width]="'7.5%'" >Fecha</th>
+                    <th dHeadCell [width]="'22.22%'" >Proveedor</th>
+                    <th dHeadCell [width]="'11.11%'">Precio x Und</th>
+                    <th dHeadCell [width]="'11.11%'">Cantidad</th>
+                    <th dHeadCell [width]="'11.11%'">Total</th>
+                    <th dHeadCell [width]="'20%'">Semana<br>Relacionada</th>
                     <th dHeadCell>Validar</th>
                   </tr>
                   </thead>
@@ -615,6 +676,35 @@
                         [field]="'total'"
                       >
                         <span>{{  rowItem.value.monedaString }} {{ rowItem.value.total }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.semanaRel"
+                        [rowItem]="rowItem"
+                        [field]="'semanaRel'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem.value.semanaRel"
+                      ><d-tag *ngIf="rowItem.value.idProveedorItem"
+                              [tag]="semana.nombreCompleto"
+                              [labelStyle]="'semanaRel'"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem.value.semanaRel"
+                          class="edit-padding-fix"
+                        >
+                          <d-select
+                            [options]='semanas'
+                            [filterKey]="'nombreCompleto'"
+                            [isSearch]="true"
+                            [readonly]="true"
+                            [(ngModel)]='rowItem.value.semanaRel'
+                          ></d-select>
+                        </div>
                       </td>
                       <td
                         dTableCell
