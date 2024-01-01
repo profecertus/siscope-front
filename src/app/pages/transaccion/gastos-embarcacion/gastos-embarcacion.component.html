@@ -289,13 +289,13 @@
                         [rowItem]="rowItem"
                         [field]="'total'"
                         style="text-align: right;">
-                        <span >{{  rowItem.value.monedaString }} {{ rowItem.value.total.toFixed(2) }}</span>
+                        <span >{{  rowItem.value.monedaString }} {{ formatearDecimales(rowItem.value.total,3) }}</span>
                       </td>
                       <td
                         dTableCell
                         [editable]="true"
                         [editableTip]="editableTip"
-                        [(editing)]="rowItem.value.total"
+                        [(editing)]="rowItem.value.idProveedorItem"
                         [rowItem]="rowItem"
                         [field]="'semanaRel'"
                         [beforeEditStart]="beforeEditStart"
@@ -345,9 +345,7 @@
         </da-col-item>
       </da-layout-row>
     </div>
-    <
-        {{this.hielos.value | json}}
-        >
+
     </div>
 
     <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(2)'>
@@ -482,26 +480,26 @@
                         [rowItem]="rowItem"
                         [field]="'total'"
                       >
-                        <span>{{  rowItem.value.monedaString }} {{ rowItem.value.total }}</span>
+                        <span>{{  rowItem.value.monedaString }} {{ formatearDecimales(rowItem.value.total,3) }}</span>
                       </td>
                       <td
                         dTableCell
                         [editable]="true"
                         [editableTip]="editableTip"
-                        [(editing)]="rowItem.value.semanaRel"
+                        [(editing)]="rowItem.value.idProveedorItem"
                         [rowItem]="rowItem"
                         [field]="'semanaRel'"
                         [beforeEditStart]="beforeEditStart"
                         [beforeEditEnd]="beforeEditEnd"
                       >
-                      <span *ngIf="!rowItem.value.semanaRel"
+                      <span *ngIf="!rowItem.value.total"
                       ><d-tag *ngIf="rowItem.value.idProveedorItem"
-                              [tag]="semana.nombreCompleto"
+                              [tag]="rowItem.value.semanaRel.nombreCompleto"
                               [labelStyle]="'semanaRel'"
                       ></d-tag
                       ></span>
                         <div
-                          *ngIf="rowItem.value.semanaRel"
+                          *ngIf="rowItem.value.total"
                           class="edit-padding-fix"
                         >
                           <d-select
@@ -675,26 +673,26 @@
                         [rowItem]="rowItem"
                         [field]="'total'"
                       >
-                        <span>{{  rowItem.value.monedaString }} {{ rowItem.value.total }}</span>
+                        <span>{{  rowItem.value.monedaString }} {{ formatearDecimales(rowItem.value.total,3) }}</span>
                       </td>
                       <td
                         dTableCell
                         [editable]="true"
                         [editableTip]="editableTip"
-                        [(editing)]="rowItem.value.semanaRel"
+                        [(editing)]="rowItem.value.idProveedorItem"
                         [rowItem]="rowItem"
                         [field]="'semanaRel'"
                         [beforeEditStart]="beforeEditStart"
                         [beforeEditEnd]="beforeEditEnd"
                       >
-                      <span *ngIf="!rowItem.value.semanaRel"
+                      <span *ngIf="!rowItem.value.total"
                       ><d-tag *ngIf="rowItem.value.idProveedorItem"
-                              [tag]="semana.nombreCompleto"
+                              [tag]="rowItem.value.semanaRel.nombreCompleto"
                               [labelStyle]="'semanaRel'"
                       ></d-tag
                       ></span>
                         <div
-                          *ngIf="rowItem.value.semanaRel"
+                          *ngIf="rowItem.value.total"
                           class="edit-padding-fix"
                         >
                           <d-select

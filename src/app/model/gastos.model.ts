@@ -13,6 +13,7 @@ export class GastosModel{
   monedaString:string = '';
   semanaRel:SemanaModel = new SemanaModel();
   precioCadena:string = '';
+  habilitado:boolean = false;
   total:number = 0;
   valorCambio:number = 0;
   [key:string]:any;

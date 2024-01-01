@@ -342,16 +342,24 @@ export class GastosEmbarcacionComponent implements OnInit {
     }
   };
 
+  formatearDecimales(numero:number, decimales:number):string{
+    let array = numero.toString().split(".")
+    if (array.length > 1){
+      while (array[1].length < decimales) {
+        array[1] += "0";
+      }
+    }else{
+      array.push("000");
+    }
+    return array[0] + '.' + array[1];
+  }
+
   beforeEditStartSR = (rowItem: any, field: any) => {
     return true;
   };
 
   beforeEditEndSR = (rowItem: any, field: any) => {
-    if (rowItem) {
-      return false;
-    } else {
-      return true;
-    }
+    return true;
   };
 
   buscarProductoSeleccionado(idProducto:number):boolean{
