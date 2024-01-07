@@ -4,10 +4,10 @@ export const echartServiceOption = {
     confine: true,
   },
   legend: {
-    data: ['服务水位'],
+    data: ['semanas'],
     type: 'scroll',
-    show: false,
-    orient: 'horizontal',
+    show: true,
+    orient: 'vertical',
     top: '6%',
     right: '6%',
     icon: 'circle',
@@ -15,7 +15,7 @@ export const echartServiceOption = {
     itemHeight: 6,
     itemGap: 13,
     textStyle: {
-      fontSize: 14,
+      fontSize: 10,
       color: '#E5E5E5',
     },
   },
@@ -89,9 +89,9 @@ export const echartServiceOption = {
     },
     axisLabel: {
       color: 'rgba(103, 103, 103, 1)',
-      fontSize: 14,
+      fontSize: 12,
       interval: 10,
-      rotate: 0,
+      rotate: 90,
     },
     show: true,
   },
@@ -115,7 +115,7 @@ export const echartServiceOption = {
   },
   series: [
     {
-      name: '服务水位',
+      name: 'Numero',
       data: [
         21.69, 30.16, 11.64, 11.64, 31.22, 17.46, 14.81, 44.44, 28.57, 14.81, 12.7, 35.98, 23.28, 16.93, 19.58, 8.99, 11.64, 4.23, 5.29,
         1.06, 3.7, 3.17, 3.17, 5.82, 16.4, 15.87, 18.52, 13.76, 19.05, 26.46, 30.16, 24.87, 23.81, 24.87, 16.93, 17.99, 13.76, 10.58, 20.63,
@@ -140,7 +140,6 @@ export const echartServiceOption = {
           y2: 1,
           type: 'linear',
           global: false,
-          //区域颜色
           colorStops: [
             {
               offset: 0,
@@ -255,36 +254,3 @@ export const monitorOption = {
   ],
 };
 
-export const mapOption = {
-  tooltip: {
-    trigger: 'item',
-    showDelay: 0,
-    transitionDuration: 0.2,
-    formatter: function (params: any) {
-      return `用户数 <br/> ${params.name}: ${params.value}`;
-    },
-  },
-  visualMap: {
-    left: 'right',
-    min: 0,
-    max: 200,
-    inRange: {
-      color: ['#BDFDFF', '#9FE1FF', '#81C5FF', '#61AAFF', '#3F8FEC', '#0676D0', '#005DB4', '#004698', '#00307E'],
-    },
-    text: ['High', 'Low'], // 文本，默认为数值文本
-    calculable: true,
-  },
-  series: [
-    {
-      map: 'china',
-      type: 'map',
-      emphasis: {
-        label: {
-          show: true,
-        },
-      },
-
-      data: [],
-    },
-  ],
-};

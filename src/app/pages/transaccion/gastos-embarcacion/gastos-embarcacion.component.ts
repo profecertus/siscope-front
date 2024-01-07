@@ -494,17 +494,32 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   deleteRow(rowItem: any, rowIndex: any) {
-    Swal.fire({
-      title:"Eliminar Gasto Embarcación",
-      html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'} para la embarcación  ${rowItem.embarcacion.nombre} en la semana ${rowItem.semana.id} ?`,
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
+    //Verifico si el gasto esta asociado a una semana cerrada o abierta
+    if(rowItem.semana.estado){
+      Swal.fire({
+        title:"Eliminar Gasto Embarcación",
+        html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'} para la embarcación  ${rowItem.embarcacion.nombre} en la semana ${rowItem.semana.id} ?`,
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
 
-      }
-    });
+          this.pescaService
+            .eliminarGastoEmb(rowItem.embarcacion.idEmbarcacion, rowItem.semana.id, rowItem.idTipoServicio)
+            .subscribe(valor => {
+              if(valor.length > 0){
+                Swal.fire("Exito", "Se elimino correctamente el gasto", "success");
+                this.getAllGastosEmb();
+              }else{
+                Swal.fire("Error", "Sucedio un error al momento de eliminar el gasto", "error");
+              }
+            });
+        }
+      });
+    }else{
+      Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, abrá la semana si desea continuar", "error");
+    }
   }
 
   onEmbarcacionChange(event: any) {

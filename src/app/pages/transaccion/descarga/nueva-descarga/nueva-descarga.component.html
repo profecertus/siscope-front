@@ -37,56 +37,95 @@
 
       <div class="u-1-5 box">
           <d-form-label [required]="true">Embarcación</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-select
-              [options]="embarcaciones"
-              name="embarcacion"
-              [filterKey]="'nombre'"
-              formControlName='embarcacion'
-              [placeholder]="'Seleccione una embarcación'"
-              [allowClear]="true"
-              [dValidateRules]="[{ required: true }]"
-            ></d-select>
-          </d-form-control>
+        <d-form-control class="form-control-width">
+          <d-select
+            [options]="embarcaciones"
+            name="embarcacion"
+            [filterKey]="'nombre'"
+            formControlName='embarcacion'
+            [placeholder]="'Seleccione una embarcación'"
+            [allowClear]="true"
+            [dValidateRules]="[{ required: true }]"
+          ></d-select>
+        </d-form-control>
       </div>
 
       <div class="u-1-5 box">
         <d-form-label [required]="true">Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="plantas" name="planta" [filterKey]="'nombrePlanta'" formControlName='planta' ></d-select>
-        </d-form-control>
-      </div>
-      <div class="u-1-5 box">
-        <d-form-label [required]="true">Destino</d-form-label>
-        <d-form-control class="form-control-width">
-          <d-select [options]="destinos" name="destino" [filterKey]="'nombre'" formControlName='destino' ></d-select>
+          <d-select
+            [options]="plantas"
+            name="planta"
+            [filterKey]="'nombrePlanta'"
+            formControlName='planta'
+            [placeholder]="'Selecciones la Planta'"
+            [width]="350"
+            [appendToBody]="true"
+            [appendToBodyDirections]="['leftDown', 'leftUp']"
+          ></d-select>
         </d-form-control>
       </div>
 
       <div class="u-1-5 box">
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Real'">Caja Real</d-form-label>
+        <d-form-label [required]="true">Destino</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select
+            [options]="destinos"
+            name="destino"
+            [filterKey]="'nombre'"
+            [placeholder]="'Seleccione el destino'"
+            formControlName='destino'
+          ></d-select>
+        </d-form-control>
+      </div>
+
+      <div class="u-1-5 box">
+          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Caja Real'">Caja Real (Und)</d-form-label>
           <d-form-control class="form-control-width">
             <d-input-number name="cajaReal" formControlName="cajaReal" />
           </d-form-control>
       </div>
       <div class="u-1-5 box">
-          <d-form-label [hasHelp]="true" [helpTips]="'Caja Guía'">Caja Guía</d-form-label>
+          <d-form-label [hasHelp]="true" [helpTips]="'Caja Guía'">Caja Guía (Und)</d-form-label>
           <d-form-control class="form-control-width">
-            <d-input-number d name="cajaGuia" formControlName="cajaGuia"/>
+            <d-input-number name="cajaGuia" formControlName="cajaGuia"/>
           </d-form-control>
       </div>
       <div class="u-1-5 box">
         <d-form-label [required]="true">Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="muelles" name="muelle" [filterKey]="'razonSocial'" formControlName='muelle'></d-select>
+          <d-select
+            [options]="muelles"
+            name="muelle"
+            [filterKey]="'razonSocial'"
+            [placeholder]="'Seleccione el Muelle'"
+            formControlName='muelle'
+            [width]="350"
+            [appendToBody]="true"
+            [appendToBodyDirections]="['leftDown', 'leftUp']"
+          ></d-select>
         </d-form-control>
       </div>
+
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio del Tarifario x Eje'">{{ l_muelle }}</d-form-label>
-        <d-form-control class="form-control-width">
-          <d-input-number name="precioMuelle" formControlName='precioMuelle' />
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio del Tarifario x Eje'">Precio</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioMuelle" formControlName='precioMuelle' style="'margin-right: 10px;'"/>
+            </div>
+            <div style="width: 58%;">
+              <d-select
+                [options]="monedas"
+                name="monedaMuelle"
+                [filterKey]="'nombre'"
+                formControlName='monedaMuelle'
+              ></d-select>
+            </div>
+          </div>
         </d-form-control>
       </div>
+
       <div class="u-1-5 box">
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'15% (Toneladas Venta x Precio Venta)'">{{  l_renta }}</d-form-label>
         <d-form-control class="form-control-width">
@@ -101,19 +140,36 @@
         <strong>FLETE</strong><br>
         <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Placa de la Cámara'">Cámara</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="camaras" name="camara" [filterKey]="'placa'" formControlName='camara'></d-select>
+          <d-select
+            [options]="camaras"
+            name="camara"
+            [placeholder]="'Seleccione la placa'"
+            [filterKey]="'placa'"
+            formControlName='camara'></d-select>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
         <d-form-label [hasHelp]="true" [helpTips]="'Debe estar seleccionado la Planta'">Tarifa Flete</d-form-label>
-        <d-form-control class="form-control-width">
-          <input dTextInput name="tarifa" formControlName='tarifaFlete' class='text-right' />
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="tarifa" formControlName='tarifaFlete' style="'margin-right: 10px;'"/>
+            </div>
+            <div style="width: 58%;">
+              <d-select
+                [options]="monedas"
+                name="monedaFlete"
+                [filterKey]="'nombre'"
+                formControlName='monedaFlete'
+              ></d-select>
+            </div>
+          </div>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
-        <d-form-label [hasHelp]="true" [helpTips]="'# Cajas x Tarifa'">Total Flete</d-form-label>
+        <d-form-label [hasHelp]="true" [helpTips]="'# Cajas x Tarifa'">{{ l_flete }}</d-form-label>
         <d-form-control class="form-control-width">
           <input dTextInput name="total" formControlName='totalFlete' class='text-right' />
         </d-form-control>
@@ -141,19 +197,22 @@
             <input dTextInput name="toneladasCompra" formControlName='toneladasCompra' class='text-right' />
           </d-form-control>
       </div>
+
       <div class="u-1-5 box">
         <br>
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio x Caja'">Precio</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-input-number name="precioCompra" formControlName='precioCompra' />
-          </d-form-control>
+        <d-form-label [hasHelp]="true" [helpTips]="'Precio de Compra por Caja'">Precio por Caja</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioCompra" formControlName='precioCompra' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaCompra" [filterKey]="'nombre'" formControlName='monedaCompra' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
       </div>
       <div class="u-1-5 box">
-        <br>
-        <d-form-label [required]="true">Moneda</d-form-label>
-        <d-form-control class="form-control-width">
-          <d-select [options]="monedas" name="monedaCompra" [filterKey]="'nombre'" formControlName='monedaCompra' ></d-select>
-        </d-form-control>
       </div>
       <div class="u-1-5 box"></div>
 
@@ -172,58 +231,234 @@
             <input dTextInput name="toneladasVenta" formControlName='toneladasVenta' class='text-right' />
           </d-form-control>
       </div>
+
       <div class="u-1-5 box">
         <br>
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio x Caja'">Precio</d-form-label>
-        <d-form-control class="form-control-width">
-          <d-input-number name="precioVenta" formControlName='precioVenta' />
+        <d-form-label [hasHelp]="true" [helpTips]="'Precio de Compra por Caja'">Precio por Caja</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioVenta" formControlName='precioVenta' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaVenta" [filterKey]="'nombre'" formControlName='monedaVenta' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box"></div>
+      <div class="u-1-5 box"></div>
+      <br><br>
+
+      <div class="u-1-5 box">
+        <strong>GASTOS VINCULADOS</strong><br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Precio de Habilitación'">Precio Habilitación</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioHabilitacion" formControlName='precioHabilitacion' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaHabilitacion" [filterKey]="'nombre'" formControlName='monedaHabilitacion' ></d-select>
+            </div>
+          </div>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
-          <d-form-label [required]="true">Moneda</d-form-label>
-          <d-form-control class="form-control-width">
-            <d-select [options]="monedas" name="monedaVenta" [filterKey]="'nombre'" formControlName='monedaVenta' ></d-select>
-          </d-form-control>
+        <d-form-label [hasHelp]="true" [helpTips]="'Precio de Compra por Caja'">Precio Atraque</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioAtraque" formControlName='precioAtraque' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaAtraque" [filterKey]="'nombre'" formControlName='monedaAtraque' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Precio de Compra por Caja'">Precio Certificado</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioCertificado" formControlName='precioCertificado' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaCertificado" [filterKey]="'nombre'" formControlName='monedaCertificado' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Precio de Hielo'">Precio Hielo</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioHielo" formControlName='precioHielo' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaHielo" [filterKey]="'nombre'" formControlName='monedaHielo' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
       </div>
       <div class="u-1-5 box"></div>
       <br><br>
+
       <div class="u-1-5 box">
-        <strong>GASTOS VINCULADOS</strong><br>
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio Habilitación'">{{ l_habilitacion }}</d-form-label>
-        <d-form-control class="form-control-width">
-          <d-input-number name="precioHabilitacion" formControlName='precioHabilitacion' />
+        <strong>OTROS SERVICIOS</strong><br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Descarga Muelle'">Descarga Muelle</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioDescargaMuelle" formControlName='precioDescargaMuelle' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaDescargaMuelle" [filterKey]="'nombre'" formControlName='monedaDescargaMuelle' ></d-select>
+            </div>
+          </div>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio Atraque'">{{  l_atraque }}</d-form-label>
+        <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Descarga en Muelle'">Proveedor Descarga Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <d-input-number name="precioAtraque" formControlName='precioAtraque' />
+          <input dTextInput name="proveedorDescargaMuelle" formControlName='proveedorDescargaMuelle' />
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Precio Certificado'">{{  l_certificado }}</d-form-label>
-        <d-form-control class="form-control-width">
-          <d-input-number name="precioCertificado" formControlName='precioCertificado' />
+        <d-form-label [hasHelp]="true" [helpTips]="'Descarga Planta en Muelle'">Descarga Planta</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioDescargaPlanta" formControlName='precioDescargaPlanta' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaDescargaPlanta" [filterKey]="'nombre'" formControlName='monedaDescargaPlanta' ></d-select>
+            </div>
+          </div>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Hielo Precio'">{{  l_hielo }}</d-form-label>
+        <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Descarga en Planta'">Proveedor Descarga Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <d-input-number name="precioHielo" formControlName='precioHielo' />
+          <input dTextInput name="proveedorDescargaPlanta" formControlName='proveedorDescargaPlanta' />
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box"></div>
+
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Comisión de Embarcación'">Comisión Embarcación</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioComisionEmbarcacion" formControlName='precioComisionEmbarcacion' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaComisionEmbarcacion" [filterKey]="'nombre'" formControlName='monedaComisionEmbarcacion' ></d-select>
+            </div>
+          </div>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
         <br>
-        <d-form-label [required]="true">Moneda Hielo</d-form-label>
+        <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Comisión de Embarcación'">Proveedor Comisón Embarcación</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select [options]="monedas" name="monedaHielo" [filterKey]="'nombre'" formControlName='monedaHielo' ></d-select>
+          <input dTextInput name="proveedorComisionEmbarcacion" formControlName='proveedorComisionEmbarcacion' />
         </d-form-control>
       </div>
-      <div class="u-1 box"></div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Comisión Planta'">Comisión Planta</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioComisionPlanta" formControlName='precioComisionPlanta' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaComisionPlanta" [filterKey]="'nombre'" formControlName='monedaComisionPlanta' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Comisión en Planta'">Proveedor Comisión Planta</d-form-label>
+        <d-form-control class="form-control-width">
+          <input dTextInput name="proveedorComisionPlanta" formControlName='proveedorComisionPlanta' />
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box"></div>
+
+
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Lavado Cubetas'">Proveedor Lavado Cubetas</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-select
+            [options]="lavadoCubetas"
+            name="proveedorLavadoCubeta"
+            [filterKey]="'razonSocial'"
+            formControlName='proveedorLavadoCubeta'
+            [placeholder]="'Lavado Cubeta'"
+            [allowClear]="true"
+            [dValidateRules]="[{ required: true }]"
+          ></d-select>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Lavado de Cubetas'">Lavado Cubetas</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioLavadoCubeta" formControlName='precioLavadoCubeta' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaLavadoCubeta" [filterKey]="'nombre'" formControlName='monedaLavadoCubeta' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Administración'">Proveedor Administración</d-form-label>
+        <d-form-control class="form-control-width">
+          <d-form-control class="form-control-width">
+            <d-select
+              [options]="administraciones"
+              name="proveedorAdministracion"
+              [filterKey]="'razonSocial'"
+              formControlName='proveedorAdministracion'
+              [placeholder]="'Proveedor Administración'"
+              [allowClear]="true"
+              [dValidateRules]="[{ required: true }]"
+            ></d-select>
+          </d-form-control>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <br>
+        <d-form-label [hasHelp]="true" [helpTips]="'Administración'">Administración</d-form-label>
+        <d-form-control style="'display: flex; align-items: center;'" >
+          <div style="display: flex; justify-content: space-between; align-items: center;" >
+            <div style="width: 40%;">
+              <d-input-number name="precioAdministracion" formControlName='precioAdministracion' />
+            </div>
+            <div style="width: 58%;">
+              <d-select [options]="monedas" name="monedaAdministracion" [filterKey]="'nombre'" formControlName='monedaAdministracion' ></d-select>
+            </div>
+          </div>
+        </d-form-control>
+      </div>
+      <div class="u-1-5 box"></div>
     </div>
   </form>
 </section>

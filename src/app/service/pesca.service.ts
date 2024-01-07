@@ -23,6 +23,11 @@ export class PescaService {
   guardarGastos(gastos:any):Observable<any>{
     return  this.http.post(`${this.apiUrlPesca}${this.pesca}/saveGastosEmb`, gastos);
   }
+
+  eliminarGastoEmb(embarcacion:number, semana:number, servicio:number):Observable<any>{
+    return  this.http.get(`${this.apiUrlPesca}${this.pesca}/eliminarGastosEmb/${embarcacion}/${semana}/${servicio}`);
+  }
+
   getCorrelativo(anio:number):Observable<any>{
     return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getCorrelativo/${anio}`);
   }

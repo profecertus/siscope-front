@@ -179,7 +179,7 @@
         <div class="da-content-wrapper">
           <da-layout-row [daGutter]="[24, 24]">
             <da-col-item [daSpan]="24" [daXs]="24">
-              <div class="da-list-container">
+              <div class="da-list-container" style='height: 65em'>
                 <da-nueva-descarga #nuevaDescargaComponent [tipo]='tipoAccion'  [formData]="formData" (canceled)="onCanceled()" (submit)="onSubmit($event)">
                 </da-nueva-descarga>
               </div>

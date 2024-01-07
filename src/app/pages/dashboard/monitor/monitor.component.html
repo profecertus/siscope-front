@@ -19,31 +19,30 @@
       </div>
     </da-col-item>
   </da-layout-row>
-      <!--da-layout-col [daSpace]="24" class="da-monitor-col"-->
-      <da-layout-row [daSpace]="24" class="da-monitor-col">
-        <da-row-item [daFlex]="16">
-          <div class="da-content-card">
-            <div class="da-content-title">
-              Consumo Petroleo
-            </div>
-            <d-echarts [options]="serviceOptions" (chartReady)="getServiceChart($event)"></d-echarts>
+    <da-layout-row [daGutter]="[24, 24]" class="da-monitor-col">
+      <da-col-item [daSpan]="24" [daXs]="12">
+        <div class="da-content-card">
+          <div class="da-content-title">
+            Consumo Petroleo (Últimas 10 semanas)
           </div>
-        </da-row-item>
-        <da-row-item [daFlex]="16">
-          <div class="da-content-card">
-            <div class="da-content-title">
-              Evolución Hielo
-            </div>
-            <d-echarts [options]="serviceOptions" (chartReady)="getServiceChart($event)"></d-echarts>
+          <d-echarts [options]="serviceOptions" (chartReady)="getServiceChart($event)"></d-echarts>
+        </div>
+      </da-col-item>
+      <da-col-item [daSpan]="24" [daXs]="12">
+        <div class="da-content-card">
+          <div class="da-content-title">
+            Evolución Hielo (Últimas 10 semanas)
           </div>
-        </da-row-item>
-        <da-row-item [daFlex]="16">
-          <div class="da-content-card">
-            <div class="da-content-title">
-              Evolución Otros
-            </div>
-            <d-echarts [options]="serviceOptions" (chartReady)="getServiceChart($event)"></d-echarts>
+          <d-echarts [options]="serviceOptions" (chartReady)="getServiceChart($event)"></d-echarts>
+        </div>
+      </da-col-item>
+      <da-row-item [daFlex]="8">
+        <div class="da-content-card">
+          <div class="da-content-title">
+            Evolución Otros (Últimas 10 semanas)
           </div>
-        </da-row-item>
-      </da-layout-row>
+          <d-echarts [options]="serviceOptions" (chartReady)="getServiceChart($event)" ></d-echarts>
+        </div>
+      </da-row-item>
+    </da-layout-row>
 </div>

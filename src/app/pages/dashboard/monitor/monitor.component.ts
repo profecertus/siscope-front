@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TimeAxisData } from 'ng-devui/time-axis';
-import { monitorOption, mapOption, echartServiceOption } from '../echarts';
-import { chinaData } from 'src/app/@core/data/mapData';
-import * as echarts from 'echarts';
+import { monitorOption, echartServiceOption } from '../echarts';
+
 
 @Component({
   selector: 'da-monitor',
@@ -19,12 +18,8 @@ export class MonitorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   monitorOptions = monitorOption;
   serviceOptions = echartServiceOption;
-  mapOptions: any = mapOption;
 
-  liveUsers = 200;
   totalUsers = 5000;
-  liveProvince = 'Chabelita';
-  randomService = [];
 
   occupationChart: any;
   serviceChart: any;
@@ -32,23 +27,6 @@ export class MonitorComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor() {}
 
   ngOnInit(): void {
-    let chinaJSON = JSON.parse(chinaData);
-    echarts.registerMap('china', chinaJSON);
-
-    this.time_axis_data_horizontal = {
-      direction: 'horizontal',
-      model: 'text',
-      list: [
-        { text: 'Download', type: 'success', status: 'runned' },
-        { text: 'Check', type: 'success', status: 'runned' },
-        { text: 'Build', type: 'primary', status: 'running' },
-        { text: 'Depoy', type: 'primary' },
-        { text: 'End', type: 'primary' },
-      ],
-    };
-
-    this.setMapData();
-
     this.timerForOccupation = setInterval(() => {
       let random = Number((Math.random() * 100).toFixed(0));
       this.monitorOptions.series[0].data[0].value = random;
@@ -59,11 +37,6 @@ export class MonitorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.totalUsers++;
     }, 140);
 
-    this.timerForLive = setInterval(() => {
-      let randomIndex = Number((Math.random() * 33).toFixed(0));
-      this.liveProvince = this.mapOptions.series[0].data[randomIndex]['name'];
-      this.liveUsers = Number((Math.random() * 500).toFixed(0));
-    }, 2000);
 
     this.timerForService = setInterval(() => {
       let temp = this.serviceOptions.series[0].data.pop()!;
@@ -85,21 +58,6 @@ export class MonitorComponent implements OnInit, OnDestroy, AfterViewInit {
     clearInterval(this.timerForTotalUser);
     clearInterval(this.timerForLive);
     clearInterval(this.timerForService);
-  }
-
-  setMapData() {
-    let data = JSON.parse(chinaData);
-    let value = [];
-    data['features'].forEach((data: any) => {
-      let tempValue = Number((Math.random() * 200).toFixed(0));
-      let temp = { name: data['properties']['name'], value: tempValue };
-      value.push(temp);
-    });
-    value.push({
-      name: 'Total',
-      value: 10,
-    });
-    this.mapOptions.series[0]['data'] = value;
   }
 
   ngAfterViewInit(): void {

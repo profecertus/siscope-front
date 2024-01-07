@@ -29,7 +29,7 @@ export default {
       'title': 'Transacciones',
       'descarga': 'Descarga de Pesca',
       'gastosEmbarcacion': 'Gastos Embarcacion',
-      'ingresos': 'Ingresos',
+      'ingresos': 'Pagos',
       'liquidacion':'Liquidación'
     },
     'reporte': {
