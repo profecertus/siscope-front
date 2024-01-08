@@ -34,6 +34,9 @@ export class GastosEmbarcacionComponent implements OnInit {
   }, {
     "idProducto": 17,
     "nombreProducto":"VIVERES",
+  }, {
+    "idProducto": 4,
+    "nombreProducto":"OTROS",
   }];
   producto:any[] = [];
   nuevoDetalle: boolean = false;
@@ -53,6 +56,7 @@ export class GastosEmbarcacionComponent implements OnInit {
   hielos: FormGroup;
   petroleos: FormGroup;
   viveres: FormGroup;
+  otros: FormGroup;
 
 
   ngOnInit(): void {
@@ -88,6 +92,13 @@ export class GastosEmbarcacionComponent implements OnInit {
       idTipoServicio: 17,
       datos: this.fb.array([]),
     });
+
+    this.otros = this.fb.group({
+      embarcacion: new Embarcacion(),
+      semana: new SemanaModel(),
+      idTipoServicio: 17,
+      datos: this.fb.array([]),
+    });
   }
 
   get valores(): FormArray {
@@ -100,6 +111,10 @@ export class GastosEmbarcacionComponent implements OnInit {
 
   get valViveres(): FormArray {
     return (this.viveres.get('datos') as FormArray)
+  }
+
+  get valOtros(): FormArray {
+    return (this.otros.get('datos') as FormArray)
   }
 
   getAllGastosEmb(){
@@ -148,7 +163,10 @@ export class GastosEmbarcacionComponent implements OnInit {
 
   getAllSemanas(): void {
     this.semanaService.obtenerSemanas(0, 52).subscribe(value => {
-      this.semanas = value.content;
+      const semanavalue = value.content;
+
+      this.semanas = semanavalue.filter( (valor: SemanaModel) => {return valor.estado == true} );
+
       this.semanas.forEach(valor => {
         valor.nombreCompleto = valor.id.toString() + " (" + this.getFecha(valor.fechaInicio) + " - " + this.getFecha(valor.fechaFin) + ")";
       })
@@ -170,9 +188,6 @@ export class GastosEmbarcacionComponent implements OnInit {
     return fechaFormateada;
   }
 
-  getDiasPorSemana() {
-
-  }
 
   buscarGastos() {
     if (this.embarcacion.idEmbarcacion == 0 || this.semana.id == 0 || this.producto.length == 0) {
@@ -184,12 +199,15 @@ export class GastosEmbarcacionComponent implements OnInit {
     //Verifico si existe gastos para esa semana embarcacion
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 3).subscribe(valor=>{
        if(valor.length > 0){
-        this.hielos = this.fb.group({
-          embarcacion: valor[0].embarcacion,
-          semana: valor[0].semana,
-          idTipoServicio: 3,
-          datos: this.fb.array(valor[0].datos),
-        });
+         //Obtengo el estado Actual de la semana
+         this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+           this.hielos = this.fb.group({
+             embarcacion: valor[0].embarcacion,
+             semana: semanaEncontrada,
+             idTipoServicio: 3,
+             datos: this.fb.array(valor[0].datos),
+           });
+         });
       }else{
         this.valores.clear();
         this.semanaService.getDiasxSemana(this.semana.id).subscribe(value => {
@@ -219,11 +237,13 @@ export class GastosEmbarcacionComponent implements OnInit {
     //Verifico si existe gastos para esa semana en Petroleo
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 2).subscribe(valor=>{
       if(valor.length > 0){
-        this.petroleos = this.fb.group({
-          embarcacion: valor[0].embarcacion,
-          semana: valor[0].semana,
-          idTipoServicio: 2,
-          datos: this.fb.array(valor[0].datos),
+        this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+          this.petroleos = this.fb.group({
+            embarcacion: valor[0].embarcacion,
+            semana: semanaEncontrada,
+            idTipoServicio: 2,
+            datos: this.fb.array(valor[0].datos),
+          });
         });
       }else{
         this.valPetroleo.clear();
@@ -243,7 +263,6 @@ export class GastosEmbarcacionComponent implements OnInit {
             gastoPetroleo.cantidad = 0
             gastoPetroleo.total = 0;
             gastoPetroleo.valorCambio = valor["valorCambio"];
-            //gastoPetroleo.semanaRel = this.semana;
             gastoPetroleo.precioCadena = '';
             this.valPetroleo.push(this.fb.group(gastoPetroleo));
           });
@@ -254,11 +273,13 @@ export class GastosEmbarcacionComponent implements OnInit {
     //Verifica si existe gastos para esa semana en Viveres
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 17).subscribe(valor=>{
       if(valor.length > 0){
-        this.viveres = this.fb.group({
-          embarcacion: valor[0].embarcacion,
-          semana: valor[0].semana,
-          idTipoServicio: 17,
-          datos: this.fb.array(valor[0].datos),
+        this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+          this.viveres = this.fb.group({
+            embarcacion: valor[0].embarcacion,
+            semana: semanaEncontrada,
+            idTipoServicio: 17,
+            datos: this.fb.array(valor[0].datos),
+          });
         });
       }else{
         this.valViveres.clear();
@@ -284,8 +305,41 @@ export class GastosEmbarcacionComponent implements OnInit {
         });
       }
     });
-    //Si todo esta OK procedo a buscar los dias de la semana
-    this.getDiasPorSemana();
+
+    //Verifica si existe gastos para esa semana en Otros
+    this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 4).subscribe(valor=>{
+      if(valor.length > 0){
+        this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+          this.otros = this.fb.group({
+            embarcacion: valor[0].embarcacion,
+            semana: semanaEncontrada,
+            idTipoServicio: 17,
+            datos: this.fb.array(valor[0].datos),
+          });
+        });
+      }else{
+        this.valOtros.clear();
+        this.semanaService.getDiasxSemana(this.semana.id).forEach(value => {
+          this.diasxSemana = [];
+          value.forEach((valor: string) => {
+            this.diasxSemana.push(JSON.parse(valor))
+          });
+          this.diasxSemana.forEach(valor => {
+            //Empiezo a crear el arreglo de viveres
+            let otros = new GastosModel();
+            otros.nombreDia = valor["nombreDia"];
+            otros.idDia = valor["idDia"];
+            otros.idDiaString = this.getFecha(valor["idDia"]);
+            otros.precio = 0;
+            otros.cantidad = 0
+            otros.total = 0;
+            otros.valorCambio = valor["valorCambio"];
+            otros.precioCadena = '';
+            this.valOtros.push(this.fb.group(otros));
+          });
+        });
+      }
+    });
   }
 
   limpiarGastos() {
@@ -494,32 +548,35 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   deleteRow(rowItem: any, rowIndex: any) {
-    //Verifico si el gasto esta asociado a una semana cerrada o abierta
-    if(rowItem.semana.estado){
-      Swal.fire({
-        title:"Eliminar Gasto Embarcación",
-        html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'} para la embarcación  ${rowItem.embarcacion.nombre} en la semana ${rowItem.semana.id} ?`,
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar',
-      }).then((result) => {
-        if (result.isConfirmed) {
+    this.semanaService.getSemana(rowItem.semana.id).subscribe(semanaEncontrada => {
+      //Verifico si el gasto esta asociado a una semana cerrada o abierta
+      // @ts-ignore
+      if(semanaEncontrada.estado){
+        Swal.fire({
+          title:"Eliminar Gasto Embarcación",
+          html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'} para la embarcación  ${rowItem.embarcacion.nombre} en la semana ${rowItem.semana.id} ?`,
+          showCancelButton: true,
+          confirmButtonText: 'Eliminar',
+          cancelButtonText: 'Cancelar',
+        }).then((result) => {
+          if (result.isConfirmed) {
 
-          this.pescaService
-            .eliminarGastoEmb(rowItem.embarcacion.idEmbarcacion, rowItem.semana.id, rowItem.idTipoServicio)
-            .subscribe(valor => {
-              if(valor.length > 0){
-                Swal.fire("Exito", "Se elimino correctamente el gasto", "success");
-                this.getAllGastosEmb();
-              }else{
-                Swal.fire("Error", "Sucedio un error al momento de eliminar el gasto", "error");
-              }
-            });
-        }
-      });
-    }else{
-      Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, abrá la semana si desea continuar", "error");
-    }
+            this.pescaService
+              .eliminarGastoEmb(rowItem.embarcacion.idEmbarcacion, rowItem.semana.id, rowItem.idTipoServicio)
+              .subscribe(valor => {
+                if(valor.length > 0){
+                  Swal.fire("Exito", "Se elimino correctamente el gasto", "success");
+                  this.getAllGastosEmb();
+                }else{
+                  Swal.fire("Error", "Sucedio un error al momento de eliminar el gasto", "error");
+                }
+              });
+          }
+        });
+      }else{
+        Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, abrá la semana si desea continuar", "error");
+      }
+    });
   }
 
   onEmbarcacionChange(event: any) {
@@ -560,7 +617,6 @@ export class GastosEmbarcacionComponent implements OnInit {
   editRow(rowItem: any, rowIndex: number) {
     this.embarcacion = rowItem.embarcacion;
     this.semana = rowItem.semana;
-    //console.log(rowItem);
     switch (rowItem.idTipoServicio){
       case 2:
         this.producto = [{

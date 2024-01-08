@@ -24,6 +24,10 @@ export class SemanaService {
     return this.http.post(`${this.apiUrl}${this.semana}/saveSemana`, semana);
   }
 
+  getSemana(semana: number){
+    return this.http.get(`${this.apiUrl}${this.semana}/getSemana/${semana}`);
+  }
+
   semanaActual():Observable<any>{
     return this.http.get(`${this.apiUrlTarifario}${this.semana}/semanaActual`)
   }

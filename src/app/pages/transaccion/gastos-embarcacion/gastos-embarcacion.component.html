@@ -45,6 +45,9 @@
               [(ngModel)]='semana'
               (ngModelChange)="onSemanaChange($event)"
               style='width: 20em'
+              [width]="300"
+              [appendToBody]="true"
+              [appendToBodyDirections]="['leftDown', 'leftUp']"
             ></d-select>
           <h3>Producto：</h3>
           <d-select
@@ -144,11 +147,6 @@
                   [canChangePageSize]="true"
                   [canJumpPage]="true"
                   [maxItems]="5">
-                  <!-- [total]="pager.total"
-                  [(pageSize)]="pager.pageSize"
-                  [(pageIndex)]="pager.pageIndex"
-                  (pageIndexChange)="onPageChange($event)"
-                  (pageSizeChange)="onSizeChange($event)"-->
                 </d-pagination>
               </div>
             </div>
@@ -157,13 +155,14 @@
       </div>
     </div>
 
-    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(3)'>
+    <!--Hielo-->
+    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(3)' [style.pointer-events]="this.hielos.value['semana'].estado? 'auto' : 'none'" >
     <!--Hielo-->
       <div class="da-content-wrapper">
       <da-layout-row [daGutter]="[24, 24]">
         <da-col-item [daSpan]="24" [daXs]="24">
           <div class="da-list-container" dLoading >
-            <h2>&nbsp;&nbsp;&nbsp;Hielo</h2>
+            <h2 [style.background-color]="this.hielos.value['semana'].estado? 'white' : 'yellow'">&nbsp;&nbsp;Hielo {{ !this.hielos.value['semana'].estado?' - SOLO LECTURA (Semana Cerrada)':'' }} </h2>
             <div class="da-list-content">
               <d-data-table
                 #dataTable
@@ -348,13 +347,14 @@
 
     </div>
 
-    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(2)'>
+    <!--Petroleo-->
+    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(2)' [style.pointer-events]="this.petroleos.value['semana'].estado? 'auto' : 'none'" >
       <!--Petroleo-->
       <div class="da-content-wrapper">
         <da-layout-row [daGutter]="[24, 24]">
           <da-col-item [daSpan]="24" [daXs]="24">
             <div class="da-list-container" dLoading >
-              <h2>&nbsp;&nbsp;&nbsp;Petroleo</h2>
+              <h2 [style.background-color]="this.petroleos.value['semana'].estado? 'white' : 'yellow'">&nbsp;&nbsp;Petroleo {{ !this.petroleos.value['semana'].estado?' - SOLO LECTURA (Semana Cerrada)':'' }} </h2>
               <div class="da-list-content">
                 <d-data-table
                   #dataTable
@@ -536,18 +536,16 @@
           </da-col-item>
         </da-layout-row>
       </div>
-      <!--
-          {{this.hielos.value | json}}
-          -->
     </div>
 
-    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(17)'>
+    <!--Viveres-->
+    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(17)' [style.pointer-events]="this.viveres.value['semana'].estado? 'auto' : 'none'" >
       <!--Viveres-->
       <div class="da-content-wrapper">
         <da-layout-row [daGutter]="[24, 24]">
           <da-col-item [daSpan]="24" [daXs]="24">
             <div class="da-list-container" dLoading >
-              <h2>Viveres</h2>
+              <h2 [style.background-color]="this.viveres.value['semana'].estado? 'white' : 'yellow'">&nbsp;&nbsp;Viveres {{ !this.viveres.value['semana'].estado?' - SOLO LECTURA (Semana Cerrada)':'' }} </h2>
               <div class="da-list-content">
                 <d-data-table
                   #dataTable
@@ -729,9 +727,196 @@
           </da-col-item>
         </da-layout-row>
       </div>
-      <!--
-          {{this.hielos.value | json}}
-          -->
+    </div>
+
+    <!--Otros-->
+    <div *ngIf='nuevoDetalle && buscarProductoSeleccionado(4)' [style.pointer-events]="this.otros.value['semana'].estado? 'auto' : 'none'" >
+      <div class="da-content-wrapper">
+        <da-layout-row [daGutter]="[24, 24]">
+          <da-col-item [daSpan]="24" [daXs]="24">
+            <div class="da-list-container" dLoading >
+              <h2 [style.background-color]="this.otros.value['semana'].estado? 'white' : 'yellow'">&nbsp;&nbsp;Otros {{ !this.otros.value['semana'].estado?' - SOLO LECTURA (Semana Cerrada)':'' }} </h2>
+              <div class="da-list-content">
+                <d-data-table
+                  #dataTable
+                  [dataSource]="valOtros.controls"
+                  [scrollable]="true"
+                >
+                  <thead dTableHead>
+                  <tr dTableRow>
+                    <th dHeadCell [width]="'7.5%'" >Dia</th>
+                    <th dHeadCell [width]="'7.5%'" >Fecha</th>
+                    <th dHeadCell [width]="'22.22%'" >Proveedor</th>
+                    <th dHeadCell [width]="'11.11%'">Precio x Und</th>
+                    <th dHeadCell [width]="'11.11%'">Cantidad</th>
+                    <th dHeadCell [width]="'11.11%'">Total</th>
+                    <th dHeadCell [width]="'20%'">Semana<br>Relacionada</th>
+                    <th dHeadCell>Validar</th>
+                  </tr>
+                  </thead>
+                  <tbody dTableBody>
+                  <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                    <tr dTableRow>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                        [field]="'nombreDia'"
+                      >
+                        <span>{{ rowItem.value.nombreDia }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                        [field]="'idDiaString'"
+                      >
+                        <span>{{ rowItem.value.idDiaString }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.idProveedorItem"
+                        [rowItem]="rowItem"
+                        [field]="'idProveedor'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem.value.idProveedorItem"
+                      ><d-tag
+                        [tag]="rowItem.value.idProveedor.razonSocial"
+                        [labelStyle]="rowItem.value.idProveedor.razonSocial"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem.value.idProveedorItem"
+                          class="edit-padding-fix"
+                        >
+                          <d-select
+                            name="idProveedor"
+                            [(ngModel)]="rowItem.value.idProveedor"
+                            [options]="proveedorViveres"
+                            [filterKey]="'razonSocial'"
+                            (ngModelChange)="onProveedorViveresChange($event, rowIndex, rowItem)"
+                          ></d-select>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.idProveedorItem"
+                        [rowItem]="rowItem"
+                        [field]="'precio'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem.value.idProveedorItem"
+                      ><d-tag
+                        [tag]="rowItem.value.precio"
+                        [labelStyle]="rowItem.value.precio"
+                      ></d-tag
+                      ></span>
+
+                        <div
+                          *ngIf="rowItem.value.idProveedorItem"
+                          class="edit-padding-fix"
+                        >
+                          {{  rowItem.value.monedaString }}
+                          <d-input-number size="sm"
+                                          [(ngModel)]="rowItem.value.precio"
+                                          (ngModelChange)="onPrecioViveresChange($event, rowIndex, rowItem)"
+                                          class="input-number">
+                          </d-input-number>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.idProveedorItem"
+                        [rowItem]="rowItem"
+                        [field]="'precio'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem.value.idProveedorItem"
+                      ><d-tag
+                        [tag]="rowItem.value.cantidad"
+                        [labelStyle]="rowItem.value.cantidad"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem.value.idProveedorItem"
+                          class="edit-padding-fix"
+                        >
+                          <d-input-number size="sm"
+                                          [(ngModel)]="rowItem.value.cantidad"
+                                          (ngModelChange)="onCantidadViveresChange($event, rowIndex, rowItem)"
+                                          class="input-number">
+                          </d-input-number>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                        [field]="'total'"
+                      >
+                        <span>{{  rowItem.value.monedaString }} {{ formatearDecimales(rowItem.value.total,3) }}</span>
+                      </td>
+                      <td
+                        dTableCell
+                        [editable]="true"
+                        [editableTip]="editableTip"
+                        [(editing)]="rowItem.value.idProveedorItem"
+                        [rowItem]="rowItem"
+                        [field]="'semanaRel'"
+                        [beforeEditStart]="beforeEditStart"
+                        [beforeEditEnd]="beforeEditEnd"
+                      >
+                      <span *ngIf="!rowItem.value.total"
+                      ><d-tag *ngIf="rowItem.value.idProveedorItem"
+                              [tag]="rowItem.value.semanaRel.nombreCompleto"
+                              [labelStyle]="'semanaRel'"
+                      ></d-tag
+                      ></span>
+                        <div
+                          *ngIf="rowItem.value.total"
+                          class="edit-padding-fix"
+                        >
+                          <d-select
+                            [options]='semanas'
+                            [filterKey]="'nombreCompleto'"
+                            [isSearch]="true"
+                            [readonly]="true"
+                            [(ngModel)]='rowItem.value.semanaRel'
+                          ></d-select>
+                        </div>
+                      </td>
+                      <td
+                        dTableCell
+                        [rowItem]="rowItem"
+                      >
+                        <d-icon
+                          class="pipeline-watch"
+                          [color]="rowItem.value.idProveedorItem ? 'var(--devui-warning)' : ''"
+                          [icon]="rowItem.value.idProveedorItem ? 'icon-star' : 'icon-star-o'"
+                          [operable]="true"
+                        >
+                        </d-icon>
+                        <d-icon icon="icon-delete" (click)="deleteRow(rowItem, rowIndex)"
+                                dIconLink>
+                          <a iconSuffix class="devui-link" href=""></a>
+                        </d-icon>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  </tbody>
+                </d-data-table>
+              </div>
+            </div>
+          </da-col-item>
+        </da-layout-row>
+      </div>
     </div>
 
   </da-layout-row>
