@@ -1,0 +1,141 @@
+<div class="da-list-wrap">
+  <div class="da-content-banner">
+    <d-breadcrumb>
+      <d-breadcrumb-item
+      ><a routerLink="/">SISCOPE</a></d-breadcrumb-item
+      >
+      <d-breadcrumb-item>Transacciones </d-breadcrumb-item>
+      <d-breadcrumb-item>Pagos de los Bienes/Servicios</d-breadcrumb-item>
+    </d-breadcrumb>
+    <div class="da-content-banner-title">
+      Pagos por Bienes Servicio
+    </div>
+    <div>Pagos por <strong>Bienes / Servicios</strong></div>
+  </div>
+
+  <da-layout-row [daGutter]="[24, 24]">
+    <da-col-item [daSpan]="24" [daXs]="24">
+      <div class="da-list-container">
+        <div class="da-list-header">
+          <h3>Producto：</h3>
+          <d-select
+            [placeholder]="'Seleccione el Producto'"
+            [options]='productos'
+            [overview]="'underlined'"
+            size='lg'
+            [filterKey]="'nombreProducto'"
+            [isSearch]="true"
+            [readonly]="true"
+            [(ngModel)]='producto'
+            [multiple]='false'
+            (ngModelChange)="onProductoChange($event)"
+            style='width: 20em'
+          ></d-select>
+
+          <h3>Embarcación：</h3>
+          <d-select
+            [placeholder]="'Seleccione la Embarcación'"
+            [options]='embarcaciones'
+            [overview]="'underlined'"
+            size='lg'
+            [filterKey]="'nombre'"
+            [isSearch]="true"
+            [readonly]="true"
+            [(ngModel)]='embarcacion'
+            (ngModelChange)="onEmbarcacionChange($event)"
+            style='width: 20em'
+          ></d-select>
+
+          <h3>Semana：</h3>
+          <d-select
+            [placeholder]="'Seleccione la Semana'"
+            [options]='semanas'
+            [overview]="'underlined'"
+            size='lg'
+            [filterKey]="'nombreCompleto'"
+            [isSearch]="true"
+            [readonly]="true"
+            [(ngModel)]='semana'
+            (ngModelChange)="onSemanaChange($event)"
+            style='width: 20em'
+            [width]="300"
+            [appendToBody]="true"
+            [appendToBodyDirections]="['leftDown', 'leftUp']"
+          ></d-select>
+
+          <div class="header-right">
+            <d-button icon="icon-add-file" (click)='buscarGastos()' *ngIf='!nuevoGasto'>Buscar Gastos</d-button>&nbsp;
+            <d-button icon="icon-save" (click)='grabarPagos()' *ngIf='nuevoGasto'>Grabar</d-button>&nbsp;
+            <d-button icon="icon-undo" (click)='volver()' *ngIf='nuevoGasto' >Volver</d-button>&nbsp;
+          </div>
+        </div>
+      </div>
+    </da-col-item>
+
+
+
+  </da-layout-row>
+
+
+  <div>
+    <div class="da-content-wrapper">
+      <da-layout-row [daGutter]="[24, 24]">
+        <da-col-item [daSpan]="24" [daXs]="24">
+          <div class="da-list-container"  dLoading >
+            <h2>&nbsp;&nbsp;Gastos </h2>
+            <div class="da-list-content">
+              <d-data-table
+                #dataTable
+                [dataSource]="listaRegistroGasto"
+                [scrollable]="true"
+                [striped]="true"
+                [headerBg]="true"
+                [resizeable]='true'
+                [tableLayout]="'auto'"
+              >
+                <d-column field="tipoServicio" header="Bien/Servicio"  [width]="'50%'">
+                  <d-cell>
+                    <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem.nombreProducto" class="over-flow-ellipsis">
+                      {{ cellItem.nombreProducto }}
+                    </span>
+                    </ng-template>
+                  </d-cell>
+                </d-column>
+
+                <d-column field="totalSoles" header="Total Soles"  [width]="'20%'">
+                  <d-cell>
+                    <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis">
+                      {{ cellItem }}
+                    </span>
+                    </ng-template>
+                  </d-cell>
+                </d-column>
+
+                <d-column field="totalDolares" header="Total Dolares"  [width]="'20%'">
+                  <d-cell>
+                    <ng-template let-cellItem="cellItem">
+                    <span [title]="cellItem" class="over-flow-ellipsis">
+                      {{ cellItem }}
+                    </span>
+                    </ng-template>
+                  </d-cell>
+                </d-column>
+
+                <d-column header="Pagar"  [width]="'10%'">
+                  <d-cell>
+                    <ng-template let-cellItem="cellItem">
+
+                    </ng-template>
+                  </d-cell>
+                </d-column>
+              </d-data-table>
+            </div>
+          </div>
+        </da-col-item>
+      </da-layout-row>
+    </div>
+
+  </div>
+</div>

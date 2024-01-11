@@ -74,7 +74,7 @@ export default function (values: any) {
       children: [
         { title: values['transaccion']['gastosEmbarcacion'], link: '/pages/transaccion/gastosEmbarcacion' },
         { title: values['transaccion']['descarga'], link: '/pages/transaccion/descarga' },
-        { title: values['transaccion']['ingresos'], link: '/pages/transaccion/ingreso' },
+        { title: values['transaccion']['ingresos'], link: '/pages/transaccion/pagos' },
         { title: values['transaccion']['liquidacion'], link: '/pages/transaccion/liquidacion' },
       ],
       link: '/pages/list',

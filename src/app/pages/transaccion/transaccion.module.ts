@@ -4,7 +4,7 @@ import { DescargaComponent } from './descarga/descarga.component';
 import { PlanillaComponent } from './planilla/planilla.component';
 import { OperativosComponent } from './operativos/operativos.component';
 import { AdministrativosComponent } from './administrativos/administrativos.component';
-import { IngresoComponent } from './ingreso/ingreso.component';
+import { PagosComponent } from './pagos/pagos.component';
 import { LiquidacionComponent } from './liquidacion/liquidacion.component';
 import { TransaccionComponent } from './transaccion.component';
 import { TransaccionRoutingModule } from './transaccion-routing.module';
@@ -25,7 +25,7 @@ import { DaGridModule } from '../../@shared/layouts/da-grid';
     HorizontalFormComponent,
     OperativosComponent,
     AdministrativosComponent,
-    IngresoComponent,
+    PagosComponent,
     LiquidacionComponent,
     GastosEmbarcacionComponent,
     NuevaDescargaComponent

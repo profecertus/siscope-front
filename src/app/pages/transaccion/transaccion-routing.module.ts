@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { TransaccionComponent } from './transaccion.component';
 import { DescargaComponent } from './descarga/descarga.component';
-import { IngresoComponent } from './ingreso/ingreso.component';
+import { PagosComponent } from './pagos/pagos.component';
 import { LiquidacionComponent } from './liquidacion/liquidacion.component';
 import { DevUIModule } from '@devui';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ const routes: Routes = [
     children: [
       { path: 'gastosEmbarcacion', component: GastosEmbarcacionComponent },
       { path: 'descarga', component: DescargaComponent },
-      { path: 'ingreso', component: IngresoComponent },
+      { path: 'pagos', component: PagosComponent },
       { path: 'liquidacion', component: LiquidacionComponent },
     ],
   },

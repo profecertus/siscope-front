@@ -161,13 +161,13 @@
       <div class="da-content-wrapper">
       <da-layout-row [daGutter]="[24, 24]">
         <da-col-item [daSpan]="24" [daXs]="24">
-          <div class="da-list-container" dLoading >
+          <div class="da-list-container"  dLoading >
             <h2 [style.background-color]="this.hielos.value['semana'].estado? 'white' : 'yellow'">&nbsp;&nbsp;Hielo {{ !this.hielos.value['semana'].estado?' - SOLO LECTURA (Semana Cerrada)':'' }} </h2>
             <div class="da-list-content">
               <d-data-table
                 #dataTable
                 [dataSource]="valores.controls"
-                [scrollable]="true"
+                [scrollable]="false"
               >
                 <thead dTableHead>
                 <tr dTableRow>
@@ -796,7 +796,7 @@
                             [(ngModel)]="rowItem.value.idProveedor"
                             [options]="proveedorViveres"
                             [filterKey]="'razonSocial'"
-                            (ngModelChange)="onProveedorViveresChange($event, rowIndex, rowItem)"
+                            (ngModelChange)="onProveedorOtrosChange($event, rowIndex, rowItem)"
                           ></d-select>
                         </div>
                       </td>

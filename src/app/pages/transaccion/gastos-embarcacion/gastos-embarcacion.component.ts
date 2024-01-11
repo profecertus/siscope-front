@@ -201,6 +201,9 @@ export class GastosEmbarcacionComponent implements OnInit {
        if(valor.length > 0){
          //Obtengo el estado Actual de la semana
          this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+           // @ts-ignore
+           semanaEncontrada['nombreCompleto']  = semanaEncontrada['id'] + " (" + this.getFecha(semanaEncontrada['fechaInicio']) + " - " + this.getFecha(semanaEncontrada['fechaFin']) + ")";
+
            this.hielos = this.fb.group({
              embarcacion: valor[0].embarcacion,
              semana: semanaEncontrada,
@@ -238,10 +241,13 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 2).subscribe(valor=>{
       if(valor.length > 0){
         this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+          // @ts-ignore
+          semanaEncontrada['nombreCompleto']  = semanaEncontrada['id'] + " (" + this.getFecha(semanaEncontrada['fechaInicio']) + " - " + this.getFecha(semanaEncontrada['fechaFin']) + ")";
           this.petroleos = this.fb.group({
             embarcacion: valor[0].embarcacion,
             semana: semanaEncontrada,
             idTipoServicio: 2,
+            //nombreCompleto: semanaEncontrada.id.toString() + " (" + this.getFecha(semanaEncontrada.fechaInicio) + " - " + this.getFecha(semanaEncontrada.fechaFin) + ")",
             datos: this.fb.array(valor[0].datos),
           });
         });
@@ -274,10 +280,13 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 17).subscribe(valor=>{
       if(valor.length > 0){
         this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+          // @ts-ignore
+          semanaEncontrada['nombreCompleto']  = semanaEncontrada['id'] + " (" + this.getFecha(semanaEncontrada['fechaInicio']) + " - " + this.getFecha(semanaEncontrada['fechaFin']) + ")";
           this.viveres = this.fb.group({
             embarcacion: valor[0].embarcacion,
             semana: semanaEncontrada,
             idTipoServicio: 17,
+            //nombreCompleto: semanaEncontrada.id.toString() + " (" + this.getFecha(semanaEncontrada.fechaInicio) + " - " + this.getFecha(semanaEncontrada.fechaFin) + ")",
             datos: this.fb.array(valor[0].datos),
           });
         });
@@ -310,6 +319,8 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 4).subscribe(valor=>{
       if(valor.length > 0){
         this.semanaService.getSemana(valor[0].semana.id).subscribe( semanaEncontrada =>{
+          // @ts-ignore
+          semanaEncontrada['nombreCompleto']  = semanaEncontrada['id'] + " (" + this.getFecha(semanaEncontrada['fechaInicio']) + " - " + this.getFecha(semanaEncontrada['fechaFin']) + ")";
           this.otros = this.fb.group({
             embarcacion: valor[0].embarcacion,
             semana: semanaEncontrada,
@@ -518,9 +529,9 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.proveedorService.obtenerPrecioxDia(this.hielos.value.datos[rowIndex].idProveedor.idProveedor,
       this.hielos.value.datos[rowIndex].idProveedor.idTipoServicio,
       this.hielos.value.datos[rowIndex].idDia).subscribe(value => {
-      this.hielos.value.datos[rowIndex].monedaString = value.abreviatura;
-      this.hielos.value.datos[rowIndex].precio = value.precio;
-      this.hielos.value.datos[rowIndex].idMoneda = value.idMoneda;
+      this.hielos.value.datos[rowIndex].monedaString = value.abreviatura==null?'S/.':value.abreviatura;
+      this.hielos.value.datos[rowIndex].precio = value.precio==null?0:value.precio;
+      this.hielos.value.datos[rowIndex].idMoneda = value.idMoneda==null?1:value.idMoneda;
       this.hielos.value.datos[rowIndex].semanaRel = this.semana;
     });
   }
@@ -529,9 +540,9 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.proveedorService.obtenerPrecioxDia(this.viveres.value.datos[rowIndex].idProveedor.idProveedor,
       this.viveres.value.datos[rowIndex].idProveedor.idTipoServicio,
       this.viveres.value.datos[rowIndex].idDia).subscribe(value => {
-      this.viveres.value.datos[rowIndex].monedaString = value.abreviatura;
-      this.viveres.value.datos[rowIndex].precio = value.precio;
-      this.viveres.value.datos[rowIndex].idMoneda = value.idMoneda;
+      this.viveres.value.datos[rowIndex].monedaString = value.abreviatura==null?'S/.':value.abreviatura;
+      this.viveres.value.datos[rowIndex].precio = value.precio==null?0:value.precio;
+      this.viveres.value.datos[rowIndex].idMoneda = value.idMoneda==null?1:value.idMoneda;
       this.viveres.value.datos[rowIndex].semanaRel = this.semana;
     });
   }
@@ -540,10 +551,21 @@ export class GastosEmbarcacionComponent implements OnInit {
     this.proveedorService.obtenerPrecioxDia(this.petroleos.value.datos[rowIndex].idProveedor.idProveedor,
       this.petroleos.value.datos[rowIndex].idProveedor.idTipoServicio,
       this.petroleos.value.datos[rowIndex].idDia).subscribe(value => {
-      this.petroleos.value.datos[rowIndex].monedaString = value.abreviatura;
-      this.petroleos.value.datos[rowIndex].precio = value.precio;
-      this.petroleos.value.datos[rowIndex].idMoneda = value.idMoneda;
+      this.petroleos.value.datos[rowIndex].monedaString = value.abreviatura==null?'S/.':value.abreviatura;
+      this.petroleos.value.datos[rowIndex].precio = value.precio==null?0:value.precio;
+      this.petroleos.value.datos[rowIndex].idMoneda = value.idMoneda==null?1:value.idMoneda;
       this.petroleos.value.datos[rowIndex].semanaRel = this.semana;
+    });
+  }
+
+  onProveedorOtrosChange(valor: any, rowIndex: any, rowItem: any) {
+    this.proveedorService.obtenerPrecioxDia(this.otros.value.datos[rowIndex].idProveedor.idProveedor,
+      this.otros.value.datos[rowIndex].idProveedor.idTipoServicio,
+      this.otros.value.datos[rowIndex].idDia).subscribe(value => {
+      this.otros.value.datos[rowIndex].monedaString = value.abreviatura==null?'S/.':value.abreviatura;
+      this.otros.value.datos[rowIndex].precio = value.precio==null?0:value.precio;
+      this.otros.value.datos[rowIndex].idMoneda = value.idMoneda==null?1:value.idMoneda;
+      this.otros.value.datos[rowIndex].semanaRel = this.semana;
     });
   }
 
