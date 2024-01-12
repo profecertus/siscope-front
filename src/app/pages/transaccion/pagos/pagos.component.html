@@ -28,7 +28,6 @@
             [readonly]="true"
             [(ngModel)]='producto'
             [multiple]='false'
-            (ngModelChange)="onProductoChange($event)"
             style='width: 20em'
           ></d-select>
 
@@ -42,7 +41,6 @@
             [isSearch]="true"
             [readonly]="true"
             [(ngModel)]='embarcacion'
-            (ngModelChange)="onEmbarcacionChange($event)"
             style='width: 20em'
           ></d-select>
 
@@ -56,7 +54,6 @@
             [isSearch]="true"
             [readonly]="true"
             [(ngModel)]='semana'
-            (ngModelChange)="onSemanaChange($event)"
             style='width: 20em'
             [width]="300"
             [appendToBody]="true"
@@ -64,9 +61,7 @@
           ></d-select>
 
           <div class="header-right">
-            <d-button icon="icon-add-file" (click)='buscarGastos()' *ngIf='!nuevoGasto'>Buscar Gastos</d-button>&nbsp;
-            <d-button icon="icon-save" (click)='grabarPagos()' *ngIf='nuevoGasto'>Grabar</d-button>&nbsp;
-            <d-button icon="icon-undo" (click)='volver()' *ngIf='nuevoGasto' >Volver</d-button>&nbsp;
+            <d-button icon="icon-add-file" (click)='buscarGastos()' >Buscar Gastos</d-button>&nbsp;
           </div>
         </div>
       </div>
@@ -83,54 +78,87 @@
         <da-col-item [daSpan]="24" [daXs]="24">
           <div class="da-list-container"  dLoading >
             <h2>&nbsp;&nbsp;Gastos </h2>
-            <div class="da-list-content">
+            <div class="da-list-content" dLoading [loading]="busy" [loadingStyle]="'infinity'" [backdrop]="true" [message]="'Espere un momento...'">
               <d-data-table
-                #dataTable
                 [dataSource]="listaRegistroGasto"
+                [tableWidthConfig]="tableWidthConfig"
                 [scrollable]="true"
                 [striped]="true"
                 [headerBg]="true"
-                [resizeable]='true'
-                [tableLayout]="'auto'"
+                [borderType]="'bordered'"
+                [tableOverflowType]="'overlay'"
+                [checkableRelation]='checkableRelation'
+                [loadChildrenTable]='loadChildrenTable'
               >
-                <d-column field="tipoServicio" header="Bien/Servicio"  [width]="'50%'">
-                  <d-cell>
-                    <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem.nombreProducto" class="over-flow-ellipsis">
-                      {{ cellItem.nombreProducto }}
-                    </span>
-                    </ng-template>
-                  </d-cell>
-                </d-column>
-
-                <d-column field="totalSoles" header="Total Soles"  [width]="'20%'">
-                  <d-cell>
-                    <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis">
-                      {{ cellItem }}
-                    </span>
-                    </ng-template>
-                  </d-cell>
-                </d-column>
-
-                <d-column field="totalDolares" header="Total Dolares"  [width]="'20%'">
-                  <d-cell>
-                    <ng-template let-cellItem="cellItem">
-                    <span [title]="cellItem" class="over-flow-ellipsis">
-                      {{ cellItem }}
-                    </span>
-                    </ng-template>
-                  </d-cell>
-                </d-column>
-
-                <d-column header="Pagar"  [width]="'10%'">
-                  <d-cell>
-                    <ng-template let-cellItem="cellItem">
-
-                    </ng-template>
-                  </d-cell>
-                </d-column>
+                <thead dTableHead >
+                <tr dTableRow>
+                  <th dHeadCell>#</th>
+                  <th dHeadCell>Bien/Servicio</th>
+                  <th dHeadCell>Total Soles (S/.)</th>
+                  <th dHeadCell>Total Dolares ($)</th>
+                  <th dHeadCell>Acciones</th>
+                </tr>
+                </thead>
+                <tbody dTableBody>
+                <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex" let-nestedLayer="nestedLayer" let-nestedIndex="nestedIndex">
+                  <tr dTableRow  >
+                    <td dTableCell>{{ rowIndex + 1 }}</td>
+                    <td dTableCell [width]="'30%'"
+                        [nestedColumn]="true"
+                        [nestedColumnIndent]="20"
+                        [rowItem]="rowItem"
+                        [nestedLayer]="nestedLayer"
+                        [iconFoldTable]="iconParentOpen"
+                        [iconUnFoldTable]="iconParentClose"
+                    >
+                      <strong *ngIf='rowItem["isParent"]'>
+                        {{ rowItem["tipoServicio"]["nombreProducto"] }}
+                      </strong>
+                      <i *ngIf='!rowItem["isParent"]'>
+                        {{ rowItem["tipoServicio"]["nombreProducto"] }}
+                      </i>
+                    </td>
+                    <td dTableCell [width]="'25%'" style="text-align: right;"  >
+                      <strong *ngIf='rowItem["isParent"]'>
+                        {{ formatearDecimales(rowItem["totalSoles"],2) }}
+                      </strong>
+                      <i *ngIf='!rowItem["isParent"]'>
+                        {{ formatearDecimales(rowItem["totalSoles"],2) }}
+                      </i>
+                    </td>
+                    <td dTableCell [width]="'25%'" style="text-align: right;">
+                      <strong *ngIf='rowItem["isParent"]'>
+                        {{ formatearDecimales(rowItem["totalDolares"],2) }}
+                      </strong>
+                      <i *ngIf='!rowItem["isParent"]'>
+                        {{ formatearDecimales(rowItem["totalDolares"],2) }}
+                      </i>
+                    </td>
+                    <td dTableCell [width]="'20%'" style="text-align: center;">
+                      <div class="btn-group">
+                        <d-button (click)='grabarPagos(rowItem,rowIndex)' *ngIf='rowItem["isParent"]' icon="icon-buy" bsStyle="primary" [disabled]='rowItem["totalSoles"] + rowItem["totalDolares"] ==0?true:false'> Pagar </d-button>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+                </tbody>
               </d-data-table>
+            </div>
+
+            <div class="da-list-footer" >
+              <d-pagination
+                [size]="'sm'"
+                [total]="pager.total"
+                [(pageSize)]="pager.pageSize"
+                [(pageIndex)]="pager.pageIndex"
+                [canViewTotal]="true"
+                [canChangePageSize]="true"
+                [canJumpPage]="true"
+                [maxItems]="10"
+                (pageIndexChange)="onPageChange($event)"
+                (pageSizeChange)="onSizeChange($event)"
+              >
+              </d-pagination>
             </div>
           </div>
         </da-col-item>

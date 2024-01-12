@@ -16,6 +16,7 @@ import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app
 import { HorizontalFormComponent } from './gastos-embarcacion/horizontal-form/horizontal-form.component';
 import { NuevaDescargaComponent } from './descarga/nueva-descarga/nueva-descarga.component';
 import { DaGridModule } from '../../@shared/layouts/da-grid';
+import { I18nModule } from 'ng-devui/i18n';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DaGridModule } from '../../@shared/layouts/da-grid';
     AdminFormModule,
     ReactiveFormsModule,
     DaGridModule,
+    I18nModule,
   ],
 })
 export class TransaccionModule { }

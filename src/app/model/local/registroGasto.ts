@@ -8,5 +8,17 @@ export class RegistroGasto{
   tipoServicio:object = { };
   totalSoles:number = 0;
   totalDolares:number = 0;
+  children:RegistroGastoHijo[] = [];
+  isParent:boolean = true;
+  [key:string]:any;
+}
+
+export class RegistroGastoHijo{
+  embarcacion:Embarcacion = new Embarcacion();
+  semana:SemanaModel = new SemanaModel();
+  tipoServicio:object = { };
+  totalSoles:number = 0;
+  totalDolares:number = 0;
+  isParent:boolean = false;
   [key:string]:any;
 }
