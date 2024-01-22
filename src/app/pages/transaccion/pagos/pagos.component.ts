@@ -171,7 +171,7 @@ export class PagosComponent implements OnInit{
 
     productoSeleccionado[0].forEach((producto:any) =>{
       const registroGasto : RegistroGasto = new RegistroGasto();
-      registroGasto.tipoServicio = { nombreProducto: producto.nombreProducto, idProducto: producto.idProducto };
+      registroGasto.tipoServicio = { nombreProducto: producto.nombreProducto, idProducto: producto.idProducto,idServicio:producto.idProducto };
       this.listaRegistroGasto.push(registroGasto);
     });
 
@@ -180,7 +180,7 @@ export class PagosComponent implements OnInit{
       valor.forEach( (unRegistro: any) => {
         //Por cada producto obtengo el total sabiendo que esta ordenado
         this.listaRegistroGasto.filter( registro => {
-          if(unRegistro.idTipoServicio == registro.tipoServicio.idProducto){
+          if(unRegistro.idTipoServicio == registro.tipoServicio.idServicio){
             //Ahora recorro datos de valor para encontrar los valores.
             unRegistro.datos.forEach( (a:any) => {
               //Ahora debo de actualizar el hijo
@@ -190,6 +190,7 @@ export class PagosComponent implements OnInit{
               let rgh:RegistroGastoHijo = new RegistroGastoHijo();
               if(hijoFiltrado.length == 0){
                 rgh.tipoServicio.idProducto = a.idProveedor.idProveedor;
+                rgh.tipoServicio.idServicio = registro.tipoServicio.idServicio;
                 rgh.tipoServicio.nombreProducto = a.idProveedor.razonSocial;
               }else{
                 rgh = hijoFiltrado[0];
@@ -197,6 +198,7 @@ export class PagosComponent implements OnInit{
               let miDetalle:DetalleGasto = new DetalleGasto();
               miDetalle.embarcacion = unRegistro.embarcacion;
               miDetalle.semana = a.semanaRel;
+              miDetalle.idDia = a.idDia;
               rgh.detalleGasto.push(miDetalle);
 
               if(a.idMoneda == 1){
@@ -214,7 +216,6 @@ export class PagosComponent implements OnInit{
           }
         });
       });
-      //console.log(this.listaRegistroGasto);
     });
   }
 

@@ -14,6 +14,7 @@ export class RegistroGasto{
 export class TipoServicio{
   nombreProducto:string = '';
   idProducto:number= 0;
+  idServicio:number = 0;
   [key:string]:any;
 }
 
@@ -29,5 +30,6 @@ export class RegistroGastoHijo{
 export class DetalleGasto{
   embarcacion:Embarcacion = new Embarcacion();
   semana:SemanaModel = new SemanaModel();
+  idDia:number = 0;
   [key:string]:any;
 }
