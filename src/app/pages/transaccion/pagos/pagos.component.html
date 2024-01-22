@@ -136,7 +136,7 @@
                     </td>
                     <td dTableCell [width]="'20%'" style="text-align: center;">
                       <div class="btn-group">
-                        <d-button (click)='grabarPagos(rowItem,rowIndex)' *ngIf='rowItem["isParent"]' icon="icon-buy" bsStyle="primary" [disabled]='rowItem["totalSoles"] + rowItem["totalDolares"] ==0?true:false'> Pagar </d-button>
+                        <d-button (click)='grabarPagos(rowItem,rowIndex)' *ngIf='!rowItem["isParent"]' icon="icon-buy" bsStyle="primary" [disabled]='rowItem["totalSoles"] + rowItem["totalDolares"] ==0?true:false'> Pagar </d-button>
                       </div>
                     </td>
                   </tr>

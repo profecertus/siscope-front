@@ -91,68 +91,9 @@ export class SemanaComponent {
   }
 
 
-  editRow(row: any, index: number) {
-    this.editRowIndex = index;
-    this.accion = 0;
-    this.formData = row;
-      this.editForm = this.dialogService.open({
-      id: 'edit-dialog',
-      width: '700px',
-      maxHeight: '600px',
-      title: 'Semanas - Edición',
-      showAnimate: false,
-      contentTemplate: this.EditorTemplate,
-      backdropCloseable: true,
-      onClose: () => {},
-      buttons: [],
-    });
-  }
 
   refresh():void{
     this.getList();
-  }
-  newRow():void {
-    let row = new Camara();
-    this.editRowIndex = -1;
-    this.accion = 1;
-    this.formData = row;
-    this.editForm = this.dialogService.open({
-      id: 'edit-dialog',
-      width: '700px',
-      maxHeight: '600px',
-      title: 'Semanas - Nuevo',
-      showAnimate: false,
-      contentTemplate: this.EditorTemplate,
-      backdropCloseable: true,
-      onClose: () => {},
-      buttons: [],
-    });
-  }
-
-  deleteRow(e: Camara, index: number) {
-    e.estadoReg = false;
-    this.accion = -1;
-    Swal.fire({
-      title: '¿Seguro de eliminar la Semana?',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // @ts-ignore
-        this.semanaService.guardarSemana(e).forEach((value: string) => {
-          e.placa = value;
-        }).then(() => {
-          this.basicDataSource.splice(index, 1);
-          Swal.fire('Exito','Cámara Eliminada!','success');
-        }).catch( (error: any) =>{
-          console.log(error);
-          Swal.fire('Error',"Hubo Problemas al Eliminar la Cámara, intentelo más tarde",'error');
-        }).finally(()=>{
-          this.editForm!.modalInstance.hide();
-        });
-      }
-    })
   }
 
   onSearch(term: any) {
@@ -162,19 +103,8 @@ export class SemanaComponent {
         return true;
       if(JSON.stringify(element, null, 2).toLowerCase().indexOf( term.toLowerCase() ) > 0)
         return true;
-      /*
-      for (const key in element) {
-        if (Object.hasOwnProperty.call(element, key)) {
-          if (element[key] == null) continue;
-          if (element[key].toString().toLowerCase().includes(term.toLowerCase())) {
-            return true;
-          }
-        }
-      }*/
       return false;
     });
-
-
   }
 
   onPageChange(e: number) {
@@ -233,10 +163,34 @@ export class SemanaComponent {
     return fechaFormateada;
   }
 
-  valor:boolean = true;
+  estadoCheck:boolean = true;
+
   onChange(rowItem:SemanaModel, rowIndex:number, status:any) {
-    rowItem.estado = status;
-    this.basicDataSource[rowIndex] = rowItem;
-    this.semanaService.guardarSemana(rowItem).subscribe();
+    if(status){
+      Swal.fire({
+        title: '¿Seguro de Re-aperturar la Semana?',
+        html: 'Esto puede traer <strong>Problemas en su cuadre de pagos.</strong>',
+        showCancelButton: true,
+        confirmButtonText: 'Si,Re-aperturar',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          rowItem.estado = status;
+          this.basicDataSource[rowIndex] = rowItem;
+          this.semanaService.guardarSemana(rowItem).subscribe(value => {
+            Swal.fire('Re-apertura Semana', 'Se procedio correctamente', 'success');
+          });
+        }else{
+          this.basicDataSource[rowIndex].estado = false;
+          rowItem.estado = false;
+          console.log(rowItem);
+        }
+      })
+    }else{
+      rowItem.estado = status;
+      this.basicDataSource[rowIndex] = rowItem;
+      this.semanaService.guardarSemana(rowItem).subscribe();
+    }
+
   }
 }

@@ -178,10 +178,6 @@ export class NuevaDescargaComponent  implements OnInit {
   administraciones:any[]=[];
 
   l_flete:string = 'Total Flete';
-  l_habilitacion:string = 'Habilitación';
-  l_atraque:string = 'Atraque';
-  l_certificado:string = 'Certificado';
-  l_hielo:string = 'Hielo';
   l_renta:string = 'Renta (S/)';
 
   constructor(private fb: FormBuilder, private semanaService:SemanaService, private pescaService:PescaService,

@@ -445,6 +445,9 @@ export class GastosEmbarcacionComponent implements OnInit {
       let total = 0;
       if(value.idProducto == 2){
         this.petroleos.value.datos.forEach((valor: any) => {
+          if(valor["pagado"] == undefined){
+            valor["pagado"] = false;
+          }
           total += valor.idProveedor.idProveedor;
         });
         if(total == 0){
@@ -454,6 +457,9 @@ export class GastosEmbarcacionComponent implements OnInit {
 
       if(value.idProducto == 3 && !encontrado){
         this.hielos.value.datos.forEach((valor: any) => {
+          if(valor["pagado"] == undefined){
+            valor["pagado"] = false;
+          }
           total += valor.idProveedor.idProveedor;
         });
         if(total == 0){
@@ -463,6 +469,9 @@ export class GastosEmbarcacionComponent implements OnInit {
 
       if(value.idProducto == 17 && !encontrado){
         this.viveres.value.datos.forEach((valor: any) => {
+          if(valor["pagado"] == undefined){
+            valor["pagado"] = false;
+          }
           total += valor.idProveedor.idProveedor;
         });
         if(total == 0){

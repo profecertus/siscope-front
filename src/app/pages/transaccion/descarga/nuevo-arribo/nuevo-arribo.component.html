@@ -1,0 +1,61 @@
+<div style="margin-left: 40px;margin-right: 40px">
+  <form dForm [layout]="layoutDirection"
+        ngForm
+        [dValidateRules]="{ message: 'The form verification failed, please check.' }"
+        [layout]="layoutDirection"
+        #planForm="dValidateRules"
+        (dSubmit)="submitPlanForm($event)"
+        ngForm>
+    <d-form-item>
+      <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha arribo de la embarcacion.'">Fecha arribo</d-form-label>
+      <d-form-control >
+        <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
+          <d-datepicker-pro
+            [appendToBody]='true'
+            [maxDate]='max'
+            [mode]="'date'"
+            [placeholder]="'Fecha arribo'"
+            [format]="'dd/MM/yyyy'"
+            [showTime]='false'
+            [calenderRange]='[2010,2050]'
+            name='fecha'
+            [(ngModel)]='fecha'
+            (ngModelChange)='getValue($event)'
+            [dValidateRules]="singleSelectRules"
+          ></d-datepicker-pro>
+        </div>
+      </d-form-control>
+    </d-form-item>
+    <d-form-item>
+      <d-form-label [hasHelp]="true" [helpTips]="'Semana de Descarga.'">Semana arribo</d-form-label>
+      <d-form-control class="form-control-width">
+        <input dTextInput name="semana"  [(ngModel)]="semana" [disabled]="true"/>
+      </d-form-control>
+    </d-form-item>
+    <d-form-item>
+      <d-form-label [required]="true">Embarcación</d-form-label>
+      <d-form-control class="form-control-width">
+        <d-select
+          [options]="embarcaciones"
+          name="embarcacion"
+          [filterKey]="'nombre'"
+          [(ngModel)]='embarcacion'
+          [placeholder]="'Seleccione una embarcación'"
+          [allowClear]="true"
+          [dValidateRules]="singleSelectRules"
+          [appendToBody]="true"
+        ></d-select>
+      </d-form-control>
+    </d-form-item>
+    <d-form-operation class="da-form-operation">
+      <d-row>
+        <d-col [dSpan]="8">
+          <d-button style="margin-right: 5px" dFormSubmit [dFormSubmitData]="'submit-button'">Aceptar</d-button>
+        </d-col>
+        <d-col [dSpan]="4"/>
+        <d-col [dSpan]="8"><d-button bsStyle="common" (click)="cancel()">Cancelar</d-button></d-col>
+        <d-col [dSpan]="2"/>
+      </d-row>
+    </d-form-operation>
+  </form>
+</div>

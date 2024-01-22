@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
 import { DialogService, ToastService } from '@devui';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -24,6 +24,7 @@ import { NuevaDescargaComponent } from './nueva-descarga/nueva-descarga.componen
 
 export class DescargaComponent implements AfterViewInit{
   @ViewChild('nuevaDescargaComponent', {static:false}) nuevaDescarga: NuevaDescargaComponent | undefined;
+  @ViewChild('EditorTemplate', { static: true }) EditorTemplate: TemplateRef<any> | undefined;
   basicDataSource: Trabajador[] = [];
   basicDataSourceBkp: Trabajador[] = [];
   tipoDocSource: TipoDocumento[] = [];
@@ -108,9 +109,21 @@ export class DescargaComponent implements AfterViewInit{
     this.getList();
   }
   newRow():void {
-    this.nuevoDetalle = !this.nuevoDetalle
-    this.formData = { };
-    this.tipoAccion = 'N';
+
+    /*this.editRowIndex = index;
+    this.formData = row;
+    this.formConfig.items[4].options = this.monedas;*/
+    this.editForm = this.dialogService.open({
+      id: 'edit-dialog',
+      width: '380px',
+      maxHeight: '300px',
+      title: 'Nueva Descarga - Datos Iniciales',
+      showAnimate: false,
+      contentTemplate: this.EditorTemplate,
+      backdropCloseable: true,
+      onClose: () => {},
+      buttons: [],
+    });
   }
 
 
@@ -159,14 +172,25 @@ export class DescargaComponent implements AfterViewInit{
   }
 
   onCanceled():void {
-    this.nuevoDetalle = !this.nuevoDetalle;
+    this.editForm.close();
   }
 
   grabarNuevaDescarga(){
     this.nuevaDescarga?.grabar();
   }
+
+  onSubmitted(event:any){
+    this.nuevoDetalle = !this.nuevoDetalle
+    this.formData = { };
+    this.tipoAccion = 'N';
+    if(event.existeArribo){
+      //En este caso debo avisar que algunos datos son cargados.
+    }
+    this.editForm!.modalInstance.hide();
+  }
+
+
   onSubmit(resultado:string):void {
-    console.log(resultado);
     const results = this.toastService.open({
       value: [{ severity: 'success', summary: `TICKET: ${resultado}`, content: 'Se grabo correctamente' }],
     });

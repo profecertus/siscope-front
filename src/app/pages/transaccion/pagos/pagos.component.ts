@@ -5,11 +5,10 @@ import { PescaService } from '../../../service/pesca.service';
 import { SemanaService } from '../../../service/semana.service';
 import { EmbarcacionService } from '../../../service/embarcacion.service';
 import { format, parse } from 'date-fns';
-import { RegistroGasto, RegistroGastoHijo } from '../../../model/local/registroGasto';
+import { DetalleGasto, RegistroGasto, RegistroGastoHijo } from '../../../model/local/registroGasto';
 import { TipoServicio } from '../../../model/tipoServicio.model';
 import { Subscription } from 'rxjs';
 import { CheckableRelation, DataTableComponent, TableWidthConfig } from 'ng-devui/data-table';
-import { shouldReportDiagnostic } from '@angular/compiler-cli/src/ngtsc/typecheck/src/diagnostics';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -155,6 +154,8 @@ export class PagosComponent implements OnInit{
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed){
+
+          console.log(rowItem);
           Swal.fire('Exito','Se pago el '+ rowItem.tipoServicio.nombreProducto ,'success');
         }
     });
@@ -162,52 +163,58 @@ export class PagosComponent implements OnInit{
 
   buscarGastos():void{
     this.listaRegistroGasto =[];
+    const productoSeleccionado :any[] = [];
+    productoSeleccionado.push( this.productos.filter( value => {
+      return this.producto.idProducto == 0?value.idProducto != this.producto.idProducto:value.idProducto == this.producto.idProducto;
+    }));
+
+
+    productoSeleccionado[0].forEach((producto:any) =>{
+      const registroGasto : RegistroGasto = new RegistroGasto();
+      registroGasto.tipoServicio = { nombreProducto: producto.nombreProducto, idProducto: producto.idProducto };
+      this.listaRegistroGasto.push(registroGasto);
+    });
+
     // @ts-ignore
     this.pescaService.getGastos(this.producto['idProducto'], this.embarcacion.idEmbarcacion, this.semana.id).subscribe((valor) => {
-      //Por cada producto obtengo el total sabiendo que esta ordenado
-      this.productos.forEach((prod:any) => {
-        if(prod.idProducto != 0) {
-          const registroGasto: RegistroGasto = new RegistroGasto();
-          //filtro el valor por el tipo de producto
-          const tipoPrd = valor.filter((dato: any) => {
-            return dato.idTipoServicio == prod.idProducto
-          });
-          let totalGastoSoles = 0;
-          let totalGastoDolares = 0;
-          tipoPrd.forEach((unGasto: any) => {
-            registroGasto.embarcacion = unGasto.embarcacion;
-            registroGasto.semana = unGasto.semana;
-            //Ahora busco en cada dato por Moneda (tener en cuenta)
-            const gastoSemana = unGasto.datos.filter((dato: any) => {
-              return dato.idProveedor.idProveedor != 0
-            });
-            gastoSemana.forEach((unDia: any) => {
-              var registroDia: RegistroGastoHijo = new RegistroGastoHijo();
-              // @ts-ignore
-              registroDia.tipoServicio["nombreProducto"] = unDia.idDiaString + ' - ' + unDia.idProveedor.razonSocial;
-              // @ts-ignore
-              registroDia.tipoServicio["fecha"] = unDia.idDia;
-              if (unDia.idMoneda == 1) {
-                totalGastoSoles = totalGastoSoles + unDia.total;
-                registroDia.totalSoles = unDia.total;
-              } else {
-                totalGastoDolares = totalGastoDolares + unDia.total;
-                registroDia.totalDolares = unDia.total;
+      valor.forEach( (unRegistro: any) => {
+        //Por cada producto obtengo el total sabiendo que esta ordenado
+        this.listaRegistroGasto.filter( registro => {
+          if(unRegistro.idTipoServicio == registro.tipoServicio.idProducto){
+            //Ahora recorro datos de valor para encontrar los valores.
+            unRegistro.datos.forEach( (a:any) => {
+              //Ahora debo de actualizar el hijo
+              const hijoFiltrado = registro.children.filter( unHijo => {
+                return unHijo.tipoServicio.idProducto == a.idProveedor.idProveedor;
+              });
+              let rgh:RegistroGastoHijo = new RegistroGastoHijo();
+              if(hijoFiltrado.length == 0){
+                rgh.tipoServicio.idProducto = a.idProveedor.idProveedor;
+                rgh.tipoServicio.nombreProducto = a.idProveedor.razonSocial;
+              }else{
+                rgh = hijoFiltrado[0];
               }
-              registroGasto.children.push(registroDia);
+              let miDetalle:DetalleGasto = new DetalleGasto();
+              miDetalle.embarcacion = unRegistro.embarcacion;
+              miDetalle.semana = a.semanaRel;
+              rgh.detalleGasto.push(miDetalle);
+
+              if(a.idMoneda == 1){
+                registro.totalSoles +=  a.total;
+                rgh.totalSoles += a.total;
+              }else{
+                registro.totalDolares +=  a.total;
+                rgh.totalDolares += a.total;
+              }
+              //Agrego a la lista
+              if(hijoFiltrado.length == 0) {
+                registro.children.push(rgh);
+              }
             });
-            registroGasto.children.sort((a, b) =>{
-              // @ts-ignore
-              return a.tipoServicio["fecha"] - b.tipoServicio["fecha"];
-            });
-          });
-          registroGasto.tipoServicio = new TipoServicio();
-          registroGasto.totalSoles = totalGastoSoles;
-          registroGasto.totalDolares = totalGastoDolares;
-          registroGasto.tipoServicio = prod;
-          this.listaRegistroGasto.push(registroGasto);
-        }
+          }
+        });
       });
+      //console.log(this.listaRegistroGasto);
     });
   }
 

@@ -1,11 +1,9 @@
 import { Embarcacion } from '../embarcacion.model';
 import { SemanaModel } from '../semana.model';
-import { TipoServicio } from '../tipoServicio.model';
+import { ProveedorModel } from '../proveedor.model';
 
 export class RegistroGasto{
-  embarcacion:Embarcacion = new Embarcacion();
-  semana:SemanaModel = new SemanaModel();
-  tipoServicio:object = { };
+  tipoServicio:TipoServicio = new TipoServicio();
   totalSoles:number = 0;
   totalDolares:number = 0;
   children:RegistroGastoHijo[] = [];
@@ -13,12 +11,23 @@ export class RegistroGasto{
   [key:string]:any;
 }
 
+export class TipoServicio{
+  nombreProducto:string = '';
+  idProducto:number= 0;
+  [key:string]:any;
+}
+
 export class RegistroGastoHijo{
-  embarcacion:Embarcacion = new Embarcacion();
-  semana:SemanaModel = new SemanaModel();
-  tipoServicio:object = { };
+  tipoServicio:TipoServicio = new TipoServicio();
   totalSoles:number = 0;
   totalDolares:number = 0;
   isParent:boolean = false;
+  detalleGasto:DetalleGasto[] = [];
+  [key:string]:any;
+}
+
+export class DetalleGasto{
+  embarcacion:Embarcacion = new Embarcacion();
+  semana:SemanaModel = new SemanaModel();
   [key:string]:any;
 }

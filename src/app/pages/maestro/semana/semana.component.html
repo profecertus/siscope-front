@@ -76,7 +76,7 @@
                 <d-cell>
                   <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
                     <span [title]="rowIndex" class="over-flow-ellipsis" [style.width]="'200px'">
-                      <d-toggle [checked]=rowItem.estado (change)="onChange(rowItem, rowIndex, $event)" ></d-toggle>
+                      <d-toggle [checked]=rowItem.estado [(ngModel)]='rowItem.estado' (change)="onChange(rowItem, rowIndex, $event)" ></d-toggle>
                     </span>
                   </ng-template>
                 </d-cell>

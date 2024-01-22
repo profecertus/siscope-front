@@ -190,3 +190,6 @@
     </da-layout-row>
   </div>
 </div><d-toast></d-toast>
+<ng-template #EditorTemplate>
+  <app-nuevo-arribo (submitted)="onSubmitted($event)" (canceled)="onCanceled()" ></app-nuevo-arribo>
+</ng-template>
