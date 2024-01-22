@@ -154,9 +154,9 @@ export class PagosComponent implements OnInit{
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed){
-
-          console.log(rowItem);
-          Swal.fire('Exito','Se pago el '+ rowItem.tipoServicio.nombreProducto ,'success');
+          this.pescaService.guardarPago(rowItem).subscribe(valor => {
+            Swal.fire('Exito','Se pago el '+ rowItem.tipoServicio.nombreProducto ,'success');
+          });
         }
     });
   }
