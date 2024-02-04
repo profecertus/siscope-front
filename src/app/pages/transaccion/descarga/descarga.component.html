@@ -28,7 +28,7 @@
               <d-button icon="icon-add-file" *ngIf='!nuevoDetalle' (click)="newRow()">Nuevo</d-button>&nbsp;
               <d-button icon="icon-refresh" *ngIf='!nuevoDetalle' (click)="refresh()">Refrescar</d-button>
               <d-button icon="icon-save" *ngIf='nuevoDetalle'  (click)='grabarNuevaDescarga( )'>Grabar</d-button>&nbsp;
-              <d-button icon="icon-close"  *ngIf='nuevoDetalle' (click)='onCanceled()'>Volver</d-button>
+              <d-button icon="icon-close"  *ngIf='nuevoDetalle' (click)='volver()'>Volver</d-button>
             </div>
           </div>
         </div>
@@ -106,15 +106,6 @@
                         </ng-template>
                       </d-cell>
                     </d-column>
-                    <!--d-column field="camara" header="Dueño" [width]="'150px'">
-                      <d-cell>
-                        <ng-template let-cellItem="cellItem">
-                          <span [title]="cellItem.idProveedor.razonSocial" class="over-flow-ellipsis" [style.width]="'150px'">
-                            {{ cellItem.idProveedor.nombreComercial }}
-                          </span>
-                        </ng-template>
-                      </d-cell>
-                    </d-column-->
 
                     <d-column field="cajaReal" header="Num. Cajas" [width]="'100px'">
                       <d-cell>

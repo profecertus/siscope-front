@@ -2,67 +2,30 @@
   <form dForm [layout]="layoutDirection" [formGroup]="formDescarga">
     <div class="grid">
       <div class="u-1-5 box">
-          <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'Fecha de Descarga.'">Fecha</d-form-label>
-          <d-form-control class="form-control-width">
-            <div class="devui-input-group devui-dropdown-origin" dActiveFormControl>
-              <input
-                class="devui-input devui-form-control"
-                placeholder="dd/MM/y"
-                (click)="datePicker1.toggle()"
-                name="dp"
-                [maxDate]="max"
-                [dateFormat]="'dd/MM/y'"
-                autocomplete="off"
-                dDatepicker
-                #datePicker1="datepicker"
-                (selectedDateChange)="getValue($event)"
-                formControlName='fecha'
-              />
-              <div class="devui-input-group-addon close-icon-wrapper" (click)="datePicker1.clearAll()">
-                <i class="icon icon-close"></i>
-              </div>
-              <div class="devui-input-group-addon" (click)="datePicker1.toggle()">
-                <i class="icon icon-calendar"></i>
-              </div>
-            </div>
-          </d-form-control>
-      </div>
-      <div class="u-1-5 box">
-          <d-form-label [hasHelp]="true" [helpTips]="'Semana de Descarga.'">Semana</d-form-label>
-          <d-form-control class="form-control-width">
-            <input dTextInput name="semana"  formControlName='semana' />
-          </d-form-control>
-      </div>
-
-
-      <div class="u-1-5 box">
-          <d-form-label [required]="true">Embarcación</d-form-label>
+          <d-form-label>Fecha Descarga</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select
-            [options]="embarcaciones"
-            name="embarcacion"
-            [filterKey]="'nombre'"
-            formControlName='embarcacion'
-            [placeholder]="'Seleccione una embarcación'"
-            [allowClear]="true"
-            [dValidateRules]="[{ required: true }]"
-          ></d-select>
+          <strong><u>{{ format(formDescarga.get("fecha")?.value, 'dd/MM/yyyy') }}</u></strong>
+          </d-form-control>
+      </div>
+      <div class="u-1-5 box">
+        <d-form-label>Semana</d-form-label>
+        <d-form-control class="form-control-width">
+          <strong><u>{{ formDescarga.get("semana")?.value  }}</u></strong>
+        </d-form-control>
+      </div>
+
+
+      <div class="u-1-5 box">
+        <d-form-label >Embarcación</d-form-label>
+        <d-form-control class="form-control-width">
+          <div  ><strong><u>{{ formDescarga.get("embarcacion")?.value["nombre"] }}</u></strong></div>
         </d-form-control>
       </div>
 
       <div class="u-1-5 box">
-        <d-form-label [required]="true">Planta</d-form-label>
+        <d-form-label>Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <d-select
-            [options]="plantas"
-            name="planta"
-            [filterKey]="'nombrePlanta'"
-            formControlName='planta'
-            [placeholder]="'Selecciones la Planta'"
-            [width]="350"
-            [appendToBody]="true"
-            [appendToBodyDirections]="['leftDown', 'leftUp']"
-          ></d-select>
+          <strong><u>{{ formDescarga.get("planta")?.value["nombrePlanta"] }}</u></strong>
         </d-form-control>
       </div>
 

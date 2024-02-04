@@ -52,7 +52,7 @@ export class DescargaComponent implements AfterViewInit{
 
   ngAfterViewInit(): void {
         if (this.nuevaDescarga){
-          console.log("Existe Nueva Descarga")
+          console.error("Existe Nueva Descarga")
         }
   }
 
@@ -109,15 +109,11 @@ export class DescargaComponent implements AfterViewInit{
     this.getList();
   }
   newRow():void {
-
-    /*this.editRowIndex = index;
-    this.formData = row;
-    this.formConfig.items[4].options = this.monedas;*/
     this.editForm = this.dialogService.open({
       id: 'edit-dialog',
       width: '380px',
-      maxHeight: '300px',
-      title: 'Nueva Descarga - Datos Iniciales',
+      maxHeight: '380px',
+      title: 'Descarga',
       showAnimate: false,
       contentTemplate: this.EditorTemplate,
       backdropCloseable: true,
@@ -172,7 +168,22 @@ export class DescargaComponent implements AfterViewInit{
   }
 
   onCanceled():void {
-    this.editForm.close();
+    this.editForm.modalInstance.hide();
+  }
+
+  volver():void{
+    Swal.fire({
+      title: '¿Seguro de volver sin grabar?',
+      showCancelButton: true,
+      confirmButtonText: 'Volver',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.nuevoDetalle = !this.nuevoDetalle
+        this.formData = { };
+        this.tipoAccion = '';
+      }
+    })
   }
 
   grabarNuevaDescarga(){
@@ -181,7 +192,7 @@ export class DescargaComponent implements AfterViewInit{
 
   onSubmitted(event:any){
     this.nuevoDetalle = !this.nuevoDetalle
-    this.formData = { };
+    this.formData = event;
     this.tipoAccion = 'N';
     if(event.existeArribo){
       //En este caso debo avisar que algunos datos son cargados.

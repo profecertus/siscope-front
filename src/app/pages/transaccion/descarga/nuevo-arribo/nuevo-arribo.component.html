@@ -40,7 +40,22 @@
           name="embarcacion"
           [filterKey]="'nombre'"
           [(ngModel)]='embarcacion'
-          [placeholder]="'Seleccione una embarcación'"
+          [placeholder]="'Embarcación'"
+          [allowClear]="true"
+          [dValidateRules]="singleSelectRules"
+          [appendToBody]="true"
+        ></d-select>
+      </d-form-control>
+    </d-form-item>
+    <d-form-item>
+      <d-form-label [required]="true">Planta</d-form-label>
+      <d-form-control class="form-control-width">
+        <d-select
+          [options]="plantas"
+          name="planta"
+          [filterKey]="'nombrePlanta'"
+          [(ngModel)]='planta'
+          [placeholder]="'Planta Destino'"
           [allowClear]="true"
           [dValidateRules]="singleSelectRules"
           [appendToBody]="true"

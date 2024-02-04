@@ -14,6 +14,7 @@ import { PescaService } from '../../../../service/pesca.service';
 import { TarifarioService } from '../../../../service/tarifario.service';
 import { ProveedorService } from '../../../../service/proveedor.service';
 import Swal from 'sweetalert2';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'da-nueva-descarga',
@@ -188,17 +189,20 @@ export class NuevaDescargaComponent  implements OnInit {
 
   ngOnInit() {
     this.getValue({ selectedDate: new Date() });
-    this.getEmbarcaciones();
     this.getMonedas();
-    this.getPlantas();
     this.getCamaras();
     this.getMuelles();
     this.getLavadoCubetas();
     this.getAdministraciones();
 
-    this.formDescarga.get("planta")?.valueChanges.subscribe((nuevoValor) =>{
-      this.selectPlanta(nuevoValor)
-    });
+
+    this.selectPlanta(this.formDescarga.get("planta")?.value);
+    //Valores por defecto a cambiar luego luego
+    this.formDescarga.get('toneladasCompra')?.setValue(2.76);
+    this.formDescarga.get('toneladasVenta')?.setValue(3.00);
+    this.formDescarga.get('kgCajaCompra')?.setValue(23.00);
+    this.formDescarga.get('kgCajaVenta')?.setValue(25.00);
+
 
     this.formDescarga.get("monedaFlete")?.valueChanges.subscribe((nuevoValor) =>{
       this.selectMoneda(nuevoValor)
@@ -218,10 +222,6 @@ export class NuevaDescargaComponent  implements OnInit {
 
     this.formDescarga.get("kgCajaVenta")?.valueChanges.subscribe((nuevoValor:number):void =>{
       this.modifiedkgVenta(nuevoValor);
-    });
-
-    this.formDescarga.get("embarcacion")?.valueChanges.subscribe((embarcacion:any):void =>{
-      this.modifiedEmbarcacion(embarcacion);
     });
 
     this.formDescarga.get("precioVenta")?.valueChanges.subscribe((nuevoValor:number):void =>{
@@ -245,7 +245,6 @@ export class NuevaDescargaComponent  implements OnInit {
 
   getLavadoCubetas():void{
     this.proveedorService.obtenerProveedorxTipo(9).subscribe(value => {
-      console.log(value);
       this.lavadoCubetas = value;
     });
   }
@@ -277,21 +276,6 @@ export class NuevaDescargaComponent  implements OnInit {
     this.monedaService.obtenerMonedas().subscribe(value => {
       this.monedas = value;
     })
-  }
-
-  getPlantas(){
-    this.plantaService.obtenerPlantas(0,100).subscribe(value => {
-      this.plantas = value.content;
-      this.plantas.forEach(valor => {
-        valor.nombrePlanta = valor.plantaDto?.nombrePlanta + ' (' + valor.plantaDto?.codUbigeo.distrito + ')';
-      });
-    })
-  }
-
-  getEmbarcaciones(){
-    this.embarcacionService.obtenerEmbarcaciones(0,100).subscribe(value => {
-      this.embarcaciones = value.content;
-    });
   }
 
   selectMoneda(moneda:any):void{
@@ -493,4 +477,5 @@ export class NuevaDescargaComponent  implements OnInit {
     }
   }
 
+  protected readonly format = format;
 }

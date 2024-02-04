@@ -9,7 +9,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open --port 8001",
+    "start": "ng serve --open --ssl --ssl-key key.pem --ssl-cert cert.pem --port 8001",
     "build": "ng build",
     "build:website": "ng build --configuration production --base-href /siscope/ --output-path dist/siscope",
     "test": "ng test",

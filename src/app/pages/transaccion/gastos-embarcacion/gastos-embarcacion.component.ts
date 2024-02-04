@@ -419,13 +419,6 @@ export class GastosEmbarcacionComponent implements OnInit {
     return array[0] + '.' + array[1];
   }
 
-  beforeEditStartSR = (rowItem: any, field: any) => {
-    return true;
-  };
-
-  beforeEditEndSR = (rowItem: any, field: any) => {
-    return true;
-  };
 
   buscarProductoSeleccionado(idProducto:number):boolean{
     let productoSeleccionado : boolean =  false;
