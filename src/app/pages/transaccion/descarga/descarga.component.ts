@@ -25,8 +25,8 @@ import { NuevaDescargaComponent } from './nueva-descarga/nueva-descarga.componen
 export class DescargaComponent implements AfterViewInit{
   @ViewChild('nuevaDescargaComponent', {static:false}) nuevaDescarga: NuevaDescargaComponent | undefined;
   @ViewChild('EditorTemplate', { static: true }) EditorTemplate: TemplateRef<any> | undefined;
-  basicDataSource: Trabajador[] = [];
-  basicDataSourceBkp: Trabajador[] = [];
+  basicDataSource: any[] = [];
+  basicDataSourceBkp: any[] = [];
   tipoDocSource: TipoDocumento[] = [];
   bancoSource: Banco[] = [];
   monedaSource: Moneda[] = [];

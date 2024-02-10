@@ -1,6 +1,5 @@
 <div style="margin-left: 40px;margin-right: 40px">
   <form dForm [layout]="layoutDirection"
-        ngForm
         [dValidateRules]="{ message: 'The form verification failed, please check.' }"
         [layout]="layoutDirection"
         #planForm="dValidateRules"
@@ -18,8 +17,8 @@
             [format]="'dd/MM/yyyy'"
             [showTime]='false'
             [calenderRange]='[2010,2050]'
-            name='fecha'
-            [(ngModel)]='fecha'
+            [(ngModel)]='fechaSel'
+            [ngModelOptions]="{standalone: true}"
             (ngModelChange)='getValue($event)'
             [dValidateRules]="singleSelectRules"
           ></d-datepicker-pro>
@@ -29,7 +28,7 @@
     <d-form-item>
       <d-form-label [hasHelp]="true" [helpTips]="'Semana de Descarga.'">Semana arribo</d-form-label>
       <d-form-control class="form-control-width">
-        <input dTextInput name="semana"  [(ngModel)]="semana" [disabled]="true"/>
+        <input dTextInput name="semana"  [(ngModel)]="semana.idSemana" [disabled]="true" [ngModelOptions]="{standalone: true}"  />
       </d-form-control>
     </d-form-item>
     <d-form-item>

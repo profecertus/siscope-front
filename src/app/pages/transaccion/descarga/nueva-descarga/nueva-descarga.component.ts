@@ -14,7 +14,8 @@ import { PescaService } from '../../../../service/pesca.service';
 import { TarifarioService } from '../../../../service/tarifario.service';
 import { ProveedorService } from '../../../../service/proveedor.service';
 import Swal from 'sweetalert2';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
+import { DescargaPesca } from '../../../../model/local/descargaPesca';
 
 @Component({
   selector: 'da-nueva-descarga',
@@ -24,22 +25,34 @@ import { format } from 'date-fns';
 
 export class NuevaDescargaComponent  implements OnInit {
   layoutDirection: FormLayout = FormLayout.Columns;
-  max = new Date();
   fechaNumber = 0;
   embarcaciones:Embarcacion[] = [];
   monedas:Moneda[]=[];
   plantas:RespuestaPlanta[]=[];
   camaras:Camara[]=[];
   tipoAccion:string='';
+  datoCargado:boolean = false;
 
   @Input() set tipo(val: string) {
     this.tipoAccion = val;
   }
 
-  @Input() set formData(val: any) {
-    if( Object.keys( this.fb.group(val).value).length > 0){
-      this.formDescarga = this.fb.group(val);
-      this.formDescarga.get('semana')?.disable();
+  @Input() set formData(val:any) {
+    // @ts-ignore
+    let dp:DescargaPesca = val;
+    if( Object.keys( this.fb.group(dp).value).length > 0){
+      this.fechaNumber = dp.fecha.idDia;
+      this.formDescarga = this.fb.group(dp);
+      if(dp.muelle.idProveedor != 0){
+        this.datoCargado = true;
+        this.formDescarga.get('muelle')?.disable();
+        this.formDescarga.get('precioAtraque')?.disable();
+        console.log(this.formDescarga.get('muelle'));
+        console.log(this.formDescarga.get('precioAtraque'));
+        this.formDescarga.get('monedaAtraque')?.disable();
+        this.formDescarga.get('precioMuelle')?.disable();
+        this.formDescarga.get('monedaMuelle')?.disable();
+      }
       this.formDescarga.get('toneladasCompra')?.disable();
       this.formDescarga.get('toneladasVenta')?.disable();
       this.formDescarga.get('totalFlete')?.disable();
@@ -48,65 +61,6 @@ export class NuevaDescargaComponent  implements OnInit {
       this.formDescarga.get('proveedorDescargaMuelle')?.disable();
       this.formDescarga.get('proveedorComisionEmbarcacion')?.disable();
       this.formDescarga.get('proveedorComisionPlanta')?.disable();
-    }else{
-     this.formDescarga = this.fb.group({
-        semana: new FormControl({ value: 0, disabled: true }),
-        fecha:new Date(),
-        fechaObj:{},
-        embarcacion:{},
-        cajaReal:[0, [Validators.pattern('[0-9]*')]],
-        cajaGuia:0,
-        numTicket:'',
-        fechaNumero:0,
-        kgCajaCompra:0,
-        precioCompra:0,
-        monedaCompra: { },
-        kgCajaVenta:0,
-        precioVenta:0,
-        destino:{},
-        muelle:{},
-        precioMuelle:0,
-        monedaMuelle:{},
-        precioHabilitacion:0,
-        monedaHabilitacion:{},
-        precioAtraque:0,
-        monedaAtraque:{},
-        precioHielo:0,
-        monedaHielo:{},
-        precioCertificado:0,
-        monedaCertificado:{},
-        monedaVenta: {  },
-        precioRenta:0,
-        planta:{},
-        camara:{},
-        tarifaFlete: new FormControl({ value: 0, disabled: false }),
-        monedaFlete:{},
-        toneladasCompra: new FormControl({ value: 0, disabled: true }),
-        toneladasVenta: new FormControl({ value: 0, disabled: true }),
-        totalFlete: new FormControl({ value: 0, disabled: true }),
-        proveedorFlete: new FormControl({ value: '', disabled: true }),
-
-        precioDescargaMuelle:0,
-        monedaDescargaMuelle:{},
-        proveedorDescargaMuelle: new FormControl({ value: '', disabled: true }),
-        precioDescargaPlanta:0,
-        monedaDescargaPlanta:{},
-        proveedorDescargaPlanta: new FormControl({ value: '', disabled: true }),
-
-       precioComisionEmbarcacion:0,
-       monedaComisionEmbarcacion:{},
-       proveedorComisionEmbarcacion: new FormControl({ value: '', disabled: true }),
-       precioComisionPlanta:0,
-       monedaComisionPlanta:{},
-       proveedorComisionPlanta: new FormControl({ value: '', disabled: true }),
-
-       precioLavadoCubeta:0,
-       monedaLavadoCubeta:{},
-       proveedorLavadoCubeta: {  },
-       precioAdministracion:0,
-       monedaAdministracion:{},
-       proveedorAdministracion: {  },
-      });
     }
   }
 
@@ -114,64 +68,7 @@ export class NuevaDescargaComponent  implements OnInit {
 
   @Output() submit = new EventEmitter();
 
-  formDescarga: FormGroup = this.fb.group({
-    semana: new FormControl({ value: 0, disabled: true }),
-    fecha:new Date(),
-    fechaObj:{},
-    embarcacion:{},
-    cajaReal:[0, [Validators.pattern('[0-9]*')]],
-    cajaGuia:0,
-    numTicket:'',
-    fechaNumero:0,
-    kgCajaCompra:0,
-    precioCompra:0,
-    monedaCompra: { },
-    kgCajaVenta:0,
-    precioVenta:0,
-    destino:{},
-    muelle:{},
-    precioMuelle:0,
-    monedaMuelle:{},
-    precioHabilitacion:0,
-    monedaHabilitacion:{},
-    precioAtraque:0,
-    monedaAtraque:{},
-    precioHielo:0,
-    monedaHielo:{},
-    precioCertificado:0,
-    monedaCertificado:{},
-    monedaVenta: {  },
-    precioRenta:0,
-    planta:{},
-    camara:{},
-    tarifaFlete: new FormControl({ value: 0, disabled: false }),
-    monedaFlete:{},
-    toneladasCompra: new FormControl({ value: 0, disabled: true }),
-    toneladasVenta: new FormControl({ value: 0, disabled: true }),
-    totalFlete: new FormControl({ value: 0, disabled: true }),
-    proveedorFlete: new FormControl({ value: '', disabled: true }),
-
-    precioDescargaMuelle:0,
-    monedaDescargaMuelle:{},
-    proveedorDescargaMuelle: new FormControl({ value: '', disabled: true }),
-    precioDescargaPlanta:0,
-    monedaDescargaPlanta:{},
-    proveedorDescargaPlanta: new FormControl({ value: '', disabled: true }),
-
-    precioComisionEmbarcacion:0,
-    monedaComisionEmbarcacion:{},
-    proveedorComisionEmbarcacion: new FormControl({ value: '', disabled: true }),
-    precioComisionPlanta:0,
-    monedaComisionPlanta:{},
-    proveedorComisionPlanta: new FormControl({ value: '', disabled: true }),
-
-    precioLavadoCubeta:0,
-    monedaLavadoCubeta:{},
-    proveedorLavadoCubeta: { },
-    precioAdministracion:0,
-    monedaAdministracion:{},
-    proveedorAdministracion: { },
-  });
+  formDescarga: FormGroup = this.fb.group({ });
 
   destinos: any[] = [];
   muelles:any[]=[];
@@ -183,12 +80,11 @@ export class NuevaDescargaComponent  implements OnInit {
 
   constructor(private fb: FormBuilder, private semanaService:SemanaService, private pescaService:PescaService,
               private proveedorService:ProveedorService,
-              private embarcacionService:EmbarcacionService, private monedaService:MonedaService, private tarifarioService: TarifarioService,
-              private plantaService:PlantaService, private camaraService:CamaraService) {
+              private monedaService:MonedaService, private tarifarioService: TarifarioService,
+              private camaraService:CamaraService) {
   }
 
   ngOnInit() {
-    this.getValue({ selectedDate: new Date() });
     this.getMonedas();
     this.getCamaras();
     this.getMuelles();
@@ -198,10 +94,14 @@ export class NuevaDescargaComponent  implements OnInit {
 
     this.selectPlanta(this.formDescarga.get("planta")?.value);
     //Valores por defecto a cambiar luego luego
-    this.formDescarga.get('toneladasCompra')?.setValue(2.76);
-    this.formDescarga.get('toneladasVenta')?.setValue(3.00);
     this.formDescarga.get('kgCajaCompra')?.setValue(23.00);
+    this.modifiedkgCompra(23.00);
     this.formDescarga.get('kgCajaVenta')?.setValue(25.00);
+    this.modifiedkgVenta(25.00);
+    this.formDescarga.get('monedaCompra')?.setValue({"idMoneda": 2,"nombre": "DOLARES","abreviatura": "$    "});
+    this.formDescarga.get('monedaVenta')?.setValue({"idMoneda": 2,"nombre": "DOLARES","abreviatura": "$    "});
+    this.modifiedMonedaVenta({"idMoneda": 2,"nombre": "DOLARES","abreviatura": "$    "});
+    //*********************************************************************
 
 
     this.formDescarga.get("monedaFlete")?.valueChanges.subscribe((nuevoValor) =>{
@@ -255,22 +155,7 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
 
-  getSemana(){
-    this.semanaService.semanaxFecha(this.fechaNumber).subscribe(value => {
-      this.formDescarga.patchValue({
-        semana: value.idSemana,
-        fechaNumero: this.fechaNumber,
-      });
-    });
-  }
 
-  getDiaSemana():void{
-    this.semanaService.getDiaSemana(this.fechaNumber).subscribe(value => {
-      this.formDescarga.patchValue({
-        fechaObj:value
-      })
-    });
-  }
 
   getMonedas(){
     this.monedaService.obtenerMonedas().subscribe(value => {
@@ -286,12 +171,14 @@ export class NuevaDescargaComponent  implements OnInit {
     this.destinos = planta.relPlantaDestinoDto;
     this.tarifarioService.obtenerTarifarioFletexDestino(planta.plantaDto.codUbigeo.codUbigeo,
       this.formDescarga.value.fechaNumero).subscribe(value => {
-        this.l_flete = 'Total Flete (' + value.idMoneda.abreviatura + ')';
-        this.formDescarga.patchValue({
-          tarifaFlete: value.monto,
-          totalFlete: (value.monto * this.formDescarga.value.cajaReal),
-          monedaFlete:value.idMoneda,
-        });
+        if(value.id != null){
+          this.l_flete = 'Total Flete (' + value.idMoneda.abreviatura + ')';
+          this.formDescarga.patchValue({
+            tarifaFlete: value.monto,
+            totalFlete: (value.monto * this.formDescarga.value.cajaReal),
+            monedaFlete:value.idMoneda,
+          });
+        }
     });
   }
 
@@ -301,13 +188,6 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
 
-  getValue(value: any):void {
-    if(value.selectedDate == null) return;
-    let fecha:Date = new Date(value.selectedDate);
-    this.fechaNumber = fecha.getFullYear() * 10000 + (fecha.getMonth() + 1) * 100 + fecha.getDate();
-    this.getSemana();
-    this.getDiaSemana();
-  }
 
   selectCamara(camara:any):void{
     this.formDescarga.patchValue({
@@ -363,13 +243,6 @@ export class NuevaDescargaComponent  implements OnInit {
     });
   }
 
-  // @ts-ignore
-  submitForm({ valid, directive }) {
-    // do something for submitting
-    //if (valid) {
-    //  console.log(this.formDescarga);
-    //}
-  }
   grabar(){
     if (this.formDescarga.valid) {
       Swal.fire({
@@ -431,10 +304,6 @@ export class NuevaDescargaComponent  implements OnInit {
     }
   }
 
-  salir():void{
-    this.canceled.emit();
-  }
-
   modifiedkgCompra(valor: number) {
     this.formDescarga.patchValue({
       toneladasCompra: this.formDescarga.value.cajaReal * valor / 1000,
@@ -459,22 +328,13 @@ export class NuevaDescargaComponent  implements OnInit {
     this.l_renta = 'Precio (' + moneda.abreviatura.trim() + ')';
   }
 
-  modifiedEmbarcacion(embarcacion:any):void{
-    if (embarcacion.relEmbarcacionProveedorDto != undefined){
-      this.proveedorService.obtenerPrecioxDia(embarcacion.relEmbarcacionProveedorDto[0].idProovedor.id,
-        embarcacion.relEmbarcacionProveedorDto[0].idTipoServicio.id,
-        this.fechaNumber).subscribe(value => {
-        const monedaEncontrada = this.monedas.find((moneda) => moneda.idMoneda === value.idMoneda);
-        this.formDescarga.patchValue({
-          precioComisionEmbarcacion:value.precio,
-          monedaComisionEmbarcacion:monedaEncontrada,
-        });
-      });
+  getFecha(idDia: number): string {
+    const fechaString: string = idDia.toString();
+    const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
 
-      this.formDescarga.patchValue({
-        proveedorComisionEmbarcacion:embarcacion.relEmbarcacionProveedorDto[0].idProovedor.razonSocial,
-      });
-    }
+    // Formatea la fecha como un string con el formato deseado
+    const fechaFormateada: string = format(fechaObjeto, 'dd/MM/yyyy');
+    return fechaFormateada;
   }
 
   protected readonly format = format;

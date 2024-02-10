@@ -24,6 +24,10 @@ export class PescaService {
     return  this.http.post(`${this.apiUrlPesca}${this.pesca}/marcarPagado`, dato);
   }
 
+  obtenerArribo(idEmbarcacion:number, idFecha:number):Observable<any>{
+    return this.http.get(`${this.apiUrlPesca}${this.pesca}/buscarArribo/${idEmbarcacion}/${idFecha}`);
+  }
+
 
   guardarGastos(gastos:any):Observable<any>{
     return  this.http.post(`${this.apiUrlPesca}${this.pesca}/saveGastosEmb`, gastos);

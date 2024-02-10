@@ -4,13 +4,13 @@
       <div class="u-1-5 box">
           <d-form-label>Fecha Descarga</d-form-label>
         <d-form-control class="form-control-width">
-          <strong><u>{{ format(formDescarga.get("fecha")?.value, 'dd/MM/yyyy') }}</u></strong>
+          <strong><u>{{ formDescarga.get("fecha")?.value["idDia"] }}</u></strong>
           </d-form-control>
       </div>
       <div class="u-1-5 box">
         <d-form-label>Semana</d-form-label>
         <d-form-control class="form-control-width">
-          <strong><u>{{ formDescarga.get("semana")?.value  }}</u></strong>
+          <strong><u>{{ formDescarga.get("semana")?.value["idSemana"]  }}</u></strong>
         </d-form-control>
       </div>
 
@@ -60,6 +60,7 @@
           <d-select
             [options]="muelles"
             name="muelle"
+            [disabled]='datoCargado'
             [filterKey]="'razonSocial'"
             [placeholder]="'Seleccione el Muelle'"
             formControlName='muelle'
@@ -290,7 +291,8 @@
         <br>
         <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Descarga en Muelle'">Proveedor Descarga Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <input dTextInput name="proveedorDescargaMuelle" formControlName='proveedorDescargaMuelle' />
+          <input dTextInput name="proveedorDescargaMuelle" formControlName='proveedorDescargaMuelle'
+                 />
         </d-form-control>
       </div>
       <div class="u-1-5 box">

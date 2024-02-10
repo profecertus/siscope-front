@@ -9,37 +9,41 @@ import { PescaService } from '../../../../service/pesca.service';
 import { PlantaDto } from '../../../../model/planta.modelo';
 import { PlantaService } from '../../../../service/planta.service';
 import { FormControl, Validators } from '@angular/forms';
+import { DiaSemana, SemanaModel } from '../../../../model/semana.model';
+import { format, parse } from 'date-fns';
+import { DescargaPesca } from '../../../../model/local/descargaPesca';
 
 @Component({
   selector: 'app-nuevo-arribo',
   templateUrl: './nuevo-arribo.component.html',
   styleUrls: ['./nuevo-arribo.component.scss']
 })
+
 export class NuevoArriboComponent implements OnInit {
   layoutDirection: FormLayout = FormLayout.Vertical;
 
   constructor(private semanaService:SemanaService,
               private plantaService:PlantaService,
+              private pescaService:PescaService,
               private embarcacionService:EmbarcacionService) {
   }
 
   max:Date = new Date();
-  fechaNumero:number = 0;
-  fecha:Date = new Date();
-  semana:number = 0;
+  fechaSel:Date = new Date();
+  fecha:DiaSemana = new DiaSemana();
+  semana:SemanaModel = new SemanaModel();
   embarcaciones:Embarcacion[] = [];
   plantas:PlantaDto[] = [];
-  // @ts-ignore
-  planta:PlantaDto;
-  // @ts-ignore
-  embarcacion:Embarcacion;
+  planta:PlantaDto = new PlantaDto();
+  embarcacion:Embarcacion = new Embarcacion();
 
 
   @Output() submitted = new EventEmitter();
   @Output() canceled = new EventEmitter();
 
   ngOnInit() {
-    this.fechaNumero = this.fecha.getFullYear() * 10000 + (this.fecha.getMonth() + 1) * 100 + this.fecha.getDate();
+    this.fecha.idDia = this.fechaSel.getFullYear() * 10000 + (this.fechaSel.getMonth() + 1) * 100 + this.fechaSel.getDate();
+    this.getDia();
     this.getEmbarcaciones();
     this.getSemana();
     this.getPlantas();
@@ -47,6 +51,11 @@ export class NuevoArriboComponent implements OnInit {
 
   singleSelectRules: DValidateRules = {validators: [{required: true,message:'El campo es obligatorio'}]};
 
+  getDia(){
+    this.semanaService.getDiaSemana(this.fecha.idDia).subscribe(value => {
+      this.fecha = value;
+    });
+  }
   getPlantas(){
     this.plantaService.obtenerPlantas(0,100).subscribe(value => {
       this.plantas = value.content;
@@ -64,96 +73,41 @@ export class NuevoArriboComponent implements OnInit {
   getValue(value: any):void {
     if(value == null) return;
     let fecha:Date = new Date(value);
-    this.fechaNumero = fecha.getFullYear() * 10000 + (fecha.getMonth() + 1) * 100 + fecha.getDate();
-    this.getSemana();
-
+    this.fecha.idDia = fecha.getFullYear() * 10000 + (fecha.getMonth() + 1) * 100 + fecha.getDate();
+    this.semanaService.getDiaSemana(this.fecha.idDia).subscribe(el => {
+      this.fecha = el;
+      this.getSemana();
+      this.getDia();
+    });
   }
 
   getSemana(){
-    this.semanaService.semanaxFecha(this.fechaNumero).subscribe(value => {
-        this.semana =  value.idSemana;
+    this.semanaService.semanaxFecha(this.fecha.idDia).subscribe(value => {
+        this.semana =  value;
     });
   }
 
   // @ts-ignore
   submitPlanForm({valid, directive, data, errors}) {
-    let existeArribo:boolean = false;
-    if (valid) {
-      Swal.fire({
-        title: "Verificando arribo",
-        html: "No cierre esta ventana.",
-        timerProgressBar: true,
-        didOpen: () => {
-          Swal.showLoading();
-          //Aca llamo a pesca para que me diga si existe o no
-          //this.pescaService.
-          Swal.close();
+    let objetoRetorno: DescargaPesca = new DescargaPesca({},this.fecha, this.semana, this.embarcacion, this.planta);
+    Swal.showLoading();
+    this.pescaService.obtenerArribo(this.embarcacion.idEmbarcacion, this.fecha.idDia).subscribe(valor =>{
+      if(valor.length > 0){
+        //Debo copiarle el muelle, precio atraque del primer elemento
+        objetoRetorno.muelle = valor[0].muelle;
+        objetoRetorno.precioAtraque = valor[0].precioAtraque;
+        objetoRetorno.monedaAtraque = valor[0].monedaAtraque;
+        //Si me devuelve un array debo de buscar si la planta ha sido asignada
+        let descargaPorPlanta =  valor.filter((el:DescargaPesca) =>{
+          return el.planta.idPlanta == this.planta.plantaDto.idPlanta;
+        });
+        if(descargaPorPlanta.length > 0){
+          objetoRetorno = descargaPorPlanta[0];
         }
-      }).then((result) => {
-
-      });
-      //Envio el ExisteArribo a submitted
-      let objetoRetorno = {
-        fecha: new Date(this.fecha),
-        semana: this.semana,
-        embarcacion: this.embarcacion,
-        planta: this.planta,
-        existeArribo: existeArribo,
-        cajaReal:[0, [Validators.pattern('[0-9]*')]],
-        cajaGuia:0,
-        numTicket:'',
-        fechaNumero:0,
-        kgCajaCompra:0,
-        precioCompra:0,
-        monedaCompra: { },
-        kgCajaVenta:0,
-        precioVenta:0,
-        destino:{},
-        muelle:{},
-        precioMuelle:0,
-        monedaMuelle:{},
-        precioHabilitacion:0,
-        monedaHabilitacion:{},
-        precioAtraque:0,
-        monedaAtraque:{},
-        precioHielo:0,
-        monedaHielo:{},
-        precioCertificado:0,
-        monedaCertificado:{},
-        monedaVenta: {  },
-        precioRenta:0,
-        camara:{},
-        tarifaFlete: new FormControl({ value: 0, disabled: false }),
-        monedaFlete:{},
-        toneladasCompra: new FormControl({ value: 0, disabled: true }),
-        toneladasVenta: new FormControl({ value: 0, disabled: true }),
-        totalFlete: new FormControl({ value: 0, disabled: true }),
-        proveedorFlete: new FormControl({ value: '', disabled: true }),
-
-        precioDescargaMuelle:0,
-        monedaDescargaMuelle:{},
-        proveedorDescargaMuelle: new FormControl({ value: '', disabled: true }),
-        precioDescargaPlanta:0,
-        monedaDescargaPlanta:{},
-        proveedorDescargaPlanta: new FormControl({ value: '', disabled: true }),
-
-        precioComisionEmbarcacion:0,
-        monedaComisionEmbarcacion:{},
-        proveedorComisionEmbarcacion: new FormControl({ value: '', disabled: true }),
-        precioComisionPlanta:0,
-        monedaComisionPlanta:{},
-        proveedorComisionPlanta: new FormControl({ value: '', disabled: true }),
-
-        precioLavadoCubeta:0,
-        monedaLavadoCubeta:{},
-        proveedorLavadoCubeta: {  },
-        precioAdministracion:0,
-        monedaAdministracion:{},
-        proveedorAdministracion: {  },
       }
-
       this.submitted.emit(objetoRetorno);
-    }
+      Swal.close();
+    });
   }
 
   cancel():void{
