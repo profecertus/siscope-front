@@ -17,7 +17,6 @@ export class SemanaService {
   constructor(private http: HttpClient) { }
 
   obtenerSemanas(numero: number, pageSize: number): Observable<any> {
-    console.log(`${this.apiUrl}${this.semana}/getAllSemana/${numero}/${pageSize}`);
     return this.http.get(`${this.apiUrl}${this.semana}/getAllSemana/${numero}/${pageSize}`);
   }
 

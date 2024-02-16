@@ -133,7 +133,9 @@ export class GastosEmbarcacionComponent implements OnInit {
         });
         value.total = totalMonto;
       });
-      this.basicDataSource = valuex;
+      valuex.slice().forEach((a: any) => {console.log(a.semana.id)});
+      this.basicDataSource =  valuex.slice().sort((a:any,b:any) => {return a.semana.id < b.semana.id})
+      //this.basicDataSource = valuex;
     });
   }
 
@@ -236,6 +238,12 @@ export class GastosEmbarcacionComponent implements OnInit {
         });
       }
     });
+   /* this.valores.controls.slice().forEach(a=>{console.log(a)})
+    this.valores.controls.slice().sort((a,b) => {
+      const aValue = a.value;
+      const bValue = b.value;
+      return aValue.localeCompare(bValue);
+    });*/
 
     //Verifico si existe gastos para esa semana en Petroleo
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 2).subscribe(valor=>{
@@ -434,10 +442,16 @@ export class GastosEmbarcacionComponent implements OnInit {
     const listaGastosPromises: Promise<any>[] = [];
     //Primero verifico que todos tienen al menos un proveedor seleccionado en la semana
     let encontrado:boolean = false;
+    let valorCero:boolean = false;
     this.producto.forEach(value => {
       let total = 0;
       if(value.idProducto == 2){
         this.petroleos.value.datos.forEach((valor: any) => {
+          if(valor["idProveedorItem"]==true){
+            if(valor["total"] == 0){
+              valorCero = true;
+            }
+          }
           if(valor["pagado"] == undefined){
             valor["pagado"] = false;
           }
@@ -450,6 +464,12 @@ export class GastosEmbarcacionComponent implements OnInit {
 
       if(value.idProducto == 3 && !encontrado){
         this.hielos.value.datos.forEach((valor: any) => {
+          //Valido que no haya precio ni cantidad cero
+          if(valor["idProveedorItem"]==true){
+            if(valor["total"] == 0){
+              valorCero = true;
+            }
+          }
           if(valor["pagado"] == undefined){
             valor["pagado"] = false;
           }
@@ -462,6 +482,12 @@ export class GastosEmbarcacionComponent implements OnInit {
 
       if(value.idProducto == 17 && !encontrado){
         this.viveres.value.datos.forEach((valor: any) => {
+          //Valido que no haya precio ni cantidad cero
+          if(valor["idProveedorItem"]==true) {
+            if (valor["total"] == 0) {
+              valorCero = true;
+            }
+          }
           if(valor["pagado"] == undefined){
             valor["pagado"] = false;
           }
@@ -475,6 +501,11 @@ export class GastosEmbarcacionComponent implements OnInit {
 
     if(encontrado){
       Swal.fire("Información", "Recuerde que debe de seleccionar al menos un proveedor por producto", "warning");
+      return;
+    }
+
+    if(valorCero){
+      Swal.fire("Error", "No puede grabar con  cantidad/precio igual a cero", "error");
       return;
     }
 
@@ -572,21 +603,19 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   deleteRow(rowItem: any, rowIndex: any) {
-    this.semanaService.getSemana(rowItem.semana.id).subscribe(semanaEncontrada => {
-      //Verifico si el gasto esta asociado a una semana cerrada o abierta
+    this.semanaService.getSemana(rowItem.value.semanaRel.id).subscribe(semanaEncontrada => {
       // @ts-ignore
       if(semanaEncontrada.estado){
         Swal.fire({
           title:"Eliminar Gasto Embarcación",
-          html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'} para la embarcación  ${rowItem.embarcacion.nombre} en la semana ${rowItem.semana.id} ?`,
+          html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'}  en la semana ${rowItem.value.semanaRel.id} ?`,
           showCancelButton: true,
           confirmButtonText: 'Eliminar',
           cancelButtonText: 'Cancelar',
         }).then((result) => {
           if (result.isConfirmed) {
-
             this.pescaService
-              .eliminarGastoEmb(rowItem.embarcacion.idEmbarcacion, rowItem.semana.id, rowItem.idTipoServicio)
+              .eliminarGastoEmb(this.idEmbarcacion, this.semana.id, rowItem.idTipoServicio)
               .subscribe(valor => {
                 if(valor.length > 0){
                   Swal.fire("Exito", "Se elimino correctamente el gasto", "success");

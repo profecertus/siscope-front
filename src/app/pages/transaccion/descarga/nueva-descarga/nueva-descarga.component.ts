@@ -128,7 +128,8 @@ export class NuevaDescargaComponent  implements OnInit {
       this.modifiedPrecioVenta(nuevoValor);
     });
 
-    this.formDescarga.get("camara")?.valueChanges.subscribe((nuevoValor:number):void =>{
+    this.formDescarga.get("camara")?.valueChanges.subscribe((nuevoValor:any):void =>{
+      this.selectPlanta(this.formDescarga.get("planta")?.value);
       this.selectCamara(nuevoValor);
     });
 
@@ -170,12 +171,12 @@ export class NuevaDescargaComponent  implements OnInit {
   selectPlanta(planta:any):void{
     this.destinos = planta.relPlantaDestinoDto;
     this.tarifarioService.obtenerTarifarioFletexDestino(planta.plantaDto.codUbigeo.codUbigeo,
-      this.formDescarga.value.fechaNumero).subscribe(value => {
+      this.fechaNumber).subscribe(value => {
         if(value.id != null){
           this.l_flete = 'Total Flete (' + value.idMoneda.abreviatura + ')';
           this.formDescarga.patchValue({
-            tarifaFlete: value.monto,
-            totalFlete: (value.monto * this.formDescarga.value.cajaReal),
+            tarifaFlete: value.monto.toFixed(2),
+            totalFlete: (value.monto * this.formDescarga.value.cajaReal).toFixed(2),
             monedaFlete:value.idMoneda,
           });
         }
@@ -190,6 +191,7 @@ export class NuevaDescargaComponent  implements OnInit {
 
 
   selectCamara(camara:any):void{
+    console.log(camara);
     this.formDescarga.patchValue({
       proveedorFlete:camara.idProveedor.nombreComercial,
     });
@@ -237,7 +239,7 @@ export class NuevaDescargaComponent  implements OnInit {
 
   modifiedCajaReal(valor:number):void{
     this.formDescarga.patchValue({
-      totalFlete: this.formDescarga.get('tarifaFlete')?.value * valor,
+      totalFlete: (this.formDescarga.get('tarifaFlete')?.value * valor).toFixed(2),
       toneladasCompra: this.formDescarga.value.kgCajaCompra * valor / 1000,
       toneladasVenta: this.formDescarga.value.kgCajaVenta * valor / 1000,
     });
