@@ -89,7 +89,7 @@ export class NuevoArriboComponent implements OnInit {
 
   // @ts-ignore
   submitPlanForm({valid, directive, data, errors}) {
-    let objetoRetorno: DescargaPesca = new DescargaPesca({},this.fecha, this.semana, this.embarcacion, this.planta);
+    let objetoRetorno: DescargaPesca = new DescargaPesca(this.fecha, this.semana, this.embarcacion, this.planta);
     Swal.showLoading();
     this.pescaService.obtenerArribo(this.embarcacion.idEmbarcacion, this.fecha.idDia).subscribe(valor =>{
       if(valor.length > 0){

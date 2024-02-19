@@ -31,6 +31,10 @@ export class ProveedorService {
     return this.http.get(`${this.apiUrl}${this.proveedor}/getAll`);
   }
 
+  obtenerProveedor(idProveedor:number):Observable<any>{
+    return this.http.get(`${this.apiUrl}${this.proveedor}/obtenerProveedor/${idProveedor}`);
+  }
+
   guardarProveedor(datos: RespuestaProveedor):Observable<any>{
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Realizar la solicitud PUT enviando el objeto JSON

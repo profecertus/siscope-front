@@ -17,6 +17,7 @@ export class PescaService {
   }
 
   guardarPesca(pesca:any, accion:string):Observable<any>{
+    console.log(`${this.apiUrlPesca}${this.pesca}/saveDescarga/${accion}`, pesca);
     return  this.http.post(`${this.apiUrlPesca}${this.pesca}/saveDescarga/${accion}`, pesca);
   }
 

@@ -58,7 +58,6 @@ export class DescargaPesca {
   public proveedorAdministracion:ProveedorModel = new ProveedorModel();
 
   constructor(
-    public _id: {},
     public fecha: DiaSemana,
     public semana: SemanaModel,
     public embarcacion: Embarcacion,

@@ -16,4 +16,9 @@ export class MonedaService {
     return this.http.get(`${this.apiUrl}${this.moneda}/getAllMoneda`);
   }
 
+  obtenerMoneda(idMoneda:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.moneda}/obtenerMoneda/${idMoneda}`);
+  }
+
+
 }

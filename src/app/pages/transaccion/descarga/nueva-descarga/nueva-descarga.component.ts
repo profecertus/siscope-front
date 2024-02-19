@@ -16,6 +16,7 @@ import { ProveedorService } from '../../../../service/proveedor.service';
 import Swal from 'sweetalert2';
 import { format, parse } from 'date-fns';
 import { DescargaPesca } from '../../../../model/local/descargaPesca';
+import { ProveedorModel } from '../../../../model/proveedor.model';
 
 @Component({
   selector: 'da-nueva-descarga',
@@ -26,9 +27,9 @@ import { DescargaPesca } from '../../../../model/local/descargaPesca';
 export class NuevaDescargaComponent  implements OnInit {
   layoutDirection: FormLayout = FormLayout.Columns;
   fechaNumber = 0;
-  embarcaciones:Embarcacion[] = [];
   monedas:Moneda[]=[];
-  plantas:RespuestaPlanta[]=[];
+  proveedorDescargaMuelle: ProveedorModel[] = [];
+  proveedorComisionPlanta: ProveedorModel[] = [];
   camaras:Camara[]=[];
   tipoAccion:string='';
   datoCargado:boolean = false;
@@ -47,8 +48,6 @@ export class NuevaDescargaComponent  implements OnInit {
         this.datoCargado = true;
         this.formDescarga.get('muelle')?.disable();
         this.formDescarga.get('precioAtraque')?.disable();
-        console.log(this.formDescarga.get('muelle'));
-        console.log(this.formDescarga.get('precioAtraque'));
         this.formDescarga.get('monedaAtraque')?.disable();
         this.formDescarga.get('precioMuelle')?.disable();
         this.formDescarga.get('monedaMuelle')?.disable();
@@ -91,7 +90,7 @@ export class NuevaDescargaComponent  implements OnInit {
     this.getLavadoCubetas();
     this.getAdministraciones();
 
-
+    //this.selectEmbarcacion(  );
     this.selectPlanta(this.formDescarga.get("planta")?.value);
     //Valores por defecto a cambiar luego luego
     this.formDescarga.get('kgCajaCompra')?.setValue(23.00);
@@ -136,6 +135,89 @@ export class NuevaDescargaComponent  implements OnInit {
     this.formDescarga.get("muelle")?.valueChanges.subscribe((nuevoValor:number):void =>{
       this.selectMuelle(nuevoValor);
     });
+
+    this.formDescarga.get("proveedorDescargaMuelle")?.valueChanges.subscribe((nuevoValor:any):void =>{
+      if(nuevoValor.idProveedor == undefined) return;
+      this.proveedorService.obtenerPrecioxDia(nuevoValor.idProveedor, nuevoValor.idTipoServicio, this.formDescarga.get("fecha")?.value.idDia ).
+      subscribe({
+        next:(valor)=>{
+          //Ahora debo de buscar la moneda
+          this.monedaService.obtenerMoneda(valor.idMoneda).
+          subscribe({
+            next:(value) => {
+              this.formDescarga.patchValue({
+                precioDescargaMuelle: valor.precio,
+                monedaDescargaMuelle: value,
+              });
+            }
+          });
+        }
+      });
+    });
+
+    if(this.formDescarga.get("planta")?.value.relPlantaProveedorDtoList[0]?.id.idProveedor!=undefined){
+      this.tarifarioService.obtenerTarifarioUnaPlanta(this.formDescarga.get("fecha")?.value.idDia,
+        this.formDescarga.get("planta")?.value.plantaDto.idPlanta,8).subscribe({
+        next:(valor)=>{
+          //this.proveedorService.
+          this.monedaService.obtenerMoneda(valor.idMoneda).subscribe({
+            next:(val) => {
+              this.proveedorService.obtenerProveedor(8).subscribe({
+                next:(proveedor)=>{
+                  console.log(proveedor);
+                  this.formDescarga.patchValue({
+                    proveedorDescargaPlanta: proveedor,
+                    precioDescargaPlanta: valor.monto,
+                    monedaDescargaPlanta: val,
+                  });
+                }
+              });
+
+            }
+          });
+        }
+      });
+    }
+
+    //Obtengo los proveedores de descarga de muelles
+    this.proveedorService.obtenerProveedorxTipo(12).subscribe({
+      next:(v)=>{
+        this.proveedorComisionPlanta = v;
+        this.formDescarga.patchValue({
+          proveedorComisionPlanta: v,
+        });
+
+      }
+    });
+
+    //Obtengo los proveedores de descarga de muelles
+    this.proveedorService.obtenerProveedorxTipo(7).subscribe({
+      next:(v)=>{
+        this.proveedorDescargaMuelle = v;
+        this.formDescarga.patchValue({
+          proveedorDescargaMuelle: v,
+        });
+
+      }
+    });
+
+    this.tarifarioService.obtenerTarifarioUnaEmbarcacion( this.formDescarga.get("fecha")?.value.idDia,
+                                                          this.formDescarga.get("embarcacion")?.value.idEmbarcacion,
+                                                          11 ).subscribe( {
+      complete: () => {},
+      error: (e) => {console.error(e)},
+      next:(v)=>{
+        this.monedaService.obtenerMoneda(v.idMoneda).subscribe({
+          next:(m)=>{
+            this.formDescarga.patchValue({
+              precioComisionEmbarcacion: v.monto,
+              monedaComisionEmbarcacion: m,
+              proveedorComisionEmbarcacion: this.formDescarga.get("embarcacion")?.value.relEmbarcacionProveedorDto[0]?.idProovedor,
+            });
+          }
+        });
+      }
+    });
   }
 
   getMuelles():void{
@@ -143,61 +225,51 @@ export class NuevaDescargaComponent  implements OnInit {
       this.muelles = value;
     });
   }
-
   getLavadoCubetas():void{
     this.proveedorService.obtenerProveedorxTipo(9).subscribe(value => {
       this.lavadoCubetas = value;
     });
   }
-
   getAdministraciones():void{
     this.proveedorService.obtenerProveedorxTipo(10).subscribe(value => {
       this.administraciones = value;
     });
   }
-
-
-
   getMonedas(){
     this.monedaService.obtenerMonedas().subscribe(value => {
       this.monedas = value;
     })
   }
-
   selectMoneda(moneda:any):void{
     this.l_flete = 'Total Flete (' + moneda.abreviatura.trim() + ')';
   }
-
   selectPlanta(planta:any):void{
     this.destinos = planta.relPlantaDestinoDto;
     this.tarifarioService.obtenerTarifarioFletexDestino(planta.plantaDto.codUbigeo.codUbigeo,
       this.fechaNumber).subscribe(value => {
-        if(value.id != null){
-          this.l_flete = 'Total Flete (' + value.idMoneda.abreviatura + ')';
-          this.formDescarga.patchValue({
-            tarifaFlete: value.monto.toFixed(2),
-            totalFlete: (value.monto * this.formDescarga.value.cajaReal).toFixed(2),
-            monedaFlete:value.idMoneda,
-          });
-        }
+      if(value.id != null){
+        this.l_flete = 'Total Flete (' + value.idMoneda.abreviatura + ')';
+        this.formDescarga.patchValue({
+          tarifaFlete: value.monto.toFixed(2),
+          totalFlete: (value.monto * this.formDescarga.value.cajaReal).toFixed(2),
+          monedaFlete:value.idMoneda,
+        });
+      }
     });
   }
+
 
   getCamaras(){
     this.camaraService.getAllCamara().subscribe(value => {
       this.camaras = value;
     });
   }
-
-
   selectCamara(camara:any):void{
-    console.log(camara);
     this.formDescarga.patchValue({
       proveedorFlete:camara.idProveedor.nombreComercial,
     });
 
   }
-
   selectMuelle(muelle:any):void{
     this.proveedorService.obtenerPrecioxDia(muelle.idProveedor, muelle.idTipoServicio, this.fechaNumber).subscribe(value => {
       const monedaEncontrada = this.monedas.find((moneda) => moneda.idMoneda === value.idMoneda);
@@ -235,8 +307,6 @@ export class NuevaDescargaComponent  implements OnInit {
       precioRenta:this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.015,
     });
   }
-
-
   modifiedCajaReal(valor:number):void{
     this.formDescarga.patchValue({
       totalFlete: (this.formDescarga.get('tarifaFlete')?.value * valor).toFixed(2),
@@ -244,7 +314,6 @@ export class NuevaDescargaComponent  implements OnInit {
       toneladasVenta: this.formDescarga.value.kgCajaVenta * valor / 1000,
     });
   }
-
   grabar(){
     if (this.formDescarga.valid) {
       Swal.fire({
@@ -264,28 +333,36 @@ export class NuevaDescargaComponent  implements OnInit {
           this.formDescarga.get('proveedorComisionEmbarcacion')?.enable();
           this.formDescarga.get('proveedorComisionPlanta')?.enable();
 
-          const objetoSinId = { ...this.formDescarga.value };
-          delete objetoSinId._id;
 
           let resultado:string = this.formDescarga.get('numTicket')?.value;
+          if(resultado.trim().length > 0){
+            this.tipoAccion = "M";
+          }
+
           if(this.tipoAccion == "N"){
             this.pescaService.getCorrelativo( Number.parseInt( this.fechaNumber.toString().substring(0,4)) ).
             subscribe(valor =>{
               resultado = `${valor.anio}-${valor.corre.toString().padStart(4, '0')}`;
               this.formDescarga.patchValue({
                 numTicket:resultado,
+                //_id:resultado,
               });
               this.pescaService.guardarPesca(this.formDescarga.value, this.tipoAccion).forEach(value => {
                 this.submit.emit(resultado);
               }).catch((rason) =>{
                 if(rason.status == 200 && rason.statusText == "OK"){
                   this.submit.emit(resultado);
+                  this.tipoAccion = "M";
                 }else{
                   Swal.fire("Error", "Hubo un error al momento de grabar la descarga", 'error')
                 }
               });
             });
+
           }else{
+            //en cualquier otro caso es actualización.
+            const objetoSinId = { ...this.formDescarga.value };
+            delete objetoSinId._id;
             this.pescaService.guardarPesca(objetoSinId, this.tipoAccion).forEach(value => {
               this.submit.emit(resultado);
             }).catch((rason) =>{
@@ -305,39 +382,24 @@ export class NuevaDescargaComponent  implements OnInit {
       console.error('El formulario no es válido, verifica los campos requeridos.');
     }
   }
-
   modifiedkgCompra(valor: number) {
     this.formDescarga.patchValue({
       toneladasCompra: this.formDescarga.value.cajaReal * valor / 1000,
     });
   }
-
-
   modifiedkgVenta(valor: number) {
     this.formDescarga.patchValue({
       toneladasVenta: this.formDescarga.value.cajaReal * valor / 1000,
       precioRenta:valor * this.formDescarga.value.precioVenta * 0.015,
     });
   }
-
   modifiedPrecioVenta(valor: number) {
     this.formDescarga.patchValue({
       precioRenta:valor * this.formDescarga.get("toneladasVenta")?.value * 0.015,
     });
   }
-
   modifiedMonedaVenta(moneda:any):void{
     this.l_renta = 'Precio (' + moneda.abreviatura.trim() + ')';
   }
-
-  getFecha(idDia: number): string {
-    const fechaString: string = idDia.toString();
-    const fechaObjeto = parse(fechaString, 'yyyyMMdd', new Date());
-
-    // Formatea la fecha como un string con el formato deseado
-    const fechaFormateada: string = format(fechaObjeto, 'dd/MM/yyyy');
-    return fechaFormateada;
-  }
-
   protected readonly format = format;
 }

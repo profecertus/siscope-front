@@ -1,4 +1,12 @@
 <section style="margin-left: 20px" >
+  <div class="grid">
+    <div class="u-1-5 box">
+      <d-form-label [helpTips]="'Número de Ticket'">Num. Ticket</d-form-label>
+      <d-form-control class="form-control-width" style='color: darkblue'>
+        <strong>{{ formDescarga.get("numTicket")?.value }}</strong>
+      </d-form-control>
+    </div>
+  </div>
   <form dForm [layout]="layoutDirection" [formGroup]="formDescarga">
     <div class="grid">
       <div class="u-1-5 box">
@@ -291,8 +299,8 @@
         <br>
         <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Descarga en Muelle'">Proveedor Descarga Muelle</d-form-label>
         <d-form-control class="form-control-width">
-          <input dTextInput name="proveedorDescargaMuelle" formControlName='proveedorDescargaMuelle'
-                 />
+          <d-select [options]='proveedorDescargaMuelle'  name="proveedorDescargaMuelle" [filterKey]="'razonSocial'"
+                    formControlName='proveedorDescargaMuelle' ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
@@ -313,7 +321,8 @@
         <br>
         <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Descarga en Planta'">Proveedor Descarga Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <input dTextInput name="proveedorDescargaPlanta" formControlName='proveedorDescargaPlanta' />
+          <d-select name="proveedorDescargaPlanta" [filterKey]="'nombreComercial'"
+                    formControlName='proveedorDescargaPlanta' ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-5 box"></div>
@@ -336,7 +345,7 @@
         <br>
         <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Comisión de Embarcación'">Proveedor Comisón Embarcación</d-form-label>
         <d-form-control class="form-control-width">
-          <input dTextInput name="proveedorComisionEmbarcacion" formControlName='proveedorComisionEmbarcacion' />
+          <d-select  name="proveedorComisionEmbarcacion" [filterKey]="'nombreComercial'" formControlName='proveedorComisionEmbarcacion' ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-5 box">
@@ -357,7 +366,7 @@
         <br>
         <d-form-label [hasHelp]="true" [helpTips]="'Proveedor Comisión en Planta'">Proveedor Comisión Planta</d-form-label>
         <d-form-control class="form-control-width">
-          <input dTextInput name="proveedorComisionPlanta" formControlName='proveedorComisionPlanta' />
+          <d-select [options]='proveedorComisionPlanta'  name="proveedorComisionPlanta" [filterKey]="'nombreComercial'" formControlName='proveedorComisionPlanta' ></d-select>
         </d-form-control>
       </div>
       <div class="u-1-5 box"></div>

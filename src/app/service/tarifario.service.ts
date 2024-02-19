@@ -22,6 +22,14 @@ export class TarifarioService {
     return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioEmbarcacion/${diaSemana}`);
   }
 
+  obtenerTarifarioUnaEmbarcacion(diaSemana:number, idEmbarcacion:number, idTipoServicio:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getTarifarioEmbarcacion/${diaSemana}/${idEmbarcacion}/${idTipoServicio}`);
+  }
+
+  obtenerTarifarioUnaPlanta(diaSemana:number, idPlanta:number, idTipoServicio:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.tarifario}/getTarifarioPlanta/${diaSemana}/${idPlanta}/${idTipoServicio}`);
+  }
+
   obtenerTarifarioPlanta(diaSemana:number): Observable<any> {
     return this.http.get(`${this.apiUrl}${this.tarifario}/getAllTarifarioPlanta/${diaSemana}`);
   }
