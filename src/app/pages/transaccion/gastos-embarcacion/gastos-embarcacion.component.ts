@@ -559,7 +559,7 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   onProveedorHieloChange(valor: any, rowIndex: any, rowItem: any) {
-    this.proveedorService.obtenerPrecioxDia(this.hielos.value.datos[rowIndex].idProveedor.idProveedor,
+    this.proveedorService.obtenerPrecioxDiaOMaximo(this.hielos.value.datos[rowIndex].idProveedor.idProveedor,
       this.hielos.value.datos[rowIndex].idProveedor.idTipoServicio,
       this.hielos.value.datos[rowIndex].idDia).subscribe(value => {
       this.hielos.value.datos[rowIndex].monedaString = value.abreviatura==null?'S/.':value.abreviatura;

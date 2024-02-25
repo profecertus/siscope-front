@@ -13,7 +13,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GastosEmbarcacionComponent } from './gastos-embarcacion/gastos-embarcacion.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminFormModule } from '../../../../schematics/src/ng-add/files/src/app/@shared/components/admin-form';
-import { HorizontalFormComponent } from './gastos-embarcacion/horizontal-form/horizontal-form.component';
 import { NuevaDescargaComponent } from './descarga/nueva-descarga/nueva-descarga.component';
 import { DaGridModule } from '../../@shared/layouts/da-grid';
 import { I18nModule } from 'ng-devui/i18n';
@@ -24,7 +23,6 @@ import { NuevoArriboComponent } from './descarga/nuevo-arribo/nuevo-arribo.compo
     TransaccionComponent,
     DescargaComponent,
     PlanillaComponent,
-    HorizontalFormComponent,
     OperativosComponent,
     AdministrativosComponent,
     PagosComponent,
