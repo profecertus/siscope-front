@@ -133,8 +133,9 @@ export class GastosEmbarcacionComponent implements OnInit {
         });
         value.total = totalMonto;
       });
-      valuex.slice().forEach((a: any) => {console.log(a.semana.id)});
-      this.basicDataSource =  valuex.slice().sort((a:any,b:any) => {return a.semana.id < b.semana.id})
+      //valuex.slice().forEach((a: any) => {console.log(a.semana.id)});
+      this.basicDataSource =  valuex.slice().sort((a:any,b:any) => { return b.semana.id - a.semana.id})
+
       //this.basicDataSource = valuex;
     });
   }
@@ -238,12 +239,6 @@ export class GastosEmbarcacionComponent implements OnInit {
         });
       }
     });
-   /* this.valores.controls.slice().forEach(a=>{console.log(a)})
-    this.valores.controls.slice().sort((a,b) => {
-      const aValue = a.value;
-      const bValue = b.value;
-      return aValue.localeCompare(bValue);
-    });*/
 
     //Verifico si existe gastos para esa semana en Petroleo
     this.pescaService.getGastoEmb(this.embarcacion.idEmbarcacion, this.semana.id, 2).subscribe(valor=>{
@@ -315,7 +310,7 @@ export class GastosEmbarcacionComponent implements OnInit {
             viveres.cantidad = 0
             viveres.total = 0;
             viveres.valorCambio = valor["valorCambio"];
-            //viveres.semanaRel = this.semana;
+//            viveres.semanaRel = this.semana;
             viveres.precioCadena = '';
             this.valViveres.push(this.fb.group(viveres));
           });
@@ -559,6 +554,8 @@ export class GastosEmbarcacionComponent implements OnInit {
   }
 
   onProveedorHieloChange(valor: any, rowIndex: any, rowItem: any) {
+    console.log(this.hielos.value.datos[rowIndex].idDia);
+    console.log(rowItem.value);
     this.proveedorService.obtenerPrecioxDiaOMaximo(this.hielos.value.datos[rowIndex].idProveedor.idProveedor,
       this.hielos.value.datos[rowIndex].idProveedor.idTipoServicio,
       this.hielos.value.datos[rowIndex].idDia).subscribe(value => {
@@ -602,20 +599,21 @@ export class GastosEmbarcacionComponent implements OnInit {
     });
   }
 
-  deleteRow(rowItem: any, rowIndex: any) {
-    this.semanaService.getSemana(rowItem.value.semanaRel.id).subscribe(semanaEncontrada => {
+  deleteRowMain(rowItem: any, rowIndex: any) {
+    console.log("Main");
+    this.semanaService.getSemana(rowItem.semana.id).subscribe(semanaEncontrada => {
       // @ts-ignore
       if(semanaEncontrada.estado){
         Swal.fire({
           title:"Eliminar Gasto Embarcación",
-          html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'}  en la semana ${rowItem.value.semanaRel.id} ?`,
+          html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'}  en la semana ${rowItem.semana.id} ?`,
           showCancelButton: true,
           confirmButtonText: 'Eliminar',
           cancelButtonText: 'Cancelar',
         }).then((result) => {
           if (result.isConfirmed) {
             this.pescaService
-              .eliminarGastoEmb(this.idEmbarcacion, this.semana.id, rowItem.idTipoServicio)
+              .eliminarGastoEmb(rowItem.embarcacion.idEmbarcacion, rowItem.semana.id, rowItem.idTipoServicio)
               .subscribe(valor => {
                 if(valor.length > 0){
                   Swal.fire("Exito", "Se elimino correctamente el gasto", "success");
@@ -624,6 +622,41 @@ export class GastosEmbarcacionComponent implements OnInit {
                   Swal.fire("Error", "Sucedio un error al momento de eliminar el gasto", "error");
                 }
               });
+          }
+        });
+      }else{
+        Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, abrá la semana si desea continuar", "error");
+      }
+    });
+  }
+
+
+  deleteRow(rowItem: any, rowIndex: any) {
+    this.semanaService.getSemana(rowItem.value.semanaRel.id).subscribe(semanaEncontrada => {
+      // @ts-ignore
+      if(semanaEncontrada.estado){
+        Swal.fire({
+          title:"Eliminar Gasto Embarcación x Dia",
+          html: `¿Seguro de Eliminar el Gasto de ${rowItem.idTipoServicio == 3? 'Hielo':rowItem.idTipoServicio == 2?'Petroleo':'Viveres'}  para el dia  ${rowItem.value.idDiaString} ?`,
+          showCancelButton: true,
+          confirmButtonText: 'Eliminar',
+          cancelButtonText: 'Cancelar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log(rowItem.value)
+            rowItem.value.idProveedor = {};
+            rowItem.value.idProveedorItem = false;
+            rowItem.value.precio = 0;
+            rowItem.value.total = 0;
+            rowItem.value.cantidad = 0;
+            rowItem.value.monedaString = "";
+            rowItem.value.idMoneda=0;
+            /*if(valor.length > 0){
+              Swal.fire("Exito", "Se elimino correctamente el gasto", "success");
+              this.getAllGastosEmb();
+            }else{
+              Swal.fire("Error", "Sucedio un error al momento de eliminar el gasto", "error");
+            } */
           }
         });
       }else{

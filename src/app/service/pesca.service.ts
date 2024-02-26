@@ -35,7 +35,7 @@ export class PescaService {
   }
 
   eliminarGastoEmb(embarcacion:number, semana:number, servicio:number):Observable<any>{
-    return  this.http.get(`${this.apiUrlPesca}${this.pesca}/eliminarGastosEmb/${embarcacion}/${semana}/${servicio}`);
+    return  this.http.delete(`${this.apiUrlPesca}${this.pesca}/eliminarGastosEmb/${embarcacion}/${semana}/${servicio}`);
   }
 
   getCorrelativo(anio:number):Observable<any>{

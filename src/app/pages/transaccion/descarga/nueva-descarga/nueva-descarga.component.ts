@@ -33,6 +33,7 @@ export class NuevaDescargaComponent  implements OnInit {
   camaras:Camara[]=[];
   tipoAccion:string='';
   datoCargado:boolean = false;
+  monedaAtraqueDis:boolean = false;
 
   @Input() set tipo(val: string) {
     this.tipoAccion = val;
@@ -48,6 +49,7 @@ export class NuevaDescargaComponent  implements OnInit {
         this.datoCargado = true;
         this.formDescarga.get('muelle')?.disable();
         this.formDescarga.get('precioAtraque')?.disable();
+        this.monedaAtraqueDis = true;
         this.formDescarga.get('monedaAtraque')?.disable();
         this.formDescarga.get('precioMuelle')?.disable();
         this.formDescarga.get('monedaMuelle')?.disable();
@@ -304,7 +306,7 @@ export class NuevaDescargaComponent  implements OnInit {
     });
 
     this.formDescarga.patchValue({
-      precioRenta:this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.015,
+      precioRenta:(this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.015).toFixed(2),
     });
   }
   modifiedCajaReal(valor:number):void{
@@ -390,12 +392,12 @@ export class NuevaDescargaComponent  implements OnInit {
   modifiedkgVenta(valor: number) {
     this.formDescarga.patchValue({
       toneladasVenta: this.formDescarga.value.cajaReal * valor / 1000,
-      precioRenta:valor * this.formDescarga.value.precioVenta * 0.015,
+      precioRenta:(valor * this.formDescarga.value.precioVenta * 0.015).toFixed(2),
     });
   }
   modifiedPrecioVenta(valor: number) {
     this.formDescarga.patchValue({
-      precioRenta:valor * this.formDescarga.get("toneladasVenta")?.value * 0.015,
+      precioRenta: (valor * this.formDescarga.get("toneladasVenta")?.value * 0.015).toFixed(2),
     });
   }
   modifiedMonedaVenta(moneda:any):void{

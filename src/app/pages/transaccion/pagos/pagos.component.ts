@@ -168,7 +168,6 @@ export class PagosComponent implements OnInit{
       return this.producto.idProducto == 0?value.idProducto != this.producto.idProducto:value.idProducto == this.producto.idProducto;
     }));
 
-
     productoSeleccionado[0].forEach((producto:any) =>{
       const registroGasto : RegistroGasto = new RegistroGasto();
       registroGasto.tipoServicio = { nombreProducto: producto.nombreProducto, idProducto: producto.idProducto,idServicio:producto.idProducto };
@@ -177,6 +176,7 @@ export class PagosComponent implements OnInit{
 
     // @ts-ignore
     this.pescaService.getGastos(this.producto['idProducto'], this.embarcacion.idEmbarcacion, this.semana.id).subscribe((valor) => {
+
       valor.forEach( (unRegistro: any) => {
         //Por cada producto obtengo el total sabiendo que esta ordenado
         this.listaRegistroGasto.filter( registro => {

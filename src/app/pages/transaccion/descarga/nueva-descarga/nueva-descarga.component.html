@@ -245,7 +245,7 @@
               <d-input-number name="precioAtraque" formControlName='precioAtraque' />
             </div>
             <div style="width: 58%;">
-              <d-select [options]="monedas" name="monedaAtraque" [filterKey]="'nombre'" formControlName='monedaAtraque' ></d-select>
+              <d-select [options]="monedas" name="monedaAtraque" [filterKey]="'nombre'" formControlName='monedaAtraque' [disabled]='monedaAtraqueDis' ></d-select>
             </div>
           </div>
         </d-form-control>
