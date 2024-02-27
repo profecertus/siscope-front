@@ -92,6 +92,7 @@
                 name="monedaMuelle"
                 [filterKey]="'nombre'"
                 formControlName='monedaMuelle'
+                [disabled]='monedaAtraqueDis'
               ></d-select>
             </div>
           </div>
@@ -99,9 +100,9 @@
       </div>
 
       <div class="u-1-5 box">
-        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'15% (Toneladas Venta x Precio Venta)'">{{  l_renta }}</d-form-label>
+        <d-form-label [required]="true" [hasHelp]="true" [helpTips]="'0.15% (Toneladas Venta x Precio Venta)'">{{  l_renta }}</d-form-label>
         <d-form-control class="form-control-width">
-          <d-input-number name="precioRenta" formControlName='precioRenta' />
+          <strong><u>{{ formDescarga.get("precioRenta")?.value }}</u></strong>
         </d-form-control>
       </div>
 
@@ -242,10 +243,11 @@
         <d-form-control style="'display: flex; align-items: center;'" >
           <div style="display: flex; justify-content: space-between; align-items: center;" >
             <div style="width: 40%;">
-              <d-input-number name="precioAtraque" formControlName='precioAtraque' />
+              <d-input-number name="precioAtraque" formControlName='precioAtraque' *ngIf='!monedaAtraqueDis' />
+              <strong><u><label *ngIf='monedaAtraqueDis'>{{ formDescarga.get("precioAtraque")?.value}} {{formDescarga.get("monedaAtraque")?.value['nombre'] }}</label></u></strong>
             </div>
             <div style="width: 58%;">
-              <d-select [options]="monedas" name="monedaAtraque" [filterKey]="'nombre'" formControlName='monedaAtraque' [disabled]='monedaAtraqueDis' ></d-select>
+              <d-select [options]="monedas" name="monedaAtraque" [filterKey]="'nombre'" formControlName='monedaAtraque' *ngIf='!monedaAtraqueDis'  ></d-select>
             </div>
           </div>
         </d-form-control>

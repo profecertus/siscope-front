@@ -370,6 +370,7 @@ export class GastosEmbarcacionComponent implements OnInit {
         this.embarcacion = new Embarcacion();
         this.semana = new SemanaModel();
         this.producto = [];
+        this.getAllGastosEmb();
       }
     });
   }
@@ -625,7 +626,7 @@ export class GastosEmbarcacionComponent implements OnInit {
           }
         });
       }else{
-        Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, abrá la semana si desea continuar", "error");
+        Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, re-aperture la semana si desea continuar", "error");
       }
     });
   }
@@ -660,7 +661,7 @@ export class GastosEmbarcacionComponent implements OnInit {
           }
         });
       }else{
-        Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, abrá la semana si desea continuar", "error");
+        Swal.fire("Error", "El gasto que intenta eliminar esta asociado a una semana cerrada, re-aperture la semana si desea continuar", "error");
       }
     });
   }

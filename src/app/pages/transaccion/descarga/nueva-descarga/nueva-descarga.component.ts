@@ -77,7 +77,7 @@ export class NuevaDescargaComponent  implements OnInit {
   administraciones:any[]=[];
 
   l_flete:string = 'Total Flete';
-  l_renta:string = 'Renta (S/)';
+  l_renta:string = 'Retención (S/)';
 
   constructor(private fb: FormBuilder, private semanaService:SemanaService, private pescaService:PescaService,
               private proveedorService:ProveedorService,
@@ -306,7 +306,7 @@ export class NuevaDescargaComponent  implements OnInit {
     });
 
     this.formDescarga.patchValue({
-      precioRenta:(this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.015).toFixed(2),
+      precioRenta:(this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.0015).toFixed(2),
     });
   }
   modifiedCajaReal(valor:number):void{
@@ -314,6 +314,7 @@ export class NuevaDescargaComponent  implements OnInit {
       totalFlete: (this.formDescarga.get('tarifaFlete')?.value * valor).toFixed(2),
       toneladasCompra: this.formDescarga.value.kgCajaCompra * valor / 1000,
       toneladasVenta: this.formDescarga.value.kgCajaVenta * valor / 1000,
+      precioRenta:(this.formDescarga.get("toneladasVenta")?.value * this.formDescarga.value.precioVenta * 0.0015).toFixed(2),
     });
   }
   grabar(){
@@ -392,16 +393,16 @@ export class NuevaDescargaComponent  implements OnInit {
   modifiedkgVenta(valor: number) {
     this.formDescarga.patchValue({
       toneladasVenta: this.formDescarga.value.cajaReal * valor / 1000,
-      precioRenta:(valor * this.formDescarga.value.precioVenta * 0.015).toFixed(2),
+      precioRenta:(valor * this.formDescarga.value.precioVenta * 0.0015).toFixed(2),
     });
   }
   modifiedPrecioVenta(valor: number) {
     this.formDescarga.patchValue({
-      precioRenta: (valor * this.formDescarga.get("toneladasVenta")?.value * 0.015).toFixed(2),
+      precioRenta: (valor * this.formDescarga.get("toneladasVenta")?.value * 0.0015).toFixed(2),
     });
   }
   modifiedMonedaVenta(moneda:any):void{
-    this.l_renta = 'Precio (' + moneda.abreviatura.trim() + ')';
+    this.l_renta = 'Retención (' + moneda.abreviatura.trim() + ')';
   }
   protected readonly format = format;
 }
