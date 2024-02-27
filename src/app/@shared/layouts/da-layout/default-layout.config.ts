@@ -1,8 +1,8 @@
 import { DaLayoutConfig } from "./da-layout.type";
 
 export const DEFAULT_LAYOUT_CONFIG: DaLayoutConfig = {
-  id: 'leftRight',
-  mode: 'sidebarTop',
+  id: 'topNav',
+  mode: 'headerTop',
   header: {
     fixed: true,
     firHeader: {
@@ -24,7 +24,7 @@ export const DEFAULT_LAYOUT_CONFIG: DaLayoutConfig = {
     hidden: false,
   },
   footer: {
-    hidden: false,
+    hidden: true,
   },
   hideLogo: false,
 };
