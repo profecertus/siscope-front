@@ -66,7 +66,7 @@ export class SideSettingsComponent implements OnDestroy {
     if (localStorage.getItem('da-layout-id')) {
       this.layout = localStorage.getItem('da-layout-id');
     } else {
-      this.layout = 'left-right';
+      this.layout = 'topNav';
     }
 
     this.translate
