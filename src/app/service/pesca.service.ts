@@ -17,7 +17,6 @@ export class PescaService {
   }
 
   guardarPesca(pesca:any, accion:string):Observable<any>{
-    console.log(`${this.apiUrlPesca}${this.pesca}/saveDescarga/${accion}`, pesca);
     return  this.http.post(`${this.apiUrlPesca}${this.pesca}/saveDescarga/${accion}`, pesca);
   }
 
@@ -49,6 +48,11 @@ export class PescaService {
   getGastos(servicio:number, embarcacion:number, semana:number):Observable<any>{
     return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getGastos/${servicio}/${embarcacion}/${semana}`);
   }
+
+  getGastosDescarga(servicio:number, embarcacion:number, semana:number):Observable<any>{
+    return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getGastosDescarga/${servicio}/${embarcacion}/${semana}`);
+  }
+
   getAllGastoEmb():Observable<any>{
     return  this.http.get(`${this.apiUrlPesca}${this.pesca}/getAllGastosEmb`);
   }

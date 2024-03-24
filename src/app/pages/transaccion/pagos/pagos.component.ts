@@ -176,7 +176,6 @@ export class PagosComponent implements OnInit{
 
     // @ts-ignore
     this.pescaService.getGastos(this.producto['idProducto'], this.embarcacion.idEmbarcacion, this.semana.id).subscribe((valor) => {
-
       valor.forEach( (unRegistro: any) => {
         //Por cada producto obtengo el total sabiendo que esta ordenado
         this.listaRegistroGasto.filter( registro => {
@@ -215,6 +214,66 @@ export class PagosComponent implements OnInit{
             });
           }
         });
+      });
+
+      //Busqueda de los valores de descarga
+      this.pescaService.getGastosDescarga(this.producto['idProducto'], this.embarcacion.idEmbarcacion, this.semana.id).subscribe((valores) => {
+        var tsNombre:String = "";
+        var rsHijo:String = "";
+        var registroGastoHijo:RegistroGastoHijo = new RegistroGastoHijo();
+        var registroGasto:RegistroGasto = new RegistroGasto();
+
+        valores.sort((a:any, b:any) => {
+          const comparacionNombre = a.tipoServicioNombre.localeCompare(b.tipoServicioNombre);
+          if(comparacionNombre !== 0){
+            return comparacionNombre;
+          }
+          return a.razonSocial.localeCompare(b.razonSocial);
+        });
+
+        valores.forEach( (unRegistro: any) => {
+          //Valido para la cabecera
+          if(unRegistro.tipoServicioNombre != tsNombre){
+            registroGasto = new RegistroGasto();
+            tsNombre = unRegistro.tipoServicioNombre;
+            registroGasto.tipoServicio.nombreProducto = unRegistro.tipoServicioNombre.toUpperCase();
+            registroGasto.isParent = true;
+            if(unRegistro.idMoneda == 1){
+              registroGasto.totalSoles = unRegistro.precio;
+            }else{
+              registroGasto.totalDolares = unRegistro.precio;
+            }
+            this.listaRegistroGasto.push(registroGasto);
+          }else{
+            if(unRegistro.idMoneda == 1){
+              registroGasto.totalSoles += unRegistro.precio;
+            }else{
+              registroGasto.totalDolares += unRegistro.precio;
+            }
+          }
+
+          //Valido para el cuerpo, OJO acá preocupate por la razón social
+          if(unRegistro.razonSocial != rsHijo){
+            registroGastoHijo = new RegistroGastoHijo();
+            rsHijo = unRegistro.razonSocial;
+            registroGastoHijo.isParent = false;
+            registroGastoHijo.tipoServicio.nombreProducto = unRegistro.razonSocial;
+            if(unRegistro.idMoneda == 1){
+              registroGastoHijo.totalSoles = unRegistro.precio;
+            }else{
+              registroGastoHijo.totalDolares = unRegistro.precio;
+            }
+            registroGasto.children.push(registroGastoHijo);
+          }else{
+            if(unRegistro.idMoneda == 1){
+              registroGastoHijo.totalSoles += unRegistro.precio;
+            }else{
+              registroGastoHijo.totalDolares += unRegistro.precio;
+            }
+          }
+
+        });
+        //this.listaRegistroGasto[this.listaRegistroGasto.length - 1].children.push(registroGastoHijo);
       });
     });
   }

@@ -102,10 +102,9 @@
                 <tbody dTableBody>
                 <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex" let-nestedLayer="nestedLayer" let-nestedIndex="nestedIndex">
                   <tr dTableRow  >
-                    <td dTableCell>{{ rowIndex + 1 }}</td>
+                    <td dTableCell  >{{ rowIndex + 1 }}</td>
                     <td dTableCell [width]="'30%'"
                         [nestedColumn]="true"
-                        [nestedColumnIndent]="20"
                         [rowItem]="rowItem"
                         [nestedLayer]="nestedLayer"
                         [iconFoldTable]="iconParentOpen"
@@ -166,4 +165,5 @@
     </div>
 
   </div>
+
 </div>
